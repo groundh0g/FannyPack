@@ -41,8 +41,19 @@ THE SOFTWARE.
 		
 		body {
 		  position: relative;
-		  /* padding-top: 40px; */
 		}
+		
+		.mainGrid {
+			margin:0; 
+			padding:0; 
+			width:100%; 
+			height:100%;
+			border:1px solid #000;
+		}
+		
+		table.mainGrid table { vertical-align:top; }
+		
+		.navbar { margin:0 !important; }
     </style>
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -65,10 +76,10 @@ THE SOFTWARE.
 	</head>
 	<body>
 
-		<table border="1" cellpadding="0" cellspacing="0" style="margin:0; padding:0; width:100%; height:100%;">
+		<table border="1" cellpadding="0" cellspacing="0" class="mainGrid" style="width:100%; height:100%;">
 			<tr>
 				<td colspan="3" style="background-color:#000;">
-					<div class="navbar navbar-inverse" style="margin:0;">
+					<div class="navbar navbar-inverse">
 					  <div class="navbar-inner">
 						<div style="margin-left:20px; margin-right:20px;">
 						  <a class="brand" href="./product.html" target="_blank">FannyPack</a>
@@ -82,7 +93,7 @@ THE SOFTWARE.
 								<a href="./documentation.html" target="_blank">Documentation</a>
 							  </li>
 							  <li class="">
-								<a href="./about.html" target="_blank">About</a>
+								<a href="#popupAbout" role="button" data-toggle="modal">About</a>
 							  </li>
 							</ul>
 						</div>
@@ -96,16 +107,16 @@ THE SOFTWARE.
 					<div style="margin-left:20px; margin-right:20px;">
 						<div class="btn-toolbar" style="margin:0;">
 						  <div class="btn-group">
-							<a href="#null" class="btn"><i class="icon icon-file"></i> New</a>
-							<a href="#null" class="btn"><i class="icon icon-folder-open"></i> Open</a>
-							<a href="#null" class="btn"><i class="icon icon-download-alt"></i> Save</a>
+							<a id="cmdFileNew"  href="#null" class="btn"><i class="icon icon-file"></i> New</a>
+							<a id="cmdFileOpen" href="#null" class="btn"><i class="icon icon-folder-open"></i> Open</a>
+							<a id="cmdFileSave" href="#null" class="btn"><i class="icon icon-download-alt"></i> Save</a>
 						  </div>
 						  <div class="btn-group">
-							<a href="#null" class="btn"><i class="icon icon-picture"></i> Add</a>
-							<a href="#null" class="btn"><i class="icon icon-remove"></i> Remove</a>
+							<a id="cmdSpriteAdd"    href="#null" class="btn"><i class="icon icon-picture"></i> Add</a>
+							<a id="cmdSpriteRemove" href="#null" class="btn"><i class="icon icon-remove"></i> Remove</a>
 						  </div>
 						  <div class="btn-group">
-							<a href="#null" class="btn"><i class="icon icon-share"></i> Publish</a>
+							<a id="cmdPublish" href="#null" class="btn"><i class="icon icon-share"></i> Publish</a>
 						  </div>
 						</div>
 					</div>
@@ -113,20 +124,23 @@ THE SOFTWARE.
 				</td>
 			</tr>
 			<tr>
+			
+				<!-- LEFT SIDEBAR -->
+			
 				<td style="background-color:#eee; vertical-align:top; padding:0; width:285px; height:100%;">
 					<table style="width:100%; margin:5px;">
 						<tr><td>Name&nbsp;</td>
-							<td><input type="text" value="Untitled" style="margin:0; width:85%;" />
+							<td><input id="txtName" type="text" value="Untitled" style="margin:0; width:85%;" />
 							</td>
 						</tr>
 						<tr><td>Image&nbsp;</td>
 							<td><div class="btn-toolbar" style="margin:0;">
 								<div class="btn-group">
-								  <a class="btn dropdown-toggle" data-toggle="dropdown">PNG <span class="caret"></span></a>
-								  <ul class="dropdown-menu">
+								  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlImageFormat">PNG</span> <span class="caret"></span></a>
+								  <ul id="ddlImageFormatOptions" class="dropdown-menu">
 									<li><a href="#null">GIF</a></li>
 									<li><a href="#null">JPG</a></li>
-									<li><a href="#null">PNG</a></li>
+									<li><a href="#null">PNG *</a></li>
 								  </ul>
 								</div>
 								</div>
@@ -135,33 +149,63 @@ THE SOFTWARE.
 						<tr><td>Data&nbsp;</td>
 							<td><div class="btn-toolbar" style="margin:0;">
 								<div class="btn-group">
-								  <a class="btn dropdown-toggle" data-toggle="dropdown">JSON <span class="caret"></span></a>
-								  <ul class="dropdown-menu">
-									<li><a href="#null">JSON</a></li>
+								  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlDataFormat">JSON</span> <span class="caret"></span></a>
+								  <ul id="ddlDataFormatOptions" class="dropdown-menu">
+									<li><a href="#null">JSON *</a></li>
 									<li><a href="#null">XML</a></li>
 								  </ul>
 								</div>
 								</div>
 							</td>
 						</tr>
-				
+						
 						<tr><td colspan="2">&nbsp;</td></tr>
 				
 						<tr><td>Width&nbsp;</td>
-							<td><input type="text" value="1024" style="margin:0; width:85%;" />
+							<td>
+								<div class="btn-toolbar" style="margin:0;"><div class="input-append btn-group"><input id="txtWidth" type="text" value="1024" style="width:66%;" /><a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+								  <ul id="txtWidthOptions" class="dropdown-menu">
+									<li><a href="#null">16</a></li>
+									<li><a href="#null">32</a></li>
+									<li><a href="#null">64</a></li>
+									<li><a href="#null">128</a></li>
+									<li><a href="#null">256</a></li>
+									<li><a href="#null">512</a></li>
+									<li><a href="#null">1024 *</a></li>
+									<li><a href="#null">2048</a></li>
+									<li><a href="#null">4096</a></li>
+									<li><a href="#null">8192</a></li>
+									<li><a href="#null">16384</a></li>
+								  </ul>
+								</div></div>
 							</td>
 						</tr>
 						<tr><td>Height&nbsp;</td>
-							<td><input type="text" value="1024" style="margin:0; width:85%;" />
+							<td>
+								<div class="btn-toolbar" style="margin:0;"><div class="input-append btn-group"><input id="txtHeight" type="text" value="1024" style="width:66%;" /><a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+								  <ul id="txtHeightOptions" class="dropdown-menu">
+									<li><a href="#null">16</a></li>
+									<li><a href="#null">32</a></li>
+									<li><a href="#null">64</a></li>
+									<li><a href="#null">128</a></li>
+									<li><a href="#null">256</a></li>
+									<li><a href="#null">512</a></li>
+									<li><a href="#null">1024 *</a></li>
+									<li><a href="#null">2048</a></li>
+									<li><a href="#null">4096</a></li>
+									<li><a href="#null">8192</a></li>
+									<li><a href="#null">16384</a></li>
+								  </ul>
+								</div></div>
 							</td>
 						</tr>
 						<tr><td>Mode&nbsp;</td>
 							<td><div class="btn-toolbar" style="margin:0;">
 								<div class="btn-group">
-								  <a class="btn dropdown-toggle" data-toggle="dropdown">Max Size <span class="caret"></span></a>
-								  <ul class="dropdown-menu">
+								  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlSizeMode">Max Size</span> <span class="caret"></span></a>
+								  <ul id="ddlSizeModeOptions" class="dropdown-menu">
 									<li><a href="#null">Fixed Size</a></li>
-									<li><a href="#null">Max Size</a></li>
+									<li><a href="#null">Max Size *</a></li>
 								  </ul>
 								</div>
 								</div>
@@ -170,10 +214,10 @@ THE SOFTWARE.
 						<tr><td>Constraint&nbsp;</td>
 							<td><div class="btn-toolbar" style="margin:0;">
 								<div class="btn-group">
-								  <a class="btn dropdown-toggle" data-toggle="dropdown">Power of Two <span class="caret"></span></a>
-								  <ul class="dropdown-menu">
+								  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlConstraint">Power of Two</span> <span class="caret"></span></a>
+								  <ul id="ddlConstraintOptions" class="dropdown-menu">
 									<li><a href="#null">Any Size</a></li>
-									<li><a href="#null">Power of Two</a></li>
+									<li><a href="#null">Power of Two *</a></li>
 								  </ul>
 								</div>
 								</div>
@@ -182,9 +226,9 @@ THE SOFTWARE.
 						<tr><td>Force&nbsp;Square&nbsp;</td>
 							<td><div class="btn-toolbar" style="margin:0;">
 								<div class="btn-group">
-								  <a class="btn dropdown-toggle" data-toggle="dropdown">No <span class="caret"></span></a>
-								  <ul class="dropdown-menu">
-									<li><a href="#null">No</a></li>
+								  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlForceSquare">No</span> <span class="caret"></span></a>
+								  <ul id="ddlForceSquareOptions" class="dropdown-menu">
+									<li><a href="#null">No *</a></li>
 									<li><a href="#null">Yes</a></li>
 								  </ul>
 								</div>
@@ -192,22 +236,37 @@ THE SOFTWARE.
 							</td>
 						</tr>
 						<tr><td>Scale&nbsp;</td>
-							<td><input type="text" value="1" style="margin:0; width:85%;" />
+							<td>
+								<div class="btn-toolbar" style="margin:0;"><div class="input-append btn-group"><input id="txtScale" type="text" value="1.000" style="width:66%;" /><a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+								  <ul id="txtScaleOptions" class="dropdown-menu">
+									<li><a href="#null">2.000</a></li>
+									<li><a href="#null">1.750</a></li>
+									<li><a href="#null">1.500</a></li>
+									<li><a href="#null">1.250</a></li>
+									<li><a href="#null">1.000 *</a></li>
+									<li><a href="#null">0.750</a></li>
+									<li><a href="#null">0.666</a></li>
+									<li><a href="#null">0.500</a></li>
+									<li><a href="#null">0.333</a></li>
+									<li><a href="#null">0.250</a></li>
+									<li><a href="#null">0.125</a></li>
+								  </ul>
+								</div></div>
 							</td>
 						</tr>
 				
 						<tr><td colspan="2">&nbsp;</td></tr>
 				
 						<tr><td>Border&nbsp;Padding&nbsp;</td>
-							<td><input type="text" value="2" style="margin:0; width:85%;" />
+							<td><div class="input-append" style="margin:0;"><input id="txtBorderPadding" type="text" value="2" style="margin:0; width:122px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span>
 							</td>
 						</tr>
 						<tr><td>Shape&nbsp;Padding&nbsp;</td>
-							<td><input type="text" value="2" style="margin:0; width:85%;" />
+							<td><div class="input-append" style="margin:0;"><input id="txtShapePadding" type="text" value="2" style="margin:0; width:122px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span>
 							</td>
 						</tr>
 						<tr><td>Inner&nbsp;Padding&nbsp;</td>
-							<td><input type="text" value="0" style="margin:0; width:85%;" />
+							<td><div class="input-append" style="margin:0;"><input id="txtInnerPadding" type="text" value="0" style="margin:0; width:122px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span>
 							</td>
 						</tr>
 				
@@ -216,9 +275,9 @@ THE SOFTWARE.
 						<tr><td>Trim&nbsp;Mode&nbsp;</td>
 							<td><div class="btn-toolbar" style="margin:0;">
 								<div class="btn-group">
-								  <a class="btn dropdown-toggle" data-toggle="dropdown">Trim <span class="caret"></span></a>
-								  <ul class="dropdown-menu">
-									<li><a href="#null">None</a></li>
+								  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlTrimMode">None</span> <span class="caret"></span></a>
+								  <ul id="ddlTrimModeOptions" class="dropdown-menu">
+									<li><a href="#null">None *</a></li>
 									<li><a href="#null">Trim</a></li>
 								  </ul>
 								</div>
@@ -226,41 +285,101 @@ THE SOFTWARE.
 							</td>
 						</tr>
 						<tr><td>Trim&nbsp;Threshold&nbsp;</td>
-							<td><input type="text" value="0" style="margin:0; width:85%;" />
+							<td><div class="input-append" style="margin:0;"><input id="txtTrimThreshold" type="text" value="1" style="margin:0; width:122px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span>
+							</td>
+						</tr>
+
+						<tr><td colspan="2">&nbsp;</td></tr>
+
+						<tr><td>&nbsp;</td>
+							<td><a class="btn btn-primary"><i class="icon icon-white icon-refresh"></i> Apply Changes</a>
 							</td>
 						</tr>
 					</table>
 				</td>
-				<td style="background-color:#888; color:#fff; vertical-align:top; height:100%;">
+				
+				<!-- CENTER WORKSPACE -->
+				
+				<td style="background-color:#888; color:#fff; vertical-align:top; height:1px;">
 					<div style="background-color:#888; color:#fff; padding:0; height:100%; width:100%;">
-						<div style="padding:5px;">
-							Hello
+						<div style="padding:0; margin:auto; height:100%;">
+							<!--
+							<div class="navbar navbar-inverse navbar-static-top">
+							  <div class="navbar-inner">
+								<div style="margin-left:20px; margin-right:20px;">
+									<div>Hello!</div>
+								</div>
+							  </div>
+						    </div>
+							-->
+							
+							<table border="0" cellspacing="0" cellpadding="0" style="width:100%; height:100%">
+								<tr><td style="height:35px;">
+									<div class="" style="background-color:#667; padding:5px; margin:0;">
+										<div>
+											<div class="btn-toolbar" style="margin:0; ">
+											  <div class="btn-group">
+												<a id="cmdWorkspaceZoomOut" title="Zoom Out" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-zoom-out"></i></a>
+												<a id="cmdWorkspaceZoomIn"  title="Zoom In" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-zoom-in"></i></a>
+											  </div>
+											  <div class="btn-group">
+												<div class="input-append" style="margin:0;"><input id="txtWorkspaceZoom" type="text" value="100%" size="5" style="width:66px;" /><a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+												  <ul id="txtWorkspaceZoomOptions" class="dropdown-menu">
+													<li><a href="#null">800%</a></li>
+													<li><a href="#null">400%</a></li>
+													<li><a href="#null">200%</a></li>
+													<li><a href="#null">100% *</a></li>
+													<li><a href="#null"> 50%</a></li>
+													<li><a href="#null"> 25%</a></li>
+													<li><a href="#null"> 13%</a></li>
+												  </ul>
+												</div>
+											  </div>
+											  <div class="btn-group">
+												<a id="cmdWorkspaceFitWidth"  title="Fit Workspace Width"  href="#null" class="btn btn-inverse"><i class="icon icon-white icon-resize-horizontal"></i></a>
+												<a id="cmdWorkspaceFitHeight" title="Fit Workspace Height" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-resize-vertical"></i></a>
+												<a id="cmdWorkspaceFit"       title="Fit to Workspace" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-resize-full"></i></a>
+											  </div>
+											</div>
+										</div>
+									</div>
+								</td></tr>
+								
+								<tr><td style="height:100%;">
+									<div style="padding:5px; height:100%;">
+										Hello!
+									</div>
+								</td></tr>
+							</table>
 						</div>
 					</div>
 				</td>
+				
+				<!-- RIGHT SIDEBAR -->
+				
 				<td style="width:285px; background-color:#eee; vertical-align:top; height:100%;">
 					<div style="background-color:#fff; padding:0; height:100%; width:285px;">
-						<div class="navbar navbar-inversex" style="margin:0;">
+						<div class="navbar">
 						  <div class="navbar-inner">
-							<div style="margin-left:20px; margin-right:20px;">
-							  <a class="brand" href="./product.html" target="_blank">Sprites</a>
+							<div style="margin-left:5px; margin-right:5px;">
+							  <a id="lnkSpritesBanner" class="brand" href="#null"><i class="icon icon-chevron-down"></i> Sprites</a>
 							</div>
 						  </div>
 						</div>
-						<div style="padding:5px;">
+						<div id="divSpritesBannerContent" style="padding:5px;">
 							Blah<br/>
 							Blah<br/>
 							Blah<br/>
 							Blah
 						</div>
-						<div class="navbar navbar-inversex" style="margin:0;">
+						<div class="navbar">
 						  <div class="navbar-inner">
-							<div style="margin-left:20px; margin-right:20px;">
-							  <a class="brand" href="#null" target="_blank">Log</a>
+							<div style="margin-left:5px; margin-right:5px;">
+							  <a id="lnkLogBanner" class="brand" href="#null"><i class="icon icon-chevron-down"></i> Log <span id="lblLogCount" class="badge badge-info">10</span></a>
 							</div>
 						  </div>
 						</div>
-						<div style="padding:5px;">
+						<div id="divLogBannerContent" style="padding:5px;">
 							Blah<br/>
 							Blah<br/>
 							Blah<br/>
@@ -270,9 +389,118 @@ THE SOFTWARE.
 				</td>
 			<tr>
 		</table>
+		
+		<div id="popupAbout" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAboutLabel" aria-hidden="true">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="popupAboutLabel">About FannyPack</h3>
+		  </div>
+		  <div class="modal-body">
+			<p>Original concept and implementation (<a href="https://github.com/SebastianNette/PixiTexturePacker" target="_blank">PixiTexturePacker</a>) by <a href="https://github.com/SebastianNette" target="_blank">@SebastianNette</a>.</p>
+			<p>UI redesign, additional features by <a href="https://github.com/groundh0g" target="_blank">@groundh0g</a>.</p>
+			<p> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+				IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+				FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+				AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+				LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+				OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+				THE SOFTWARE.</p>
+		  </div>
+		  <div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Dismiss</button>
+		  </div>
+		</div>		
     
     <script src="assets/js/jquery-1.8.3.js"></script>
 	<script src="assets/js/bootstrap.js"></script>
+	
+	<script type="text/javascript">
+		var OnValueChanged = function() { return false; }
+		
+		var DoFileNew = function () { return false; };
+		var DoFileOpen = function () { return false; };
+		var DoFileSave = function () { return false; };
+		var DoSpriteAdd = function () { return false; };
+		var DoSpriteRemove = function () { return false; };
+		var DoPublish = function () { return false; };
+		
+		var UpdateDropDownValue = function(ddlName, $obj) {
+			$("#" + ddlName).text($obj.text().replace("*",""));
+			OnValueChanged();
+			return true;
+		};
+		
+		var UpdateDropDownValueInput = function(ddlName, $obj) {
+			$("#" + ddlName).val($obj.text().replace("*",""));
+			OnValueChanged();
+			return true;
+		};
+		
+		var UpdateSpinBox = function (txtName, event, key) {
+			var delta = 0;
+			if(event && event.which) {
+				var which = event.which;
+				if(key && which === key) { which = 13; }
+				if(key && which !== key) { which = 0; }
+				if(which === 38) { delta = 1; }
+				if(which === 40) { delta = -1; }
+				if(which === 13) { 
+					OnValueChanged();
+					$("#" + txtName).blur();
+					return true;
+				}
+			}
+			if(delta !== 0) {
+				var valTxt = $("#" + txtName).val()
+				var valInt = parseInt(valTxt, 10);
+				if(valTxt !== "" && !isNaN(valInt) && isFinite(valInt)) {
+					$("#" + txtName).val(valInt + delta);
+					OnValueChanged();
+					return true;
+				}
+			}
+			return false;
+		}
+	</script>
+	
+	<script type="text/javascript">
+		// -- TOOLBAR --
+		$("#cmdFileNew").click(function() { return DoFileNew(); });
+		$("#cmdFileOpen").click(function() { return DoFileOpen(); });
+		$("#cmdFileSave").click(function() { return DoFileSave(); });
+		$("#cmdSpriteAdd").click(function() { return DoSpriteAdd(); });
+		$("#cmdSpriteRemove").click(function() { return DoSpriteRemove(); });
+		$("#cmdPublish").click(function() { return DoPublish(); });
+		
+		// -- LEFT SIDEBAR --
+		$("#txtName").keyup(function(event) { return UpdateSpinBox("txtName", event, 13); });
+		$("#ddlDataFormatOptions li a").click(function() { return UpdateDropDownValue("ddlDataFormat", $(this)); });
+		$("#ddlImageFormatOptions li a").click(function() { return UpdateDropDownValue("ddlImageFormat", $(this)); });
+		$("#txtWidthOptions li a").click(function() { return UpdateDropDownValueInput("txtWidth", $(this)); });
+		$("#txtWidth").keyup(function(event) { return UpdateSpinBox("txtWidth", event); });
+		$("#txtHeightOptions li a").click(function() { return UpdateDropDownValueInput("txtHeight", $(this)); });
+		$("#txtHeight").keyup(function(event) { return UpdateSpinBox("txtHeight", event); });
+		$("#ddlSizeModeOptions li a").click(function() { return UpdateDropDownValue("ddlSizeMode", $(this)); });
+		$("#ddlConstraintOptions li a").click(function() { return UpdateDropDownValue("ddlConstraint", $(this)); });
+		$("#ddlForceSquareOptions li a").click(function() { return UpdateDropDownValue("ddlForceSquare", $(this)); });
+		$("#txtScaleOptions li a").click(function() { return UpdateDropDownValueInput("txtScale", $(this)); });
+		$("#txtScale").keyup(function(event) { return UpdateSpinBox("txtScale", event); });
+		$("#txtBorderPadding").keyup(function(event) { return UpdateSpinBox("txtBorderPadding", event); });
+		$("#txtShapePadding").keyup(function(event) { return UpdateSpinBox("txtShapePadding", event); });
+		$("#txtInnerPadding").keyup(function(event) { return UpdateSpinBox("txtInnerPadding", event); });
+		$("#ddlTrimModeOptions li a").click(function() { return UpdateDropDownValue("ddlTrimMode", $(this)); });
+		$("#txtTrimThreshold").keyup(function(event) { return UpdateSpinBox("txtTrimThreshold", event); });
+		
+		// -- WORKSPACE TOOLBAR --
+		$("#txtWorkspaceZoomOptions li a").click(function() { return UpdateDropDownValueInput("txtWorkspaceZoom", $(this)); });
+		
+		// -- RIGHT NAV --
+		// a#lnkSpritesBanner
+		// div#divSpritesBannerContent
+		// a#lnkLogBanner
+		// span#lblLogCount
+		// div#divLogBannerContent
+	</script>
 	
 	</body>
 </html>
