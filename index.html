@@ -118,6 +118,9 @@ THE SOFTWARE.
 						  <div class="btn-group">
 							<a id="cmdPublish" href="#null" class="btn"><i class="icon icon-share"></i> Publish</a>
 						  </div>
+						  <div class="btn-group">
+							<a id="cmdToggleHelp" href="#null" class="btn"><i class="icon icon-question-sign"></i> Tooltips</a>
+						  </div>
 						</div>
 					</div>
 				  </div>
@@ -126,12 +129,12 @@ THE SOFTWARE.
 			<tr>
 			
 				<!-- LEFT SIDEBAR -->
-			
-				<td style="background-color:#eee; vertical-align:top; padding:0; width:285px; height:100%;">
-					<table style="width:100%; margin:5px;">
+				<td class="leftSidebar" style="background-color:#eee; vertical-align:top; padding:0; width:305px; height:100%;">
+					<table class="leftSidebar" style="width:295px; margin:5px;">
 						<tr><td>Name&nbsp;</td>
-							<td><input id="txtName" type="text" value="Untitled" style="margin:0; width:85%;" />
+							<td><input id="txtName" type="text" value="Untitled" style="margin:0; width:140px;" />
 							</td>
+							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
 						</tr>
 						<tr><td>Image&nbsp;</td>
 							<td><div class="btn-toolbar" style="margin:0;">
@@ -145,6 +148,7 @@ THE SOFTWARE.
 								</div>
 								</div>
 							</td>
+							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
 						</tr>
 						<tr><td>Data&nbsp;</td>
 							<td><div class="btn-toolbar" style="margin:0;">
@@ -157,13 +161,14 @@ THE SOFTWARE.
 								</div>
 								</div>
 							</td>
+							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
 						</tr>
 						
-						<tr><td colspan="2">&nbsp;</td></tr>
-				
+						<tr><td colspan="3">&nbsp;</td></tr>
+
 						<tr><td>Width&nbsp;</td>
 							<td>
-								<div class="btn-toolbar" style="margin:0;"><div class="input-append btn-group"><input id="txtWidth" type="text" value="1024" style="width:66%;" /><a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+								<div class="input-append btn-group" style="margin:0;"><input id="txtWidth" type="text" value="1024" style="width:110px;" /><a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
 								  <ul id="txtWidthOptions" class="dropdown-menu">
 									<li><a href="#null">16</a></li>
 									<li><a href="#null">32</a></li>
@@ -177,27 +182,29 @@ THE SOFTWARE.
 									<li><a href="#null">8192</a></li>
 									<li><a href="#null">16384</a></li>
 								  </ul>
-								</div></div>
+								</div>
 							</td>
+							<td class="tipcol"><i class="icon icon-question-sign" title="The width of the published image."></i></td>
 						</tr>
 						<tr><td>Height&nbsp;</td>
 							<td>
-								<div class="btn-toolbar" style="margin:0;"><div class="input-append btn-group"><input id="txtHeight" type="text" value="1024" style="width:66%;" /><a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+								<div class="input-append btn-group" style="margin:0;"><input id="txtHeight" type="text" value="1024" style="width:110px;" /><a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
 								  <ul id="txtHeightOptions" class="dropdown-menu">
-									<li><a href="#null">16</a></li>
-									<li><a href="#null">32</a></li>
-									<li><a href="#null">64</a></li>
-									<li><a href="#null">128</a></li>
-									<li><a href="#null">256</a></li>
-									<li><a href="#null">512</a></li>
-									<li><a href="#null">1024 *</a></li>
-									<li><a href="#null">2048</a></li>
-									<li><a href="#null">4096</a></li>
-									<li><a href="#null">8192</a></li>
+									<li><a href="#null">&nbsp;&nbsp;&nbsp;16</a></li>
+									<li><a href="#null">&nbsp;&nbsp;&nbsp;32</a></li>
+									<li><a href="#null">&nbsp;&nbsp;&nbsp;64</a></li>
+									<li><a href="#null">&nbsp;&nbsp;128</a></li>
+									<li><a href="#null">&nbsp;&nbsp;256</a></li>
+									<li><a href="#null">&nbsp;&nbsp;512</a></li>
+									<li><a href="#null">&nbsp;1024 *</a></li>
+									<li><a href="#null">&nbsp;2048</a></li>
+									<li><a href="#null">&nbsp;4096</a></li>
+									<li><a href="#null">&nbsp;8192</a></li>
 									<li><a href="#null">16384</a></li>
 								  </ul>
-								</div></div>
+								</div>
 							</td>
+							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
 						</tr>
 						<tr><td>Mode&nbsp;</td>
 							<td><div class="btn-toolbar" style="margin:0;">
@@ -210,6 +217,7 @@ THE SOFTWARE.
 								</div>
 								</div>
 							</td>
+							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
 						</tr>
 						<tr><td>Constraint&nbsp;</td>
 							<td><div class="btn-toolbar" style="margin:0;">
@@ -222,6 +230,7 @@ THE SOFTWARE.
 								</div>
 								</div>
 							</td>
+							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
 						</tr>
 						<tr><td>Force&nbsp;Square&nbsp;</td>
 							<td><div class="btn-toolbar" style="margin:0;">
@@ -234,43 +243,38 @@ THE SOFTWARE.
 								</div>
 								</div>
 							</td>
+							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
 						</tr>
-						<tr><td>Scale&nbsp;</td>
-							<td>
-								<div class="btn-toolbar" style="margin:0;"><div class="input-append btn-group"><input id="txtScale" type="text" value="1.000" style="width:66%;" /><a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-								  <ul id="txtScaleOptions" class="dropdown-menu">
-									<li><a href="#null">2.000</a></li>
-									<li><a href="#null">1.750</a></li>
-									<li><a href="#null">1.500</a></li>
-									<li><a href="#null">1.250</a></li>
-									<li><a href="#null">1.000 *</a></li>
-									<li><a href="#null">0.750</a></li>
-									<li><a href="#null">0.666</a></li>
-									<li><a href="#null">0.500</a></li>
-									<li><a href="#null">0.333</a></li>
-									<li><a href="#null">0.250</a></li>
-									<li><a href="#null">0.125</a></li>
+						<tr><td>Include&nbsp;@2x</td>
+							<td><div class="btn-toolbar" style="margin:0;">
+								<div class="btn-group">
+								  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlIncludeAt2x">No</span> <span class="caret"></span></a>
+								  <ul id="ddlIncludeAt2xOptions" class="dropdown-menu">
+									<li><a href="#null">No *</a></li>
+									<li><a href="#null">Yes</a></li>
 								  </ul>
-								</div></div>
+								</div>
+								</div>
 							</td>
+							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
 						</tr>
 				
-						<tr><td colspan="2">&nbsp;</td></tr>
-				
+						<tr><td colspan="3">&nbsp;</td></tr>
+
 						<tr><td>Border&nbsp;Padding&nbsp;</td>
-							<td><div class="input-append" style="margin:0;"><input id="txtBorderPadding" type="text" value="2" style="margin:0; width:122px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span>
-							</td>
+							<td><div class="input-append" style="margin:0;"><input id="txtBorderPadding" type="text" value="2" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
+							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
 						</tr>
 						<tr><td>Shape&nbsp;Padding&nbsp;</td>
-							<td><div class="input-append" style="margin:0;"><input id="txtShapePadding" type="text" value="2" style="margin:0; width:122px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span>
-							</td>
+							<td><div class="input-append" style="margin:0;"><input id="txtShapePadding" type="text" value="2" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
+							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
 						</tr>
 						<tr><td>Inner&nbsp;Padding&nbsp;</td>
-							<td><div class="input-append" style="margin:0;"><input id="txtInnerPadding" type="text" value="0" style="margin:0; width:122px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span>
-							</td>
+							<td><div class="input-append" style="margin:0;"><input id="txtInnerPadding" type="text" value="0" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
+							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
 						</tr>
-				
-						<tr><td colspan="2">&nbsp;</td></tr>
+
+						<tr><td colspan="3">&nbsp;</td></tr>
 				
 						<tr><td>Trim&nbsp;Mode&nbsp;</td>
 							<td><div class="btn-toolbar" style="margin:0;">
@@ -283,18 +287,20 @@ THE SOFTWARE.
 								</div>
 								</div>
 							</td>
+							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
 						</tr>
 						<tr><td>Trim&nbsp;Threshold&nbsp;</td>
-							<td><div class="input-append" style="margin:0;"><input id="txtTrimThreshold" type="text" value="1" style="margin:0; width:122px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span>
-							</td>
+							<td><div class="input-append" style="margin:0;"><input id="txtTrimThreshold" type="text" value="1" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
+							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
 						</tr>
 
-						<tr><td colspan="2">&nbsp;</td></tr>
+						<tr><td colspan="3">&nbsp;</td></tr>
 
 						<tr><td>&nbsp;</td>
-							<td><a class="btn btn-primary"><i class="icon icon-white icon-refresh"></i> Apply Changes</a>
-							</td>
+							<td><a class="btn btn-primary"><i class="icon icon-white icon-refresh"></i> Apply Changes</a></td>
+							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
 						</tr>
+
 					</table>
 				</td>
 				
@@ -325,13 +331,14 @@ THE SOFTWARE.
 											  <div class="btn-group">
 												<div class="input-append" style="margin:0;"><input id="txtWorkspaceZoom" type="text" value="100%" size="5" style="width:66px;" /><a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
 												  <ul id="txtWorkspaceZoomOptions" class="dropdown-menu">
-													<li><a href="#null">800%</a></li>
-													<li><a href="#null">400%</a></li>
-													<li><a href="#null">200%</a></li>
-													<li><a href="#null">100% *</a></li>
-													<li><a href="#null"> 50%</a></li>
-													<li><a href="#null"> 25%</a></li>
-													<li><a href="#null"> 13%</a></li>
+													<li><a href="#null">1600.0%</a></li>
+													<li><a href="#null">&nbsp;800.0%</a></li>
+													<li><a href="#null">&nbsp;400.0%</a></li>
+													<li><a href="#null">&nbsp;200.0%</a></li>
+													<li><a href="#null">&nbsp;100.0% *</a></li>
+													<li><a href="#null">&nbsp;&nbsp;50.0%</a></li>
+													<li><a href="#null">&nbsp;&nbsp;25.0%</a></li>
+													<li><a href="#null">&nbsp;&nbsp;12.5%</a></li>
 												  </ul>
 												</div>
 											  </div>
@@ -346,8 +353,9 @@ THE SOFTWARE.
 								</td></tr>
 								
 								<tr><td style="height:100%;">
-									<div style="padding:5px; height:100%;">
+									<div style="padding:5px; height:100%; overflow:scroll;">
 										Hello!
+<div id="popupAddSpritesPreview"></div>
 									</div>
 								</td></tr>
 							</table>
@@ -396,9 +404,10 @@ THE SOFTWARE.
 			<h3 id="popupAboutLabel">About FannyPack</h3>
 		  </div>
 		  <div class="modal-body">
-			<p>Original concept and implementation (<a href="https://github.com/SebastianNette/PixiTexturePacker" target="_blank">PixiTexturePacker</a>) by <a href="https://github.com/SebastianNette" target="_blank">@SebastianNette</a>.</p>
-			<p>UI redesign, additional features by <a href="https://github.com/groundh0g" target="_blank">@groundh0g</a>.</p>
-			<p> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+			<p><a href="https://github.com/groundh0g/FannyPack" target="_blank">FannyPack</a> is a spritesheet tool written in HTML &amp; JavaScript by <a href="https://github.com/groundh0g" target="_blank">@groundh0g</a>.<p>
+			<p>Original concept and inspiration from <a href="https://github.com/SebastianNette/PixiTexturePacker" target="_blank">PixiTexturePacker</a> by <a href="https://github.com/SebastianNette" target="_blank">@SebastianNette</a>.</p>
+			<p>Changes for FannyPack include UI redesign, removal of dependencies, addition of features, other tweaks -- like getting the darn thing to work in Chrome. :)</p>
+			<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 				IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 				FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 				AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -410,7 +419,26 @@ THE SOFTWARE.
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Dismiss</button>
 		  </div>
 		</div>		
-    
+
+		<div id="popupAddSprites" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAddSpritesLabel" aria-hidden="true">
+<form id= "uploadSprites" name="uploadSprites" action="#" enctype="multipart/form-data" method="post" onsubmit="return ProcessSpriteAdd(event);">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="popupAddSpritesLabel">Add Sprite(s)</h3>
+		  </div>
+		  <div class="modal-body">
+		  <p>Stuff here ...</p>
+		  
+<p><INPUT id="uploadFiles" type="file" name="submitfile" multiple="multiple" /></p>
+		  
+		  </div>
+		  <div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			<button class="btn btn-primary" aria-hidden="true">OK</button>
+		  </div>
+</form>		  
+		</div>		
+
     <script src="assets/js/jquery-1.8.3.js"></script>
 	<script src="assets/js/bootstrap.js"></script>
 	
@@ -420,18 +448,37 @@ THE SOFTWARE.
 		var DoFileNew = function () { return false; };
 		var DoFileOpen = function () { return false; };
 		var DoFileSave = function () { return false; };
-		var DoSpriteAdd = function () { return false; };
+		var DoSpriteAdd = function () { 
+			$("#popupAddSprites").modal("show"); 
+			return false; 
+		};		
 		var DoSpriteRemove = function () { return false; };
 		var DoPublish = function () { return false; };
 		
+		var isHelpVisible = true;
+		var DoToggleHelp = function () {
+			if(isHelpVisible) {
+				$("td.tipcol").hide();
+				$("table.leftSidebar").css("width","274px");
+				$("td.leftSidebar").css("width","284px");
+				isHelpVisible = false;
+			} else {
+				$("td.leftSidebar").css("width","305px");
+				$("table.leftSidebar").css("width","295px");
+				$("td.tipcol").show();
+				isHelpVisible = true;
+			}
+			return false;
+		}
+		
 		var UpdateDropDownValue = function(ddlName, $obj) {
-			$("#" + ddlName).text($obj.text().replace("*",""));
+			$("#" + ddlName).text($obj.text().replace(" *",""));
 			OnValueChanged();
 			return true;
 		};
 		
 		var UpdateDropDownValueInput = function(ddlName, $obj) {
-			$("#" + ddlName).val($obj.text().replace("*",""));
+			$("#" + ddlName).val($obj.text().replace(" *",""));
 			OnValueChanged();
 			return true;
 		};
@@ -461,6 +508,34 @@ THE SOFTWARE.
 			}
 			return false;
 		}
+		
+		var uploadedFiles = [];
+		var ProcessSpriteAdd = function(event) {
+			event.preventDefault();
+			var $uploadFiles = $("#uploadFiles")[0];
+			var files = $uploadFiles.files;
+			for(var i = 0; i < files.length; i++) {
+				var file = files[i];
+				var imageRegEx = /image.*/;
+				
+				if(!file.type.match(imageRegEx)) { continue; }
+				
+				var $img = $("<img />");
+				$img.addClass("foo");
+				var reader = new FileReader();
+				reader.onload = function(e) { 
+					$img.attr("src", e.target.result); 
+					$("#popupAddSpritesPreview").append($img);
+				}
+				reader.readAsDataURL(file);
+			}
+
+			$("#uploadSprites")[0].reset();
+			$("#popupAddSprites").modal("hide");
+
+			return false;
+		};
+		
 	</script>
 	
 	<script type="text/javascript">
@@ -471,6 +546,7 @@ THE SOFTWARE.
 		$("#cmdSpriteAdd").click(function() { return DoSpriteAdd(); });
 		$("#cmdSpriteRemove").click(function() { return DoSpriteRemove(); });
 		$("#cmdPublish").click(function() { return DoPublish(); });
+		$("#cmdToggleHelp").click(function() { return DoToggleHelp(); });
 		
 		// -- LEFT SIDEBAR --
 		$("#txtName").keyup(function(event) { return UpdateSpinBox("txtName", event, 13); });
@@ -483,8 +559,7 @@ THE SOFTWARE.
 		$("#ddlSizeModeOptions li a").click(function() { return UpdateDropDownValue("ddlSizeMode", $(this)); });
 		$("#ddlConstraintOptions li a").click(function() { return UpdateDropDownValue("ddlConstraint", $(this)); });
 		$("#ddlForceSquareOptions li a").click(function() { return UpdateDropDownValue("ddlForceSquare", $(this)); });
-		$("#txtScaleOptions li a").click(function() { return UpdateDropDownValueInput("txtScale", $(this)); });
-		$("#txtScale").keyup(function(event) { return UpdateSpinBox("txtScale", event); });
+		$("#ddlIncludeAt2xOptions li a").click(function() { return UpdateDropDownValue("ddlIncludeAt2x", $(this)); });
 		$("#txtBorderPadding").keyup(function(event) { return UpdateSpinBox("txtBorderPadding", event); });
 		$("#txtShapePadding").keyup(function(event) { return UpdateSpinBox("txtShapePadding", event); });
 		$("#txtInnerPadding").keyup(function(event) { return UpdateSpinBox("txtInnerPadding", event); });
@@ -500,6 +575,8 @@ THE SOFTWARE.
 		// a#lnkLogBanner
 		// span#lblLogCount
 		// div#divLogBannerContent
+		
+		DoToggleHelp();
 	</script>
 	
 	</body>
