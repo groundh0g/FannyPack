@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<!-- 
+Copyright (c) 2014 @groundh0g
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+
+<html>
+	<head>
+    <meta charset="utf-8">
+    <title>FannyPack</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A simple spritesheet editor.">
+    <meta name="author" content="@groundh0g">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <!--<link href="assets/css/bootstrap-responsive.css" rel="stylesheet">-->
+    
+    <style type="text/css">
+		html, body {
+		  width: 100%;
+		  height: 100%;
+		}
+		
+		body {
+		  position: relative;
+		  /* padding-top: 40px; */
+		}
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <link rel="shortcut icon" href="assets/ico/favicon.png">
+
+    <script type="text/javascript">
+//       var _gaq = _gaq || [];
+//       _gaq.push(['_setAccount', 'UA-146052-10']);
+//       _gaq.push(['_trackPageview']);
+//       (function() {
+//         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+//         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+//         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+//       })();
+    </script>
+	</head>
+	<body>
+
+		<table border="1" cellpadding="0" cellspacing="0" style="margin:0; padding:0; width:100%; height:100%;">
+			<tr>
+				<td colspan="3" style="background-color:#000;">
+					<div class="navbar navbar-inverse" style="margin:0;">
+					  <div class="navbar-inner">
+						<div style="margin-left:20px; margin-right:20px;">
+						  <a class="brand" href="./product.html" target="_blank">FannyPack</a>
+							<ul class="nav">
+							  <li class="active">
+								<a href="./index.html">Application</a>
+							  </li>
+							</ul>
+							<ul class="nav pull-right">
+							  <li class="">
+								<a href="./documentation.html" target="_blank">Documentation</a>
+							  </li>
+							  <li class="">
+								<a href="./about.html" target="_blank">About</a>
+							  </li>
+							</ul>
+						</div>
+					  </div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" style="">
+				  <div class="" style="background-color:#eee; padding:5px 0px; margin:0;">
+					<div style="margin-left:20px; margin-right:20px;">
+						<div class="btn-toolbar" style="margin:0;">
+						  <div class="btn-group">
+							<a href="#null" class="btn"><i class="icon icon-file"></i> New</a>
+							<a href="#null" class="btn"><i class="icon icon-folder-open"></i> Open</a>
+							<a href="#null" class="btn"><i class="icon icon-download-alt"></i> Save</a>
+						  </div>
+						  <div class="btn-group">
+							<a href="#null" class="btn"><i class="icon icon-picture"></i> Add</a>
+							<a href="#null" class="btn"><i class="icon icon-remove"></i> Remove</a>
+						  </div>
+						  <div class="btn-group">
+							<a href="#null" class="btn"><i class="icon icon-share"></i> Publish</a>
+						  </div>
+						</div>
+					</div>
+				  </div>
+				</td>
+			</tr>
+			<tr>
+				<td style="background-color:#eee; vertical-align:top; padding:0; width:285px; height:100%;">
+					<table style="width:100%; margin:5px;">
+						<tr><td>Name&nbsp;</td>
+							<td><input type="text" value="Untitled" style="margin:0; width:85%;" />
+							</td>
+						</tr>
+						<tr><td>Image&nbsp;</td>
+							<td><div class="btn-toolbar" style="margin:0;">
+								<div class="btn-group">
+								  <a class="btn dropdown-toggle" data-toggle="dropdown">PNG <span class="caret"></span></a>
+								  <ul class="dropdown-menu">
+									<li><a href="#null">GIF</a></li>
+									<li><a href="#null">JPG</a></li>
+									<li><a href="#null">PNG</a></li>
+								  </ul>
+								</div>
+								</div>
+							</td>
+						</tr>
+						<tr><td>Data&nbsp;</td>
+							<td><div class="btn-toolbar" style="margin:0;">
+								<div class="btn-group">
+								  <a class="btn dropdown-toggle" data-toggle="dropdown">JSON <span class="caret"></span></a>
+								  <ul class="dropdown-menu">
+									<li><a href="#null">JSON</a></li>
+									<li><a href="#null">XML</a></li>
+								  </ul>
+								</div>
+								</div>
+							</td>
+						</tr>
+				
+						<tr><td colspan="2">&nbsp;</td></tr>
+				
+						<tr><td>Width&nbsp;</td>
+							<td><input type="text" value="1024" style="margin:0; width:85%;" />
+							</td>
+						</tr>
+						<tr><td>Height&nbsp;</td>
+							<td><input type="text" value="1024" style="margin:0; width:85%;" />
+							</td>
+						</tr>
+						<tr><td>Mode&nbsp;</td>
+							<td><div class="btn-toolbar" style="margin:0;">
+								<div class="btn-group">
+								  <a class="btn dropdown-toggle" data-toggle="dropdown">Max Size <span class="caret"></span></a>
+								  <ul class="dropdown-menu">
+									<li><a href="#null">Fixed Size</a></li>
+									<li><a href="#null">Max Size</a></li>
+								  </ul>
+								</div>
+								</div>
+							</td>
+						</tr>
+						<tr><td>Constraint&nbsp;</td>
+							<td><div class="btn-toolbar" style="margin:0;">
+								<div class="btn-group">
+								  <a class="btn dropdown-toggle" data-toggle="dropdown">Power of Two <span class="caret"></span></a>
+								  <ul class="dropdown-menu">
+									<li><a href="#null">Any Size</a></li>
+									<li><a href="#null">Power of Two</a></li>
+								  </ul>
+								</div>
+								</div>
+							</td>
+						</tr>
+						<tr><td>Force&nbsp;Square&nbsp;</td>
+							<td><div class="btn-toolbar" style="margin:0;">
+								<div class="btn-group">
+								  <a class="btn dropdown-toggle" data-toggle="dropdown">No <span class="caret"></span></a>
+								  <ul class="dropdown-menu">
+									<li><a href="#null">No</a></li>
+									<li><a href="#null">Yes</a></li>
+								  </ul>
+								</div>
+								</div>
+							</td>
+						</tr>
+						<tr><td>Scale&nbsp;</td>
+							<td><input type="text" value="1" style="margin:0; width:85%;" />
+							</td>
+						</tr>
+				
+						<tr><td colspan="2">&nbsp;</td></tr>
+				
+						<tr><td>Border&nbsp;Padding&nbsp;</td>
+							<td><input type="text" value="2" style="margin:0; width:85%;" />
+							</td>
+						</tr>
+						<tr><td>Shape&nbsp;Padding&nbsp;</td>
+							<td><input type="text" value="2" style="margin:0; width:85%;" />
+							</td>
+						</tr>
+						<tr><td>Inner&nbsp;Padding&nbsp;</td>
+							<td><input type="text" value="0" style="margin:0; width:85%;" />
+							</td>
+						</tr>
+				
+						<tr><td colspan="2">&nbsp;</td></tr>
+				
+						<tr><td>Trim&nbsp;Mode&nbsp;</td>
+							<td><div class="btn-toolbar" style="margin:0;">
+								<div class="btn-group">
+								  <a class="btn dropdown-toggle" data-toggle="dropdown">Trim <span class="caret"></span></a>
+								  <ul class="dropdown-menu">
+									<li><a href="#null">None</a></li>
+									<li><a href="#null">Trim</a></li>
+								  </ul>
+								</div>
+								</div>
+							</td>
+						</tr>
+						<tr><td>Trim&nbsp;Threshold&nbsp;</td>
+							<td><input type="text" value="0" style="margin:0; width:85%;" />
+							</td>
+						</tr>
+					</table>
+				</td>
+				<td style="background-color:#888; color:#fff; vertical-align:top; height:100%;">
+					<div style="background-color:#888; color:#fff; padding:0; height:100%; width:100%;">
+						<div style="padding:5px;">
+							Hello
+						</div>
+					</div>
+				</td>
+				<td style="width:285px; background-color:#eee; vertical-align:top; height:100%;">
+					<div style="background-color:#fff; padding:0; height:100%; width:285px;">
+						<div class="navbar navbar-inversex" style="margin:0;">
+						  <div class="navbar-inner">
+							<div style="margin-left:20px; margin-right:20px;">
+							  <a class="brand" href="./product.html" target="_blank">Sprites</a>
+							</div>
+						  </div>
+						</div>
+						<div style="padding:5px;">
+							Blah<br/>
+							Blah<br/>
+							Blah<br/>
+							Blah
+						</div>
+						<div class="navbar navbar-inversex" style="margin:0;">
+						  <div class="navbar-inner">
+							<div style="margin-left:20px; margin-right:20px;">
+							  <a class="brand" href="#null" target="_blank">Log</a>
+							</div>
+						  </div>
+						</div>
+						<div style="padding:5px;">
+							Blah<br/>
+							Blah<br/>
+							Blah<br/>
+							Blah
+						</div>
+					</div>
+				</td>
+			<tr>
+		</table>
+    
+    <script src="assets/js/jquery-1.8.3.js"></script>
+	<script src="assets/js/bootstrap.js"></script>
+	
+	</body>
+</html>
