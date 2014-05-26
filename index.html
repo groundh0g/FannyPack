@@ -54,6 +54,39 @@ THE SOFTWARE.
 		table.mainGrid table { vertical-align:top; }
 		
 		.navbar { margin:0 !important; }
+		
+		.dropzone {
+			text-align:center;
+			border:1px dashed #866;
+			background-color: #fdd;
+			color: #633;
+			padding:5px;
+		}
+
+		#divSpritesList {
+			height:100%;
+			/*background-color:#fdd;*/
+			overflow:auto;
+			border-top:1px solid #000;
+		}
+		
+		.divSpritesListItem {
+			padding:2px;
+			height:36px;
+			background-color:#fed;
+			border-bottom:1px solid #888;
+			overflow:none;
+			line-height:32px;
+			font-weight:bold;
+		}
+		
+		.divSpritesListItem img {
+			border:0;
+			margin:2px;
+			width:32px;
+			height:32px;
+		}
+		
     </style>
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -85,7 +118,10 @@ THE SOFTWARE.
 						  <a class="brand" href="./product.html" target="_blank">FannyPack</a>
 							<ul class="nav">
 							  <li class="active">
-								<a href="./index.html">Application</a>
+								<a href="./sheets.html">Sprite Sheets</a>
+							  </li>
+							  <li class="">
+								<a href="./fonts.html">Sprite Fonts</a>
 							  </li>
 							</ul>
 							<ul class="nav pull-right">
@@ -309,16 +345,6 @@ THE SOFTWARE.
 				<td style="background-color:#888; color:#fff; vertical-align:top; height:1px;">
 					<div style="background-color:#888; color:#fff; padding:0; height:100%; width:100%;">
 						<div style="padding:0; margin:auto; height:100%;">
-							<!--
-							<div class="navbar navbar-inverse navbar-static-top">
-							  <div class="navbar-inner">
-								<div style="margin-left:20px; margin-right:20px;">
-									<div>Hello!</div>
-								</div>
-							  </div>
-						    </div>
-							-->
-							
 							<table border="0" cellspacing="0" cellpadding="0" style="width:100%; height:100%">
 								<tr><td style="height:35px;">
 									<div class="" style="background-color:#667; padding:5px; margin:0;">
@@ -354,8 +380,7 @@ THE SOFTWARE.
 								
 								<tr><td style="height:100%;">
 									<div style="padding:5px; height:100%; overflow:scroll;">
-										Hello!
-<div id="popupAddSpritesPreview"></div>
+									<div id="popupAddSpritesPreview"></div>
 									</div>
 								</td></tr>
 							</table>
@@ -366,34 +391,85 @@ THE SOFTWARE.
 				<!-- RIGHT SIDEBAR -->
 				
 				<td style="width:285px; background-color:#eee; vertical-align:top; height:100%;">
-					<div style="background-color:#fff; padding:0; height:100%; width:285px;">
-						<div class="navbar">
-						  <div class="navbar-inner">
-							<div style="margin-left:5px; margin-right:5px;">
-							  <a id="lnkSpritesBanner" class="brand" href="#null"><i class="icon icon-chevron-down"></i> Sprites</a>
-							</div>
-						  </div>
-						</div>
-						<div id="divSpritesBannerContent" style="padding:5px;">
-							Blah<br/>
-							Blah<br/>
-							Blah<br/>
-							Blah
-						</div>
-						<div class="navbar">
-						  <div class="navbar-inner">
-							<div style="margin-left:5px; margin-right:5px;">
-							  <a id="lnkLogBanner" class="brand" href="#null"><i class="icon icon-chevron-down"></i> Log <span id="lblLogCount" class="badge badge-info">10</span></a>
-							</div>
-						  </div>
-						</div>
-						<div id="divLogBannerContent" style="padding:5px;">
-							Blah<br/>
-							Blah<br/>
-							Blah<br/>
-							Blah
-						</div>
-					</div>
+					<table border="0" cellspacing="0" cellpadding="0" style="width:100%; height:100%;">
+						<tr>
+							<td style="height:30px; background-color:#fafafa; padding:5px;">
+								<div class="btn-group" data-toggle="buttons-radio">
+								  <button type="button" class="btn active">Sprites</button>
+								  <button type="button" class="btn">Console <span id="lblLogCount" class="badge badge-info">10</span></button>
+								</div>
+							</td>
+						</tr><tr>
+							<td>
+								<div id="divSpritesList">
+									<div class="divSpritesListItem">
+										<img src="assets/ico/favicon.png" />
+										<span>Testing.png</span>
+									</div>
+									<div class="divSpritesListItem">
+										<img src="assets/ico/favicon.png" />
+										<span>Testing.png</span>
+									</div>
+									<div class="divSpritesListItem">
+										<img src="assets/ico/favicon.png" />
+										<span>Testing.png</span>
+									</div>
+									<div class="divSpritesListItem">
+										<img src="assets/ico/favicon.png" />
+										<span>Testing.png</span>
+									</div>
+									<div class="divSpritesListItem">
+										<img src="assets/ico/favicon.png" />
+										<span>Testing.png</span>
+									</div>
+									<div class="divSpritesListItem">
+										<img src="assets/ico/favicon.png" />
+										<span>Testing.png</span>
+									</div>
+									<div class="divSpritesListItem">
+										<img src="assets/ico/favicon.png" />
+										<span>Testing.png</span>
+									</div>
+									<div class="divSpritesListItem">
+										<img src="assets/ico/favicon.png" />
+										<span>Testing.png</span>
+									</div>
+									<div class="divSpritesListItem">
+										<img src="assets/ico/favicon.png" />
+										<span>Testing.png</span>
+									</div>
+									<div class="divSpritesListItem">
+										<img src="assets/ico/favicon.png" />
+										<span>Testing.png</span>
+									</div>
+									<div class="divSpritesListItem">
+										<img src="assets/ico/favicon.png" />
+										<span>Testing.png</span>
+									</div>
+									<div class="divSpritesListItem">
+										<img src="assets/ico/favicon.png" />
+										<span>Testing.png</span>
+									</div>
+									<div class="divSpritesListItem">
+										<img src="assets/ico/favicon.png" />
+										<span>Testing.png</span>
+									</div>
+									<div class="divSpritesListItem">
+										<img src="assets/ico/favicon.png" />
+										<span>Testing.png</span>
+									</div>
+									<div class="divSpritesListItem">
+										<img src="assets/ico/favicon.png" />
+										<span>Testing.png</span>
+									</div>
+									<div class="divSpritesListItem">
+										<img src="assets/ico/favicon.png" />
+										<span>Testing.png</span>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
 				</td>
 			<tr>
 		</table>
@@ -420,23 +496,24 @@ THE SOFTWARE.
 		  </div>
 		</div>		
 
-		<div id="popupAddSprites" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAddSpritesLabel" aria-hidden="true">
-<form id= "uploadSprites" name="uploadSprites" action="#" enctype="multipart/form-data" method="post" onsubmit="return ProcessSpriteAdd(event);">
+		<INPUT id="uploadFiles" type="file" name="submitfile" multiple="multiple" style="display:none;" onchange="return ProcessSpriteAdd(this.files);" />
+
+		<div id="popupFileModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAddSpritesLabel" aria-hidden="true">
 		  <div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h3 id="popupAddSpritesLabel">Add Sprite(s)</h3>
+			<h3 id="popupFileModalTitle">Add Sprite(s)</h3>
 		  </div>
 		  <div class="modal-body">
-		  <p>Stuff here ...</p>
-		  
-<p><INPUT id="uploadFiles" type="file" name="submitfile" multiple="multiple" /></p>
-		  
+		    <div class="dropzone">
+		    	<span id="popupFileModalDropLabel">Drag and drop image files here, or ...</span><br/><br/><br/>
+		    	<a id="cmdUploadFiles" class="btn btn-primary" href="#null">Click to Upload</a><br/><br/><br/>
+		    	<span id="popupFileModalDropInfo">No file(s) selected.</span>
+		    </div>
 		  </div>
 		  <div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
 			<button class="btn btn-primary" aria-hidden="true">OK</button>
 		  </div>
-</form>		  
 		</div>		
 
     <script src="assets/js/jquery-1.8.3.js"></script>
@@ -449,7 +526,10 @@ THE SOFTWARE.
 		var DoFileOpen = function () { return false; };
 		var DoFileSave = function () { return false; };
 		var DoSpriteAdd = function () { 
-			$("#popupAddSprites").modal("show"); 
+			$("#popupFileModalTitle").text("Add Sprite(s)");
+			$("#popupFileModalDropLabel").text("Drag and drop image files here, or ...");
+			$("#popupFileModalDropInfo").text("No file(s) selected.");
+			$("#popupFileModal").modal("show");
 			return false; 
 		};		
 		var DoSpriteRemove = function () { return false; };
@@ -575,6 +655,9 @@ THE SOFTWARE.
 		// a#lnkLogBanner
 		// span#lblLogCount
 		// div#divLogBannerContent
+		
+		// -- POPUPS --
+		$("#cmdUploadSprites").click(function(){ $("#uploadFiles").click(); });
 		
 		DoToggleHelp();
 	</script>
