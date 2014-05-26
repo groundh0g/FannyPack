@@ -87,6 +87,13 @@ THE SOFTWARE.
 			height:32px;
 		}
 		
+		td.leftSidebar {
+			background-color:#eee; 
+			vertical-align:top; 
+			width:305px; 
+			height:100%;
+		}
+		
     </style>
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -155,6 +162,7 @@ THE SOFTWARE.
 							<a id="cmdPublish" href="#null" class="btn"><i class="icon icon-share"></i> Publish</a>
 						  </div>
 						  <div class="btn-group">
+							<a id="cmdToggleSettings" href="#null" class="btn"><i class="icon icon-wrench"></i> Settings</a>
 							<a id="cmdToggleHelp" href="#null" class="btn"><i class="icon icon-question-sign"></i> Tooltips</a>
 						  </div>
 						</div>
@@ -165,179 +173,181 @@ THE SOFTWARE.
 			<tr>
 			
 				<!-- LEFT SIDEBAR -->
-				<td class="leftSidebar" style="background-color:#eee; vertical-align:top; padding:0; width:305px; height:100%;">
-					<table class="leftSidebar" style="width:295px; margin:5px;">
-						<tr><td>Name&nbsp;</td>
-							<td><input id="txtName" type="text" value="Untitled" style="margin:0; width:140px;" />
-							</td>
-							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
-						</tr>
-						<tr><td>Image&nbsp;</td>
-							<td><div class="btn-toolbar" style="margin:0;">
-								<div class="btn-group">
-								  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlImageFormat">PNG</span> <span class="caret"></span></a>
-								  <ul id="ddlImageFormatOptions" class="dropdown-menu">
-									<li><a href="#null">GIF</a></li>
-									<li><a href="#null">JPG</a></li>
-									<li><a href="#null">PNG *</a></li>
-								  </ul>
-								</div>
-								</div>
-							</td>
-							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
-						</tr>
-						<tr><td>Data&nbsp;</td>
-							<td><div class="btn-toolbar" style="margin:0;">
-								<div class="btn-group">
-								  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlDataFormat">JSON</span> <span class="caret"></span></a>
-								  <ul id="ddlDataFormatOptions" class="dropdown-menu">
-									<li><a href="#null">JSON *</a></li>
-									<li><a href="#null">XML</a></li>
-								  </ul>
-								</div>
-								</div>
-							</td>
-							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
-						</tr>
+				<td id="leftSidebar" class="leftSidebar">
+					<div style="height:100%; padding:5px; overflow:auto;">
+						<table class="leftSidebar" style="width:295px;">
+							<tr><td>Name&nbsp;</td>
+								<td><input id="txtName" type="text" value="Untitled" style="margin:0; width:140px;" />
+								</td>
+								<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+							</tr>
+							<tr><td>Image&nbsp;</td>
+								<td><div class="btn-toolbar" style="margin:0;">
+									<div class="btn-group">
+									  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlImageFormat">PNG</span> <span class="caret"></span></a>
+									  <ul id="ddlImageFormatOptions" class="dropdown-menu">
+										<li><a href="#null">GIF</a></li>
+										<li><a href="#null">JPG</a></li>
+										<li><a href="#null">PNG *</a></li>
+									  </ul>
+									</div>
+									</div>
+								</td>
+								<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+							</tr>
+							<tr><td>Data&nbsp;</td>
+								<td><div class="btn-toolbar" style="margin:0;">
+									<div class="btn-group">
+									  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlDataFormat">JSON</span> <span class="caret"></span></a>
+									  <ul id="ddlDataFormatOptions" class="dropdown-menu">
+										<li><a href="#null">JSON *</a></li>
+										<li><a href="#null">XML</a></li>
+									  </ul>
+									</div>
+									</div>
+								</td>
+								<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+							</tr>
 						
-						<tr><td colspan="3">&nbsp;</td></tr>
+							<tr><td colspan="3">&nbsp;</td></tr>
 
-						<tr><td>Width&nbsp;</td>
-							<td>
-								<div class="input-append btn-group" style="margin:0;"><input id="txtWidth" type="text" value=" 1024" style="width:110px;" /><a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-								  <ul id="txtWidthOptions" class="dropdown-menu">
-									<li><a href="#null">&nbsp;&nbsp;&nbsp;16</a></li>
-									<li><a href="#null">&nbsp;&nbsp;&nbsp;32</a></li>
-									<li><a href="#null">&nbsp;&nbsp;&nbsp;64</a></li>
-									<li><a href="#null">&nbsp;&nbsp;128</a></li>
-									<li><a href="#null">&nbsp;&nbsp;256</a></li>
-									<li><a href="#null">&nbsp;&nbsp;512</a></li>
-									<li><a href="#null">&nbsp;1024 *</a></li>
-									<li><a href="#null">&nbsp;2048</a></li>
-									<li><a href="#null">&nbsp;4096</a></li>
-									<li><a href="#null">&nbsp;8192</a></li>
-									<li><a href="#null">16384</a></li>
-								  </ul>
-								</div>
-							</td>
-							<td class="tipcol"><i class="icon icon-question-sign" title="The width of the published image."></i></td>
-						</tr>
-						<tr><td>Height&nbsp;</td>
-							<td>
-								<div class="input-append btn-group" style="margin:0;"><input id="txtHeight" type="text" value=" 1024" style="width:110px;" /><a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-								  <ul id="txtHeightOptions" class="dropdown-menu">
-									<li><a href="#null">&nbsp;&nbsp;&nbsp;16</a></li>
-									<li><a href="#null">&nbsp;&nbsp;&nbsp;32</a></li>
-									<li><a href="#null">&nbsp;&nbsp;&nbsp;64</a></li>
-									<li><a href="#null">&nbsp;&nbsp;128</a></li>
-									<li><a href="#null">&nbsp;&nbsp;256</a></li>
-									<li><a href="#null">&nbsp;&nbsp;512</a></li>
-									<li><a href="#null">&nbsp;1024 *</a></li>
-									<li><a href="#null">&nbsp;2048</a></li>
-									<li><a href="#null">&nbsp;4096</a></li>
-									<li><a href="#null">&nbsp;8192</a></li>
-									<li><a href="#null">16384</a></li>
-								  </ul>
-								</div>
-							</td>
-							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
-						</tr>
-						<tr><td>Mode&nbsp;</td>
-							<td><div class="btn-toolbar" style="margin:0;">
-								<div class="btn-group">
-								  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlSizeMode">Max Size</span> <span class="caret"></span></a>
-								  <ul id="ddlSizeModeOptions" class="dropdown-menu">
-									<li><a href="#null">Fixed Size</a></li>
-									<li><a href="#null">Max Size *</a></li>
-								  </ul>
-								</div>
-								</div>
-							</td>
-							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
-						</tr>
-						<tr><td>Constraint&nbsp;</td>
-							<td><div class="btn-toolbar" style="margin:0;">
-								<div class="btn-group">
-								  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlConstraint">Power of Two</span> <span class="caret"></span></a>
-								  <ul id="ddlConstraintOptions" class="dropdown-menu">
-									<li><a href="#null">Any Size</a></li>
-									<li><a href="#null">Power of Two *</a></li>
-								  </ul>
-								</div>
-								</div>
-							</td>
-							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
-						</tr>
-						<tr><td>Force&nbsp;Square&nbsp;</td>
-							<td><div class="btn-toolbar" style="margin:0;">
-								<div class="btn-group">
-								  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlForceSquare">No</span> <span class="caret"></span></a>
-								  <ul id="ddlForceSquareOptions" class="dropdown-menu">
-									<li><a href="#null">No *</a></li>
-									<li><a href="#null">Yes</a></li>
-								  </ul>
-								</div>
-								</div>
-							</td>
-							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
-						</tr>
-						<tr><td>Include&nbsp;@2x</td>
-							<td><div class="btn-toolbar" style="margin:0;">
-								<div class="btn-group">
-								  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlIncludeAt2x">No</span> <span class="caret"></span></a>
-								  <ul id="ddlIncludeAt2xOptions" class="dropdown-menu">
-									<li><a href="#null">No *</a></li>
-									<li><a href="#null">Yes</a></li>
-								  </ul>
-								</div>
-								</div>
-							</td>
-							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
-						</tr>
+							<tr><td>Width&nbsp;</td>
+								<td>
+									<div class="input-append btn-group" style="margin:0;"><input id="txtWidth" type="text" value=" 1024" style="width:110px;" /><a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+									  <ul id="txtWidthOptions" class="dropdown-menu">
+										<li><a href="#null">&nbsp;&nbsp;&nbsp;16</a></li>
+										<li><a href="#null">&nbsp;&nbsp;&nbsp;32</a></li>
+										<li><a href="#null">&nbsp;&nbsp;&nbsp;64</a></li>
+										<li><a href="#null">&nbsp;&nbsp;128</a></li>
+										<li><a href="#null">&nbsp;&nbsp;256</a></li>
+										<li><a href="#null">&nbsp;&nbsp;512</a></li>
+										<li><a href="#null">&nbsp;1024 *</a></li>
+										<li><a href="#null">&nbsp;2048</a></li>
+										<li><a href="#null">&nbsp;4096</a></li>
+										<li><a href="#null">&nbsp;8192</a></li>
+										<li><a href="#null">16384</a></li>
+									  </ul>
+									</div>
+								</td>
+								<td class="tipcol"><i class="icon icon-question-sign" title="The width of the published image."></i></td>
+							</tr>
+							<tr><td>Height&nbsp;</td>
+								<td>
+									<div class="input-append btn-group" style="margin:0;"><input id="txtHeight" type="text" value=" 1024" style="width:110px;" /><a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+									  <ul id="txtHeightOptions" class="dropdown-menu">
+										<li><a href="#null">&nbsp;&nbsp;&nbsp;16</a></li>
+										<li><a href="#null">&nbsp;&nbsp;&nbsp;32</a></li>
+										<li><a href="#null">&nbsp;&nbsp;&nbsp;64</a></li>
+										<li><a href="#null">&nbsp;&nbsp;128</a></li>
+										<li><a href="#null">&nbsp;&nbsp;256</a></li>
+										<li><a href="#null">&nbsp;&nbsp;512</a></li>
+										<li><a href="#null">&nbsp;1024 *</a></li>
+										<li><a href="#null">&nbsp;2048</a></li>
+										<li><a href="#null">&nbsp;4096</a></li>
+										<li><a href="#null">&nbsp;8192</a></li>
+										<li><a href="#null">16384</a></li>
+									  </ul>
+									</div>
+								</td>
+								<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+							</tr>
+							<tr><td>Mode&nbsp;</td>
+								<td><div class="btn-toolbar" style="margin:0;">
+									<div class="btn-group">
+									  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlSizeMode">Max Size</span> <span class="caret"></span></a>
+									  <ul id="ddlSizeModeOptions" class="dropdown-menu">
+										<li><a href="#null">Fixed Size</a></li>
+										<li><a href="#null">Max Size *</a></li>
+									  </ul>
+									</div>
+									</div>
+								</td>
+								<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+							</tr>
+							<tr><td>Constraint&nbsp;</td>
+								<td><div class="btn-toolbar" style="margin:0;">
+									<div class="btn-group">
+									  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlConstraint">Power of Two</span> <span class="caret"></span></a>
+									  <ul id="ddlConstraintOptions" class="dropdown-menu">
+										<li><a href="#null">Any Size</a></li>
+										<li><a href="#null">Power of Two *</a></li>
+									  </ul>
+									</div>
+									</div>
+								</td>
+								<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+							</tr>
+							<tr><td>Force&nbsp;Square&nbsp;</td>
+								<td><div class="btn-toolbar" style="margin:0;">
+									<div class="btn-group">
+									  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlForceSquare">No</span> <span class="caret"></span></a>
+									  <ul id="ddlForceSquareOptions" class="dropdown-menu">
+										<li><a href="#null">No *</a></li>
+										<li><a href="#null">Yes</a></li>
+									  </ul>
+									</div>
+									</div>
+								</td>
+								<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+							</tr>
+							<tr><td>Include&nbsp;@2x</td>
+								<td><div class="btn-toolbar" style="margin:0;">
+									<div class="btn-group">
+									  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlIncludeAt2x">No</span> <span class="caret"></span></a>
+									  <ul id="ddlIncludeAt2xOptions" class="dropdown-menu">
+										<li><a href="#null">No *</a></li>
+										<li><a href="#null">Yes</a></li>
+									  </ul>
+									</div>
+									</div>
+								</td>
+								<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+							</tr>
 				
-						<tr><td colspan="3">&nbsp;</td></tr>
+							<tr><td colspan="3">&nbsp;</td></tr>
 
-						<tr><td>Border&nbsp;Padding&nbsp;</td>
-							<td><div class="input-append" style="margin:0;"><input id="txtBorderPadding" type="text" value="2" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
-							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
-						</tr>
-						<tr><td>Shape&nbsp;Padding&nbsp;</td>
-							<td><div class="input-append" style="margin:0;"><input id="txtShapePadding" type="text" value="2" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
-							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
-						</tr>
-						<tr><td>Inner&nbsp;Padding&nbsp;</td>
-							<td><div class="input-append" style="margin:0;"><input id="txtInnerPadding" type="text" value="0" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
-							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
-						</tr>
+							<tr><td>Border&nbsp;Padding&nbsp;</td>
+								<td><div class="input-append" style="margin:0;"><input id="txtBorderPadding" type="text" value="2" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
+								<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+							</tr>
+							<tr><td>Shape&nbsp;Padding&nbsp;</td>
+								<td><div class="input-append" style="margin:0;"><input id="txtShapePadding" type="text" value="2" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
+								<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+							</tr>
+							<tr><td>Inner&nbsp;Padding&nbsp;</td>
+								<td><div class="input-append" style="margin:0;"><input id="txtInnerPadding" type="text" value="0" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
+								<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+							</tr>
 
-						<tr><td colspan="3">&nbsp;</td></tr>
+							<tr><td colspan="3">&nbsp;</td></tr>
 				
-						<tr><td>Trim&nbsp;Mode&nbsp;</td>
-							<td><div class="btn-toolbar" style="margin:0;">
-								<div class="btn-group">
-								  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlTrimMode">None</span> <span class="caret"></span></a>
-								  <ul id="ddlTrimModeOptions" class="dropdown-menu">
-									<li><a href="#null">None *</a></li>
-									<li><a href="#null">Trim</a></li>
-								  </ul>
-								</div>
-								</div>
-							</td>
-							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
-						</tr>
-						<tr><td>Trim&nbsp;Threshold&nbsp;</td>
-							<td><div class="input-append" style="margin:0;"><input id="txtTrimThreshold" type="text" value="1" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
-							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
-						</tr>
+							<tr><td>Trim&nbsp;Mode&nbsp;</td>
+								<td><div class="btn-toolbar" style="margin:0;">
+									<div class="btn-group">
+									  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlTrimMode">None</span> <span class="caret"></span></a>
+									  <ul id="ddlTrimModeOptions" class="dropdown-menu">
+										<li><a href="#null">None *</a></li>
+										<li><a href="#null">Trim</a></li>
+									  </ul>
+									</div>
+									</div>
+								</td>
+								<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+							</tr>
+							<tr><td>Trim&nbsp;Threshold&nbsp;</td>
+								<td><div class="input-append" style="margin:0;"><input id="txtTrimThreshold" type="text" value="1" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
+								<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+							</tr>
 
-						<tr><td colspan="3">&nbsp;</td></tr>
+							<tr><td colspan="3">&nbsp;</td></tr>
 
-						<tr><td>&nbsp;</td>
-							<td><a class="btn btn-primary"><i class="icon icon-white icon-refresh"></i> Apply Changes</a></td>
-							<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
-						</tr>
+							<tr><td>&nbsp;</td>
+								<td><a class="btn btn-primary"><i class="icon icon-white icon-refresh"></i> Apply Changes</a></td>
+								<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+							</tr>
 
-					</table>
+						</table>
+					</div>
 				</td>
 				
 				<!-- CENTER WORKSPACE -->
@@ -551,6 +561,18 @@ THE SOFTWARE.
 			return false;
 		}
 		
+		var isSettingsVisible = true;
+		var DoToggleSettings = function () {
+			if(isSettingsVisible) {
+				$("#leftSidebar").hide();
+				isSettingsVisible = false;
+			} else {
+				$("#leftSidebar").show();
+				isSettingsVisible = true;
+			}
+			return false;
+		}
+		
 		var UpdateDropDownValue = function(ddlName, $obj) {
 			$("#" + ddlName).text($obj.text().replace(" *",""));
 			OnValueChanged();
@@ -627,6 +649,7 @@ THE SOFTWARE.
 		$("#cmdSpriteRemove").click(function() { return DoSpriteRemove(); });
 		$("#cmdPublish").click(function() { return DoPublish(); });
 		$("#cmdToggleHelp").click(function() { return DoToggleHelp(); });
+		$("#cmdToggleSettings").click(function() { return DoToggleSettings(); } )
 		
 		// -- LEFT SIDEBAR --
 		$("#txtName").keyup(function(event) { return UpdateSpinBox("txtName", event, 13); });
