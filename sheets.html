@@ -50,7 +50,7 @@ THE SOFTWARE.
 		
 		.navbar { background-color:#000; margin:0 !important; }
 		
-		#divSidebarLeft {
+		.divSidebarLeft {
 			border:1px solid #000;
 			position:absolute; 
 			top:81px; 
@@ -63,12 +63,11 @@ THE SOFTWARE.
 			padding:5px;
 		}
 		
-		#divSidebarRightToolbar {
+		.divSidebarRightToolbar {
 			border:1px solid #000;
 			position:absolute; 
 			top:81px; 
-			height:28px; 
-			right:0;
+			height:30px; 
 			width:290px; 
 			right:0; 
 			background-color:#eee; 
@@ -76,10 +75,10 @@ THE SOFTWARE.
 			padding:5px;
 		}
 		
-		#divSidebarRight {
+		.divSidebarRight {
 			border:1px solid #000;
 			position:absolute; 
-			top:120px; 
+			top:122px; 
 			bottom:0; 
 			right:0; 
 			width:290px; 
@@ -89,22 +88,22 @@ THE SOFTWARE.
 			padding:5px;
 		}
 		
-		#divWorkspaceToolbar {
+		.divWorkspaceToolbar {
 			border:1px solid #000;
 			position:absolute; 
 			right:301px; 
 			left:301px; 
 			top:81px; 
-			height:28px; 
+			height:30px; 
 			background-color:#667; 
 			color:fff;
 			padding:5px;
 		}
 		
-		#divWorkspace {
+		.divWorkspace {
 			border:1px solid #000;
 			position:absolute; 
-			top:120px; 
+			top:122px; 
 			bottom:0; 
 			right:301px; 
 			left:301px; 
@@ -225,8 +224,8 @@ THE SOFTWARE.
 			</div>
 
 			
-			<div id="divSidebarLeft">
-				<table class="leftSidebar" style="width:100%;">
+			<div id="divSidebarLeft" class="divSidebarLeft">
+				<table style="width:100%;">
 					<tr><td>Name&nbsp;</td>
 						<td><input id="txtName" type="text" value="Untitled" style="margin:0; width:140px;" />
 						</td>
@@ -400,7 +399,7 @@ THE SOFTWARE.
 				</table>
 			</div>
 			
-			<div id="divWorkspaceToolbar">
+			<div id="divWorkspaceToolbar" class="divWorkspaceToolbar">
 				<div class="btn-toolbar" style="margin:0; ">
 				  <div class="btn-group">
 					<a id="cmdWorkspaceZoomOut" title="Zoom Out" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-zoom-out"></i></a>
@@ -428,17 +427,17 @@ THE SOFTWARE.
 				</div>
 			</div>
 			
-			<div id="divWorkspace">
+			<div id="divWorkspace" class="divWorkspace">
 			</div>
 			
-			<div id="divSidebarRightToolbar">
+			<div class="divSidebarRightToolbar">
 				<div class="btn-group" data-toggle="buttons-radio">
 				  <button type="button" class="btn active">Sprites</button>
 				  <button type="button" class="btn">Console <span id="lblLogCount" class="badge badge-info">10</span></button>
 				</div>
 			</div>
 			
-			<div id="divSidebarRight">
+			<div class="divSidebarRight">
 				<div id="divSpritesList">
 					<div class="divSpritesListItem">
 						<img src="assets/ico/favicon.png" />
@@ -584,14 +583,18 @@ THE SOFTWARE.
 				}
 				return false;
 			}
-		
+
 			var isSettingsVisible = true;
 			var DoToggleSettings = function () {
 				if(isSettingsVisible) {
-					$("#leftSidebar").hide();
+					$("#divSidebarLeft").hide();
+					$("#divWorkspace").css("left","0");
+					$("#divWorkspaceToolbar").css("left","0");
 					isSettingsVisible = false;
 				} else {
-					$("#leftSidebar").show();
+					$("#divSidebarLeft").show();
+					$("#divWorkspace").css("left","301px");
+					$("#divWorkspaceToolbar").css("left","301px");
 					isSettingsVisible = true;
 				}
 				return false;
