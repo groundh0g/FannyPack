@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- 
-Copyright (c) 2014 @groundh0g
+Copyright (c) 2014 Joseph B. Hall [@groundh0g]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -138,20 +138,16 @@ THE SOFTWARE.
 			padding:5px;
 		}
 		
-		/*
-		.mainGrid {
-			margin:0; 
-			padding:0; 
-			width:100%; 
-			height:100%;
-			border:1px solid #000;
+		.divWorkspaceContainer {
 		}
-
-		#divWorkspace {
+		
+		.divWorkspaceContainerCrop {
 			background: url(./assets/img/transparent_background.png) repeat;
 		}
-		*/
 		
+		.divWorkspaceContainerCrop img {
+			max-width:none;
+		}
     </style>
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -428,6 +424,10 @@ THE SOFTWARE.
 			</div>
 			
 			<div id="divWorkspace" class="divWorkspace">
+				<div class="divWorkspaceContainer">
+					<div id="divWorkspaceContainerCrop" class="divWorkspaceContainerCrop" style="width:1024px; height:1024px;">
+					</div>
+				</div>
 			</div>
 			
 			<div class="divSidebarRightToolbar">
@@ -529,7 +529,7 @@ THE SOFTWARE.
 		  </div>
 		</div>		
 
-		<INPUT id="uploadFiles" type="file" name="submitfile" multiple="multiple" style="display:none;" onchange="return ProcessSpriteAdd(this.files);" />
+		<INPUT id="uploadSprites" type="file" name="submitfile" multiple="multiple" style="display:none;" onchange="return ProcessSpriteAdd(this.files);" />
 
 		<div id="popupFileModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAddSpritesLabel" aria-hidden="true">
 		  <div class="modal-header">
@@ -539,7 +539,7 @@ THE SOFTWARE.
 		  <div class="modal-body">
 		    <div class="dropzone">
 		    	<span id="popupFileModalDropLabel">Drag and drop image files here, or ...</span><br/><br/><br/>
-		    	<a id="cmdUploadFiles" class="btn btn-primary" href="#null">Click to Upload</a><br/><br/><br/>
+		    	<a id="cmdUploadSprites" class="btn btn-primary" href="#null">Click to Upload</a><br/><br/><br/>
 		    	<span id="popupFileModalDropInfo">No file(s) selected.</span>
 		    </div>
 		  </div>
@@ -639,28 +639,28 @@ THE SOFTWARE.
 			}
 		
 			var uploadedFiles = [];
-			var ProcessSpriteAdd = function(event) {
-				event.preventDefault();
-				var $uploadFiles = $("#uploadFiles")[0];
-				var files = $uploadFiles.files;
+			var ProcessSpriteAdd = function(files) {
+				//event.preventDefault();
+				//var $uploadFiles = $("#uploadFiles")[0];
+				//var files = $uploadFiles.files;
 				for(var i = 0; i < files.length; i++) {
 					var file = files[i];
 					var imageRegEx = /image.*/;
 				
 					if(!file.type.match(imageRegEx)) { continue; }
 				
-					var $img = $("<img />");
-					$img.addClass("foo");
 					var reader = new FileReader();
 					reader.onload = function(e) { 
-						$img.attr("src", e.target.result); 
-						$("#popupAddSpritesPreview").append($img);
+						var $img = $("<img />");
+						$img.addClass("foo");
+						$img.attr("src", e.target.result);
+						$("#divWorkspaceContainerCrop").append($img);
 					}
 					reader.readAsDataURL(file);
 				}
 
-				$("#uploadSprites")[0].reset();
-				$("#popupAddSprites").modal("hide");
+				$("#uploadSprites").val("");
+				$("#popupFileModal").modal("hide");
 
 				return false;
 			};
@@ -707,7 +707,7 @@ THE SOFTWARE.
 			// div#divLogBannerContent
 		
 			// -- POPUPS --
-			$("#cmdUploadSprites").click(function(){ $("#uploadFiles").click(); });
+			$("#cmdUploadSprites").click(function(){ $("#uploadSprites").click(); });
 		
 			DoToggleHelp();
 		</script>
