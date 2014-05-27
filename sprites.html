@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<!-- 
+Copyright (c) 2014 @groundh0g
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+
+<html>
+	<head>
+    <meta charset="utf-8">
+    <title>FannyPack</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A simple spritesheet editor.">
+    <meta name="author" content="@groundh0g">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <!--<link href="assets/css/bootstrap-responsive.css" rel="stylesheet">-->
+    
+    <style type="text/css">
+    	* {
+		  padding:0;
+		  margin:0;
+    	}
+    	
+		html, body {
+		  width: 100%;
+		  height: 100%;
+		}
+		
+		body {
+		  position: relative;
+		}
+		
+		.navbar { background-color:#000; margin:0 !important; }
+		
+		#divSidebarLeft {
+			border:1px solid #000;
+			position:absolute; 
+			top:81px; 
+			bottom:0; 
+			left:0; 
+			width:290px; 
+			background-color:#eee; 
+			color:333;
+			overflow:auto;
+			padding:5px;
+		}
+		
+		#divSidebarRightToolbar {
+			border:1px solid #000;
+			position:absolute; 
+			top:81px; 
+			height:28px; 
+			right:0;
+			width:290px; 
+			right:0; 
+			background-color:#eee; 
+			color:333;
+			padding:5px;
+		}
+		
+		#divSidebarRight {
+			border:1px solid #000;
+			position:absolute; 
+			top:120px; 
+			bottom:0; 
+			right:0; 
+			width:290px; 
+			background-color:#eee; 
+			color:333;
+			overflow:auto;
+			padding:5px;
+		}
+		
+		#divWorkspaceToolbar {
+			border:1px solid #000;
+			position:absolute; 
+			right:301px; 
+			left:301px; 
+			top:81px; 
+			height:28px; 
+			background-color:#667; 
+			color:fff;
+			padding:5px;
+		}
+		
+		#divWorkspace {
+			border:1px solid #000;
+			position:absolute; 
+			top:120px; 
+			bottom:0; 
+			right:301px; 
+			left:301px; 
+			background-color:#888; 
+			color:333;
+			overflow:auto;
+			padding:5px;
+		}
+		
+		.divSpritesListItem {
+			padding:2px;
+			height:36px;
+			background-color:#fed;
+			border-bottom:1px solid #888;
+			overflow:none;
+			line-height:32px;
+			font-weight:bold;
+		}
+		
+		.divSpritesListItem img {
+			border:0;
+			margin:2px;
+			width:32px;
+			height:32px;
+		}
+		
+		.dropzone {
+			text-align:center;
+			border:1px dashed #866;
+			background-color: #fdd;
+			color: #633;
+			padding:5px;
+		}
+		
+		/*
+		.mainGrid {
+			margin:0; 
+			padding:0; 
+			width:100%; 
+			height:100%;
+			border:1px solid #000;
+		}
+
+		#divWorkspace {
+			background: url(./assets/img/transparent_background.png) repeat;
+		}
+		*/
+		
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <link rel="shortcut icon" href="assets/ico/favicon.png">
+
+    <script type="text/javascript">
+//       var _gaq = _gaq || [];
+//       _gaq.push(['_setAccount', 'UA-146052-10']);
+//       _gaq.push(['_trackPageview']);
+//       (function() {
+//         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+//         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+//         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+//       })();
+    </script>
+	</head>
+	<body>
+		<div style="min-height:100%; height:100%; min-width:100%; width:100%; background-color:#fee;">
+			
+			<!-- NAVBAR -->
+			<div class="navbar navbar-inverse">
+			  <div class="navbar-inner">
+				<div style="margin-left:20px; margin-right:20px;">
+				  <a class="brand" href="./product.html" target="_blank">FannyPack</a>
+					<ul class="nav">
+					  <li class="active">
+						<a href="./sheets.html">Sprite Sheets</a>
+					  </li>
+					  <li class="">
+						<a href="./fonts.html">Sprite Fonts</a>
+					  </li>
+					</ul>
+					<ul class="nav pull-right">
+					  <li class="">
+						<a href="./documentation.html" target="_blank">Documentation</a>
+					  </li>
+					  <li class="">
+						<a href="#popupAbout" role="button" data-toggle="modal">About</a>
+					  </li>
+					</ul>
+				</div>
+			  </div>
+			</div>
+
+			<div class="" style="background-color:#eee; padding:5px 0px; margin:0;">
+				<div style="margin-left:20px; margin-right:20px;">
+					<div class="btn-toolbar" style="margin:0;">
+					  <div class="btn-group">
+						<a id="cmdFileNew"  href="#null" class="btn"><i class="icon icon-file"></i> New</a>
+						<a id="cmdFileOpen" href="#null" class="btn"><i class="icon icon-folder-open"></i> Open</a>
+						<a id="cmdFileSave" href="#null" class="btn"><i class="icon icon-download-alt"></i> Save</a>
+					  </div>
+					  <div class="btn-group">
+						<a id="cmdSpriteAdd"    href="#null" class="btn"><i class="icon icon-picture"></i> Add</a>
+						<a id="cmdSpriteRemove" href="#null" class="btn"><i class="icon icon-remove"></i> Remove</a>
+					  </div>
+					  <div class="btn-group">
+						<a id="cmdPublish" href="#null" class="btn"><i class="icon icon-share"></i> Publish</a>
+					  </div>
+					  <div class="btn-group">
+						<a id="cmdToggleSettings" href="#null" class="btn"><i class="icon icon-wrench"></i> Settings</a>
+						<a id="cmdToggleHelp" href="#null" class="btn"><i class="icon icon-question-sign"></i> Tooltips</a>
+					  </div>
+					</div>
+				</div>
+			</div>
+
+			
+			<div id="divSidebarLeft">
+				<table class="leftSidebar" style="width:100%;">
+					<tr><td>Name&nbsp;</td>
+						<td><input id="txtName" type="text" value="Untitled" style="margin:0; width:140px;" />
+						</td>
+						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+					</tr>
+					<tr><td>Image&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlImageFormat">PNG</span> <span class="caret"></span></a>
+							  <ul id="ddlImageFormatOptions" class="dropdown-menu">
+								<li><a href="#null">GIF</a></li>
+								<li><a href="#null">JPG</a></li>
+								<li><a href="#null">PNG *</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+					</tr>
+					<tr><td>Data&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlDataFormat">JSON</span> <span class="caret"></span></a>
+							  <ul id="ddlDataFormatOptions" class="dropdown-menu">
+								<li><a href="#null">JSON *</a></li>
+								<li><a href="#null">XML</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+					</tr>
+				
+					<tr><td colspan="3">&nbsp;</td></tr>
+
+					<tr><td>Width&nbsp;</td>
+						<td>
+							<div class="input-append btn-group" style="margin:0;"><input id="txtWidth" type="text" value=" 1024" style="width:110px;" /><a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+							  <ul id="txtWidthOptions" class="dropdown-menu">
+								<li><a href="#null">&nbsp;&nbsp;&nbsp;16</a></li>
+								<li><a href="#null">&nbsp;&nbsp;&nbsp;32</a></li>
+								<li><a href="#null">&nbsp;&nbsp;&nbsp;64</a></li>
+								<li><a href="#null">&nbsp;&nbsp;128</a></li>
+								<li><a href="#null">&nbsp;&nbsp;256</a></li>
+								<li><a href="#null">&nbsp;&nbsp;512</a></li>
+								<li><a href="#null">&nbsp;1024 *</a></li>
+								<li><a href="#null">&nbsp;2048</a></li>
+								<li><a href="#null">&nbsp;4096</a></li>
+								<li><a href="#null">&nbsp;8192</a></li>
+								<li><a href="#null">16384</a></li>
+							  </ul>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-sign" title="The width of the published image."></i></td>
+					</tr>
+					<tr><td>Height&nbsp;</td>
+						<td>
+							<div class="input-append btn-group" style="margin:0;"><input id="txtHeight" type="text" value=" 1024" style="width:110px;" /><a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+							  <ul id="txtHeightOptions" class="dropdown-menu">
+								<li><a href="#null">&nbsp;&nbsp;&nbsp;16</a></li>
+								<li><a href="#null">&nbsp;&nbsp;&nbsp;32</a></li>
+								<li><a href="#null">&nbsp;&nbsp;&nbsp;64</a></li>
+								<li><a href="#null">&nbsp;&nbsp;128</a></li>
+								<li><a href="#null">&nbsp;&nbsp;256</a></li>
+								<li><a href="#null">&nbsp;&nbsp;512</a></li>
+								<li><a href="#null">&nbsp;1024 *</a></li>
+								<li><a href="#null">&nbsp;2048</a></li>
+								<li><a href="#null">&nbsp;4096</a></li>
+								<li><a href="#null">&nbsp;8192</a></li>
+								<li><a href="#null">16384</a></li>
+							  </ul>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+					</tr>
+					<tr><td>Mode&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlSizeMode">Max Size</span> <span class="caret"></span></a>
+							  <ul id="ddlSizeModeOptions" class="dropdown-menu">
+								<li><a href="#null">Fixed Size</a></li>
+								<li><a href="#null">Max Size *</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+					</tr>
+					<tr><td>Constraint&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlConstraint">Power of Two</span> <span class="caret"></span></a>
+							  <ul id="ddlConstraintOptions" class="dropdown-menu">
+								<li><a href="#null">Any Size</a></li>
+								<li><a href="#null">Power of Two *</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+					</tr>
+					<tr><td>Force&nbsp;Square&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlForceSquare">No</span> <span class="caret"></span></a>
+							  <ul id="ddlForceSquareOptions" class="dropdown-menu">
+								<li><a href="#null">No *</a></li>
+								<li><a href="#null">Yes</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+					</tr>
+					<tr><td>Include&nbsp;@2x</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlIncludeAt2x">No</span> <span class="caret"></span></a>
+							  <ul id="ddlIncludeAt2xOptions" class="dropdown-menu">
+								<li><a href="#null">No *</a></li>
+								<li><a href="#null">Yes</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+					</tr>
+		
+					<tr><td colspan="3">&nbsp;</td></tr>
+
+					<tr><td>Border&nbsp;Padding&nbsp;</td>
+						<td><div class="input-append" style="margin:0;"><input id="txtBorderPadding" type="text" value="2" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
+						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+					</tr>
+					<tr><td>Shape&nbsp;Padding&nbsp;</td>
+						<td><div class="input-append" style="margin:0;"><input id="txtShapePadding" type="text" value="2" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
+						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+					</tr>
+					<tr><td>Inner&nbsp;Padding&nbsp;</td>
+						<td><div class="input-append" style="margin:0;"><input id="txtInnerPadding" type="text" value="0" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
+						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+					</tr>
+
+					<tr><td colspan="3">&nbsp;</td></tr>
+		
+					<tr><td>Trim&nbsp;Mode&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlTrimMode">None</span> <span class="caret"></span></a>
+							  <ul id="ddlTrimModeOptions" class="dropdown-menu">
+								<li><a href="#null">None *</a></li>
+								<li><a href="#null">Trim</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+					</tr>
+					<tr><td>Trim&nbsp;Threshold&nbsp;</td>
+						<td><div class="input-append" style="margin:0;"><input id="txtTrimThreshold" type="text" value="1" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
+						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+					</tr>
+
+					<tr><td colspan="3">&nbsp;</td></tr>
+
+					<tr><td>&nbsp;</td>
+						<td><a class="btn btn-primary"><i class="icon icon-white icon-refresh"></i> Apply Changes</a></td>
+						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+					</tr>
+
+				</table>
+			</div>
+			
+			<div id="divWorkspaceToolbar">
+				<div class="btn-toolbar" style="margin:0; ">
+				  <div class="btn-group">
+					<a id="cmdWorkspaceZoomOut" title="Zoom Out" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-zoom-out"></i></a>
+					<a id="cmdWorkspaceZoomIn"  title="Zoom In" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-zoom-in"></i></a>
+				  </div>
+				  <div class="btn-group">
+					<div class="input-append" style="margin:0;"><input id="txtWorkspaceZoom" type="text" value="100%" size="5" style="width:66px;" /><a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+					  <ul id="txtWorkspaceZoomOptions" class="dropdown-menu">
+						<li><a href="#null">1600.0%</a></li>
+						<li><a href="#null">&nbsp;800.0%</a></li>
+						<li><a href="#null">&nbsp;400.0%</a></li>
+						<li><a href="#null">&nbsp;200.0%</a></li>
+						<li><a href="#null">&nbsp;100.0% *</a></li>
+						<li><a href="#null">&nbsp;&nbsp;50.0%</a></li>
+						<li><a href="#null">&nbsp;&nbsp;25.0%</a></li>
+						<li><a href="#null">&nbsp;&nbsp;12.5%</a></li>
+					  </ul>
+					</div>
+				  </div>
+				  <div class="btn-group">
+					<a id="cmdWorkspaceFitWidth"  title="Fit Workspace Width"  href="#null" class="btn btn-inverse"><i class="icon icon-white icon-resize-horizontal"></i></a>
+					<a id="cmdWorkspaceFitHeight" title="Fit Workspace Height" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-resize-vertical"></i></a>
+					<a id="cmdWorkspaceFit"       title="Fit to Workspace" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-resize-full"></i></a>
+				  </div>
+				</div>
+			</div>
+			
+			<div id="divWorkspace">
+			</div>
+			
+			<div id="divSidebarRightToolbar">
+				<div class="btn-group" data-toggle="buttons-radio">
+				  <button type="button" class="btn active">Sprites</button>
+				  <button type="button" class="btn">Console <span id="lblLogCount" class="badge badge-info">10</span></button>
+				</div>
+			</div>
+			
+			<div id="divSidebarRight">
+				<div id="divSpritesList">
+					<div class="divSpritesListItem">
+						<img src="assets/ico/favicon.png" />
+						<span>Testing.png</span>
+					</div>
+					<div class="divSpritesListItem">
+						<img src="assets/ico/favicon.png" />
+						<span>Testing.png</span>
+					</div>
+					<div class="divSpritesListItem">
+						<img src="assets/ico/favicon.png" />
+						<span>Testing.png</span>
+					</div>
+					<div class="divSpritesListItem">
+						<img src="assets/ico/favicon.png" />
+						<span>Testing.png</span>
+					</div>
+					<div class="divSpritesListItem">
+						<img src="assets/ico/favicon.png" />
+						<span>Testing.png</span>
+					</div>
+					<div class="divSpritesListItem">
+						<img src="assets/ico/favicon.png" />
+						<span>Testing.png</span>
+					</div>
+					<div class="divSpritesListItem">
+						<img src="assets/ico/favicon.png" />
+						<span>Testing.png</span>
+					</div>
+					<div class="divSpritesListItem">
+						<img src="assets/ico/favicon.png" />
+						<span>Testing.png</span>
+					</div>
+					<div class="divSpritesListItem">
+						<img src="assets/ico/favicon.png" />
+						<span>Testing.png</span>
+					</div>
+					<div class="divSpritesListItem">
+						<img src="assets/ico/favicon.png" />
+						<span>Testing.png</span>
+					</div>
+					<div class="divSpritesListItem">
+						<img src="assets/ico/favicon.png" />
+						<span>Testing.png</span>
+					</div>
+					<div class="divSpritesListItem">
+						<img src="assets/ico/favicon.png" />
+						<span>Testing.png</span>
+					</div>
+					<div class="divSpritesListItem">
+						<img src="assets/ico/favicon.png" />
+						<span>Testing.png</span>
+					</div>
+					<div class="divSpritesListItem">
+						<img src="assets/ico/favicon.png" />
+						<span>Testing.png</span>
+					</div>
+					<div class="divSpritesListItem">
+						<img src="assets/ico/favicon.png" />
+						<span>Testing.png</span>
+					</div>
+					<div class="divSpritesListItem">
+						<img src="assets/ico/favicon.png" />
+						<span>Testing.png</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="popupAbout" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAboutLabel" aria-hidden="true">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="popupAboutLabel">About FannyPack</h3>
+		  </div>
+		  <div class="modal-body">
+			<p><a href="https://github.com/groundh0g/FannyPack" target="_blank">FannyPack</a> is a spritesheet tool written in HTML &amp; JavaScript by <a href="https://github.com/groundh0g" target="_blank">@groundh0g</a>.<p>
+			<p>Original concept and inspiration from <a href="https://github.com/SebastianNette/PixiTexturePacker" target="_blank">PixiTexturePacker</a> by <a href="https://github.com/SebastianNette" target="_blank">@SebastianNette</a>.</p>
+			<p>Changes for FannyPack include UI redesign, removal of dependencies, addition of features, other tweaks -- like getting the darn thing to work in Chrome. :)</p>
+			<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+				IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+				FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+				AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+				LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+				OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+				THE SOFTWARE.</p>
+		  </div>
+		  <div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Dismiss</button>
+		  </div>
+		</div>		
+
+		<INPUT id="uploadFiles" type="file" name="submitfile" multiple="multiple" style="display:none;" onchange="return ProcessSpriteAdd(this.files);" />
+
+		<div id="popupFileModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAddSpritesLabel" aria-hidden="true">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="popupFileModalTitle">Add Sprite(s)</h3>
+		  </div>
+		  <div class="modal-body">
+		    <div class="dropzone">
+		    	<span id="popupFileModalDropLabel">Drag and drop image files here, or ...</span><br/><br/><br/>
+		    	<a id="cmdUploadFiles" class="btn btn-primary" href="#null">Click to Upload</a><br/><br/><br/>
+		    	<span id="popupFileModalDropInfo">No file(s) selected.</span>
+		    </div>
+		  </div>
+		  <div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			<button class="btn btn-primary" aria-hidden="true">OK</button>
+		  </div>
+		</div>		
+
+		<script src="assets/js/jquery-1.8.3.js"></script>
+		<script src="assets/js/bootstrap.js"></script>
+	
+		<script type="text/javascript">
+			var OnValueChanged = function() { return false; }
+		
+			var DoFileNew = function () { return false; };
+			var DoFileOpen = function () { return false; };
+			var DoFileSave = function () { return false; };
+			var DoSpriteAdd = function () { 
+				$("#popupFileModalTitle").text("Add Sprite(s)");
+				$("#popupFileModalDropLabel").text("Drag and drop image files here, or ...");
+				$("#popupFileModalDropInfo").text("No file(s) selected.");
+				$("#popupFileModal").modal("show");
+				return false; 
+			};		
+			var DoSpriteRemove = function () { return false; };
+			var DoPublish = function () { return false; };
+		
+			var isHelpVisible = true;
+			var DoToggleHelp = function () {
+				if(isHelpVisible) {
+					$("td.tipcol").hide();
+					$("table.leftSidebar").css("width","274px");
+					$("td.leftSidebar").css("width","284px");
+					isHelpVisible = false;
+				} else {
+					$("td.leftSidebar").css("width","305px");
+					$("table.leftSidebar").css("width","295px");
+					$("td.tipcol").show();
+					isHelpVisible = true;
+				}
+				return false;
+			}
+		
+			var isSettingsVisible = true;
+			var DoToggleSettings = function () {
+				if(isSettingsVisible) {
+					$("#leftSidebar").hide();
+					isSettingsVisible = false;
+				} else {
+					$("#leftSidebar").show();
+					isSettingsVisible = true;
+				}
+				return false;
+			}
+		
+			var UpdateDropDownValue = function(ddlName, $obj) {
+				$("#" + ddlName).text($obj.text().replace(" *",""));
+				OnValueChanged();
+				return true;
+			};
+		
+			var UpdateDropDownValueInput = function(ddlName, $obj) {
+				$("#" + ddlName).val($obj.text().replace(" *",""));
+				OnValueChanged();
+				return true;
+			};
+		
+			var UpdateSpinBox = function (txtName, event, key) {
+				var delta = 0;
+				if(event && event.which) {
+					var which = event.which;
+					if(key && which === key) { which = 13; }
+					if(key && which !== key) { which = 0; }
+					if(which === 38) { delta = 1; }
+					if(which === 40) { delta = -1; }
+					if(which === 13) { 
+						OnValueChanged();
+						$("#" + txtName).blur();
+						return true;
+					}
+				}
+				if(delta !== 0) {
+					var valTxt = $("#" + txtName).val()
+					var valInt = parseInt(valTxt, 10);
+					if(valTxt !== "" && !isNaN(valInt) && isFinite(valInt)) {
+						$("#" + txtName).val(valInt + delta);
+						OnValueChanged();
+						return true;
+					}
+				}
+				return false;
+			}
+		
+			var uploadedFiles = [];
+			var ProcessSpriteAdd = function(event) {
+				event.preventDefault();
+				var $uploadFiles = $("#uploadFiles")[0];
+				var files = $uploadFiles.files;
+				for(var i = 0; i < files.length; i++) {
+					var file = files[i];
+					var imageRegEx = /image.*/;
+				
+					if(!file.type.match(imageRegEx)) { continue; }
+				
+					var $img = $("<img />");
+					$img.addClass("foo");
+					var reader = new FileReader();
+					reader.onload = function(e) { 
+						$img.attr("src", e.target.result); 
+						$("#popupAddSpritesPreview").append($img);
+					}
+					reader.readAsDataURL(file);
+				}
+
+				$("#uploadSprites")[0].reset();
+				$("#popupAddSprites").modal("hide");
+
+				return false;
+			};
+		
+		</script>
+	
+		<script type="text/javascript">
+			// -- TOOLBAR --
+			$("#cmdFileNew").click(function() { return DoFileNew(); });
+			$("#cmdFileOpen").click(function() { return DoFileOpen(); });
+			$("#cmdFileSave").click(function() { return DoFileSave(); });
+			$("#cmdSpriteAdd").click(function() { return DoSpriteAdd(); });
+			$("#cmdSpriteRemove").click(function() { return DoSpriteRemove(); });
+			$("#cmdPublish").click(function() { return DoPublish(); });
+			$("#cmdToggleHelp").click(function() { return DoToggleHelp(); });
+			$("#cmdToggleSettings").click(function() { return DoToggleSettings(); } )
+		
+			// -- LEFT SIDEBAR --
+			$("#txtName").keyup(function(event) { return UpdateSpinBox("txtName", event, 13); });
+			$("#ddlDataFormatOptions li a").click(function() { return UpdateDropDownValue("ddlDataFormat", $(this)); });
+			$("#ddlImageFormatOptions li a").click(function() { return UpdateDropDownValue("ddlImageFormat", $(this)); });
+			$("#txtWidthOptions li a").click(function() { return UpdateDropDownValueInput("txtWidth", $(this)); });
+			$("#txtWidth").keyup(function(event) { return UpdateSpinBox("txtWidth", event); });
+			$("#txtHeightOptions li a").click(function() { return UpdateDropDownValueInput("txtHeight", $(this)); });
+			$("#txtHeight").keyup(function(event) { return UpdateSpinBox("txtHeight", event); });
+			$("#ddlSizeModeOptions li a").click(function() { return UpdateDropDownValue("ddlSizeMode", $(this)); });
+			$("#ddlConstraintOptions li a").click(function() { return UpdateDropDownValue("ddlConstraint", $(this)); });
+			$("#ddlForceSquareOptions li a").click(function() { return UpdateDropDownValue("ddlForceSquare", $(this)); });
+			$("#ddlIncludeAt2xOptions li a").click(function() { return UpdateDropDownValue("ddlIncludeAt2x", $(this)); });
+			$("#txtBorderPadding").keyup(function(event) { return UpdateSpinBox("txtBorderPadding", event); });
+			$("#txtShapePadding").keyup(function(event) { return UpdateSpinBox("txtShapePadding", event); });
+			$("#txtInnerPadding").keyup(function(event) { return UpdateSpinBox("txtInnerPadding", event); });
+			$("#ddlTrimModeOptions li a").click(function() { return UpdateDropDownValue("ddlTrimMode", $(this)); });
+			$("#txtTrimThreshold").keyup(function(event) { return UpdateSpinBox("txtTrimThreshold", event); });
+		
+			// -- WORKSPACE TOOLBAR --
+			$("#txtWorkspaceZoomOptions li a").click(function() { return UpdateDropDownValueInput("txtWorkspaceZoom", $(this)); });
+		
+			// -- RIGHT NAV --
+			// a#lnkSpritesBanner
+			// div#divSpritesBannerContent
+			// a#lnkLogBanner
+			// span#lblLogCount
+			// div#divLogBannerContent
+		
+			// -- POPUPS --
+			$("#cmdUploadSprites").click(function(){ $("#uploadFiles").click(); });
+		
+			DoToggleHelp();
+		</script>
+
+	</body>
+</html>

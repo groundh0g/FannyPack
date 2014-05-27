@@ -37,6 +37,8 @@ THE SOFTWARE.
 		html, body {
 		  width: 100%;
 		  height: 100%;
+		  padding:0;
+		  margin:0;
 		}
 		
 		body {
@@ -92,6 +94,10 @@ THE SOFTWARE.
 			vertical-align:top; 
 			width:305px; 
 			height:100%;
+		}
+		
+		#divWorkspace {
+			background: url(./assets/img/transparent_background.png) repeat;
 		}
 		
     </style>
@@ -352,56 +358,50 @@ THE SOFTWARE.
 				
 				<!-- CENTER WORKSPACE -->
 				
-				<td style="background-color:#888; color:#fff; vertical-align:top; height:1px;">
-					<div style="background-color:#888; color:#fff; padding:0; height:100%; width:100%;">
-						<div style="padding:0; margin:auto; height:100%;">
-							<table border="0" cellspacing="0" cellpadding="0" style="width:100%; height:100%">
-								<tr><td style="height:35px;">
+				<td style="background-color:#888; color:#fff; vertical-align:top; height:100%;">
+							<table border="0" cellspacing="0" cellpadding="0" style="width:100%; height:100%;">
+								<tr><td style="height:35px; width:100%;">
 									<div class="" style="background-color:#667; padding:5px; margin:0;">
-										<div>
-											<div class="btn-toolbar" style="margin:0; ">
-											  <div class="btn-group">
-												<a id="cmdWorkspaceZoomOut" title="Zoom Out" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-zoom-out"></i></a>
-												<a id="cmdWorkspaceZoomIn"  title="Zoom In" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-zoom-in"></i></a>
-											  </div>
-											  <div class="btn-group">
-												<div class="input-append" style="margin:0;"><input id="txtWorkspaceZoom" type="text" value="100%" size="5" style="width:66px;" /><a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-												  <ul id="txtWorkspaceZoomOptions" class="dropdown-menu">
-													<li><a href="#null">1600.0%</a></li>
-													<li><a href="#null">&nbsp;800.0%</a></li>
-													<li><a href="#null">&nbsp;400.0%</a></li>
-													<li><a href="#null">&nbsp;200.0%</a></li>
-													<li><a href="#null">&nbsp;100.0% *</a></li>
-													<li><a href="#null">&nbsp;&nbsp;50.0%</a></li>
-													<li><a href="#null">&nbsp;&nbsp;25.0%</a></li>
-													<li><a href="#null">&nbsp;&nbsp;12.5%</a></li>
-												  </ul>
-												</div>
-											  </div>
-											  <div class="btn-group">
-												<a id="cmdWorkspaceFitWidth"  title="Fit Workspace Width"  href="#null" class="btn btn-inverse"><i class="icon icon-white icon-resize-horizontal"></i></a>
-												<a id="cmdWorkspaceFitHeight" title="Fit Workspace Height" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-resize-vertical"></i></a>
-												<a id="cmdWorkspaceFit"       title="Fit to Workspace" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-resize-full"></i></a>
-											  </div>
+										<div class="btn-toolbar" style="margin:0; ">
+										  <div class="btn-group">
+											<a id="cmdWorkspaceZoomOut" title="Zoom Out" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-zoom-out"></i></a>
+											<a id="cmdWorkspaceZoomIn"  title="Zoom In" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-zoom-in"></i></a>
+										  </div>
+										  <div class="btn-group">
+											<div class="input-append" style="margin:0;"><input id="txtWorkspaceZoom" type="text" value="100%" size="5" style="width:66px;" /><a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+											  <ul id="txtWorkspaceZoomOptions" class="dropdown-menu">
+												<li><a href="#null">1600.0%</a></li>
+												<li><a href="#null">&nbsp;800.0%</a></li>
+												<li><a href="#null">&nbsp;400.0%</a></li>
+												<li><a href="#null">&nbsp;200.0%</a></li>
+												<li><a href="#null">&nbsp;100.0% *</a></li>
+												<li><a href="#null">&nbsp;&nbsp;50.0%</a></li>
+												<li><a href="#null">&nbsp;&nbsp;25.0%</a></li>
+												<li><a href="#null">&nbsp;&nbsp;12.5%</a></li>
+											  </ul>
 											</div>
+										  </div>
+										  <div class="btn-group">
+											<a id="cmdWorkspaceFitWidth"  title="Fit Workspace Width"  href="#null" class="btn btn-inverse"><i class="icon icon-white icon-resize-horizontal"></i></a>
+											<a id="cmdWorkspaceFitHeight" title="Fit Workspace Height" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-resize-vertical"></i></a>
+											<a id="cmdWorkspaceFit"       title="Fit to Workspace" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-resize-full"></i></a>
+										  </div>
 										</div>
 									</div>
 								</td></tr>
 								
-								<tr><td style="height:100%;">
-									<div style="padding:5px; height:100%; overflow:scroll;">
-									<div id="popupAddSpritesPreview"></div>
+								<tr><td style="width:100%;">
+									<div style="padding:5px; height:100%; width:100%; overflow:auto;">
+									<div id="divWorkspace" style="width:1024px; height:1024px;"></div>
 									</div>
 								</td></tr>
 							</table>
-						</div>
-					</div>
 				</td>
 				
 				<!-- RIGHT SIDEBAR -->
 				
 				<td style="width:285px; background-color:#eee; vertical-align:top; height:100%;">
-					<table border="0" cellspacing="0" cellpadding="0" style="width:100%; height:100%;">
+					<table border="0" cellspacing="0" cellpadding="0" style="width:100%; width:285px;">
 						<tr>
 							<td style="height:30px; background-color:#fafafa; padding:5px;">
 								<div class="btn-group" data-toggle="buttons-radio">
