@@ -121,6 +121,8 @@ THE SOFTWARE.
 			overflow:none;
 			line-height:32px;
 			font-weight:bold;
+			overflow:hidden;
+			white-space:nowrap;
 		}
 		
 		.divSpritesListItem img {
@@ -129,6 +131,13 @@ THE SOFTWARE.
 			margin-right:10px;
 			width:32px;
 			height:32px;
+			/*
+			-webkit-transform: rotate(90deg);
+			-moz-transform: rotate(90deg);
+			-o-transform: rotate(90deg);
+			-ms-transform: rotate(90deg);
+			transform: rotate(90deg);
+			*/
 		}
 		
 		.dropzone {
@@ -140,6 +149,9 @@ THE SOFTWARE.
 		}
 		
 		.divWorkspaceContainer {
+			position:relative;
+			background-color:#866;
+			display:inline;
 		}
 		
 		.divWorkspaceContainerCrop {
@@ -148,6 +160,7 @@ THE SOFTWARE.
 		
 		.divWorkspaceContainerCrop img {
 			max-width:none;
+			position:absolute;
 		}
     </style>
 
@@ -426,7 +439,7 @@ THE SOFTWARE.
 			
 			<div id="divWorkspace" class="divWorkspace">
 				<div class="divWorkspaceContainer">
-					<div id="divWorkspaceContainerCrop" class="divWorkspaceContainerCrop" style="width:1024px; height:1024px;">
+					<div id="divWorkspaceContainerCrop" class="divWorkspaceContainerCrop" style="width:32px; height:32px;">
 					</div>
 				</div>
 			</div>
@@ -726,6 +739,19 @@ THE SOFTWARE.
 						$div.append($span);
 						$("#divSpritesList").append($div);
 					});
+				}
+				PlaceSpritesOnWorkspace(null);
+			};
+			
+			var PlaceSpritesOnWorkspace = function(map) {
+				var keys = Object.keys(imagePool).sort(function(a,b){ return (a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0; });
+				if(keys.length > 0) {
+					$("#divWorkspaceContainerCrop").append(
+						$("<img/>")
+						.attr("src",imagePool[keys[0]].src)
+						.css("left","100px")
+						.css("top","100px")
+					);
 				}
 			};
 
