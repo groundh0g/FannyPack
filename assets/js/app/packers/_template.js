@@ -1,6 +1,6 @@
 var packers = packers || {};
 
-packers["Basic"] = {
+packers["Null"] = {
 	// likely unused, but called for all packers before pack()
 	// returns error message, or empty string on success
 	// this might be useful for checking browser compatibility?
@@ -8,7 +8,5 @@ packers["Basic"] = {
 	
 	// accepts array of imagePool entities, and set of options from left sidebar
 	// returns array of imagePool keys with their location (and rotation) in the sheet
-	pack: function(images, options) { 
-		return []; 
-	}
+	pack: function(images, options) { return []; }
 };
