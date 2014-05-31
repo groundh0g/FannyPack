@@ -366,8 +366,10 @@ THE SOFTWARE.
 		  </div>
 		  <div class="modal-body">
 		    <div class="dropzone">
-		    	<span id="popupFileModalDropLabel">Drag and drop image files here, or ...</span><br/><br/><br/>
-		    	<a id="cmdUploadSprites" class="btn btn-primary" href="#null">Click to Upload</a><br/><br/><br/>
+		    	<span id="popupFileModalDropLabel" style="text-decoration:line-through;">Drag and drop image files here, or ...</span>
+		    	<br/><br/><br/>
+		    	<a id="cmdUploadSprites" class="btn btn-primary" href="#null">Click to Upload</a>
+		    	<br/><br/><br/>
 		    	<span id="popupFileModalDropInfo">No file(s) selected.</span>
 		    </div>
 		  </div>
@@ -383,8 +385,16 @@ THE SOFTWARE.
 		
 		<!-- utils -->
 		<script src="assets/js/app/util/guid.js"></script>
+		<script src="assets/js/app/util/json2.js"></script>
 		<script src="assets/js/app/util/object-keys.js"></script>
+		
+		<!-- objs -->
+		<script src="assets/js/app/options.js"></script>
 	
+		<!-- packers -->
+		<script src="assets/js/app/packers/_base.js"></script>
+		<script src="assets/js/app/packers/basic.js"></script>
+		
 		<!-- page -->
 		<script src="assets/js/app/sheets.js"></script>
 		<script src="assets/js/app/sheets-events.js"></script>

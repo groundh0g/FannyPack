@@ -22,12 +22,12 @@ THE SOFTWARE.
 
 var packers = packers || {};
 
-function BasicPacker() {
-	BasePacker.call(this, "Basic");
+function BasePacker(name) {
 	var self = this;
-
+	this.name = name || "Null";
+  
 	// likely unused, but called for all packers before pack()
-	// returns error message, or empty array on success
+	// returns error messages, or empty array on success
 	// this might be useful for checking browser compatibility?
 	this.init = function() { return []; };
 	
@@ -43,4 +43,28 @@ function BasicPacker() {
 	};
 }
 
-(new BasicPacker()).register();
+BasePacker.SORT_BY_KEY = function(images) {
+	return Object.keys(images).sort(function(a,b) {
+		return (a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0;
+	});
+};
+
+BasePacker.SORT_BY_WIDTH_DESC = function(images) {
+	return Object.keys(images).sort(function(a,b) {
+		return (images[a].width < images[b].width) ? 1 : (images[a].width > images[b].width) ? -1 : 0;
+	});
+};
+
+BasePacker.SORT_BY_HEIGHT_DESC = function(images) {
+	return Object.keys(images).sort(function(a,b) {
+		return (images[a].height < images[b].height) ? 1 : (images[a].height > images[b].height) ? -1 : 0;
+	});
+};
+
+BasePacker.SORT_BY_AREA_DESC = function(images) {
+	return Object.keys(images).sort(function(a,b) {
+		var area_a = images[a].width * images[a].height;
+		var area_b = images[b].width * images[b].height;
+		return (area_a < area_b) ? 1 : (area_a > area_b) ? -1 : 0;
+	});
+};
