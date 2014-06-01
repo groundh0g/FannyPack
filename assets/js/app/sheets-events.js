@@ -53,6 +53,16 @@ $("#txtTrimThreshold").keyup(function(event) { return UpdateSpinBox("txtTrimThre
 $("#txtWorkspaceZoomOptions li a").click(function() { return UpdateDropDownValueInput("txtWorkspaceZoom", $(this)); });
 
 // -- RIGHT NAV --
+$("#radioRightNav button").click(function() {
+	$(this).addClass('active').siblings().removeClass('active');
+	if($(this).attr("id") === "tabSprites") {
+		$("#divConsole").hide();
+		$("#divSpritesList").show();
+	} else {
+		$("#divSpritesList").hide();
+		$("#divConsole").show();
+	}
+});
 // a#lnkSpritesBanner
 // div#divSpritesBannerContent
 // a#lnkLogBanner

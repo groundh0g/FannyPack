@@ -342,21 +342,22 @@ THE SOFTWARE.
 			</div>
 			
 			<div class="divSidebarRightToolbar">
-				<div class="btn-group" data-toggle="buttons-radio">
-				  <button type="button" class="btn active">Sprites</button>
-				  <button type="button" class="btn">Console <span id="lblLogCount" class="badge badge-info">10</span></button>
+				<div id="radioRightNav" class="btn-group">
+				  <button id="tabSprites" type="button" class="btn active">Sprites</button>
+				  <button id="tabConsole" type="button" class="btn">Console 
+				  	<span id="lblLogCountSuccess" class="badge badge-success">0</span>
+				  	<span id="lblLogCountWarning" class="badge badge-warning">0</span>
+				  	<span id="lblLogCountError" class="badge badge-important">0</span>
+				  </button>
 				</div>
 			</div>
 			
 			<div class="divSidebarRight">
 				<div id="divSpritesList">
-					<div>[No sprites selected.]</div>
-					<!--
-					<div class="divSpritesListItem">
-						<img src="assets/ico/favicon.png" />
-						<span>Testing.png</span>
-					</div>
-					-->
+					[No sprites selected.]
+				</div>
+				<div id="divConsole" style="display:none;">
+					[No messages.]
 				</div>
 			</div>
 		</div>
