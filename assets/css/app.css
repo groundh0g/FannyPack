@@ -148,3 +148,7 @@ body {
 	max-width:none;
 	position:absolute;
 }
+
+.versionPlaceholder {
+	font-size:0.75em;
+}

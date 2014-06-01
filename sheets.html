@@ -364,12 +364,12 @@ THE SOFTWARE.
 		<div id="popupAbout" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAboutLabel" aria-hidden="true">
 		  <div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h3 id="popupAboutLabel">About FannyPack</h3>
+			<h3 id="popupAboutLabel">About FannyPack <span class="versionPlaceholder">&nbsp;</span></h3>
 		  </div>
 		  <div class="modal-body">
 			<p><a href="https://github.com/groundh0g/FannyPack" target="_blank">FannyPack</a> is a spritesheet tool written in HTML &amp; JavaScript by <a href="https://github.com/groundh0g" target="_blank">@groundh0g</a>.<p>
-			<p>Original concept and inspiration from <a href="https://github.com/SebastianNette/PixiTexturePacker" target="_blank">PixiTexturePacker</a> by <a href="https://github.com/SebastianNette" target="_blank">@SebastianNette</a>.</p>
-			<p>Sebastian was inspired by the <em>EXCELLENT</em> <a href="http://www.codeandweb.com/texturepacker" target="_blank">TexturePacker</a> tool, by Andreas Löw [<a href="https://github.com/CodeAndWeb" target="_blank">@CodeAndWeb</a>]. I personally own TexturePacker, and highly recommend it to all game developers. Unfortunately, I can't afford to use TP for the classes that I teach, so I took Sebastian's idea and ran with it.</p>
+			<p>Original concept and inspiration from <a href="https://github.com/SebastianNette/PixiTexturePacker" target="_blank">PixiTexturePacker</a> by <a href="https://github.com/SebastianNette" target="_blank">@SebastianNette</a>, although none of his code was used on this project. 
+			   Sebastian was inspired by the <em>excellent</em> <a href="http://www.codeandweb.com/texturepacker" target="_blank">TexturePacker</a> software, by <a href="https://github.com/CodeAndWeb" target="_blank">Andreas Löw</a>. I personally own TexturePacker, and highly recommend it.</p>
 			<p><strong>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 				IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 				FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -378,7 +378,7 @@ THE SOFTWARE.
 				OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 				THE SOFTWARE.</strong></p>
 			<p>This project uses modules from the following opensource and public domain projects: 
-				<a href="http://getbootstrap.com/2.3.2/index.html" target="_blank">Bootstrap&nbsp;v2.3.2</a>, 
+				<a href="http://getbootstrap.com/2.3.2/index.html" target="_blank">Bootstrap</a>, 
 				<a href="https://github.com/eligrey/FileSaver.js" target="_blank">FileSaver</a>, 
 				<a href="https://github.com/douglascrockford/JSON-js" target="_blank">json2</a>, 
 				<a href="https://github.com/Stuk/jszip" target="_blank">jszip</a>, 
@@ -425,8 +425,9 @@ THE SOFTWARE.
 		<script src="assets/js/app/util/FileSaver.js"></script>
 		
 		<!-- objs -->
-		<script src="assets/js/app/options.js"></script>
 		<script src="assets/js/app/image.js"></script>
+		<script src="assets/js/app/options.js"></script>
+		<script src="assets/js/app/version.js"></script>
 	
 		<!-- packers -->
 		<script src="assets/js/app/packers/_base.js"></script>
