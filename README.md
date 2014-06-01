@@ -1,4 +1,4 @@
 FannyPack
 =========
 
-A texture packing "app" written in HTML &amp; JS. Inspired by @SebastianNette SebastianNette/PixiTexturePacker.
+A texture packing "app" written in HTML and JS. Inspired by the work of @CodeAndWeb and @SebastianNette.
