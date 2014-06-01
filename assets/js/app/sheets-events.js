@@ -34,6 +34,7 @@ $("#cmdToggleSettings").click(function() { return DoToggleSettings(); } )
 $("#txtName").keyup(function(event) { return UpdateSpinBox("txtName", event, 13); });
 $("#ddlDataFormatOptions li a").click(function() { return UpdateDropDownValue("ddlDataFormat", $(this)); });
 $("#ddlImageFormatOptions li a").click(function() { return UpdateDropDownValue("ddlImageFormat", $(this)); });
+// NOTE: ddlSpritePacker and ddlSortBy are handled in $(document).ready(); [in sheets.js]
 $("#txtWidthOptions li a").click(function() { return UpdateDropDownValueInput("txtWidth", $(this)); });
 $("#txtWidth").keyup(function(event) { return UpdateSpinBox("txtWidth", event); });
 $("#txtHeightOptions li a").click(function() { return UpdateDropDownValueInput("txtHeight", $(this)); });

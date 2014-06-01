@@ -27,6 +27,9 @@ function Options(copy) {
 	this.dataFormat = copy.dataFormat || "JSON";
 	this.imageFormat = copy.imageFormat || "PNG";
 	
+	this.spritePacker = copy.spritePacker || "Joe";
+	this.sortBy = copy.sortBy || "AREA_DESC";
+	
 	this.width = copy.width || 1024;
 	this.height = copy.height || 1024;
 	this.sizeMode = copy.sizeMode || "Max Size";
@@ -62,6 +65,9 @@ function Options(copy) {
 			opts["dataFormat"]  = $("#ddlDataFormat").text();
 			opts["imageFormat"] = $("#ddlImageFormat").text();
 
+			opts["spritePacker"]  = $("#ddlSpritePacker").text();
+			opts["sortBy"]  = $("#ddlSortBy").text();
+	
 			opts["width"]  = parseInt($("#txtWidth").val(),10);
 			opts["height"] = parseInt($("#txtHeight").val(),10);
 			opts["sizeMode"]  = $("#ddlSizeMode").text();
@@ -80,6 +86,9 @@ function Options(copy) {
 		this.name = $.trim(opts.name || this.name);
 		this.dataFormat = $.trim(opts.dataFormat || this.dataFormat);
 		this.imageFormat = $.trim(opts.imageFormat || this.imageFormat);
+
+		this.spritePacker = $.trim(opts.spritePacker || this.spritePacker);
+		this.sortBy = $.trim(opts.sortBy || this.sortBy);
 
 		this.width = $.isNumeric(opts.width) ? opts.width : this.width;
 		this.height = $.isNumeric(opts.height) ? opts.height : this.width;
@@ -106,6 +115,9 @@ function Options(copy) {
 		$("#ddlDataFormat").text(this["dataFormat"]);
 		$("#ddlImageFormat").text(this["imageFormat"]);
 
+		$("#ddlSpritePacker").text(this["spritePacker"]);
+		$("#ddlSortBy").text(this["sortBy"]);
+		
 		$("#txtWidth").val(this["width"]);
 		$("#txtHeight").val(this["height"]);
 		$("#ddlSizeMode").text(this["sizeMode"]);
@@ -138,6 +150,9 @@ function Options(copy) {
 				$.trim(obj1.name) === $.trim(obj2.name) &&
 				$.trim(obj1.dataFormat) === $.trim(obj2.dataFormat) &&
 				$.trim(obj1.imageFormat) === $.trim(obj2.imageFormat) &&
+
+				$.trim(obj1.spritePacker) === $.trim(obj2.spritePacker) &&
+				$.trim(obj1.sortBy) === $.trim(obj2.sortBy) &&
 
 				$.trim(obj1.width) === $.trim(obj2.width) &&
 				$.trim(obj1.height) === $.trim(obj2.height) &&

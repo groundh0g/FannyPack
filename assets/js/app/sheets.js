@@ -32,7 +32,10 @@ var DoFileSave = function () {
 		options: options,
 		images: imagePool
 	};
-	console.log(JSON.stringify(data, null, 2));
+
+	var zip = new JSZip();
+	zip.file("project.json", JSON.stringify(data, null, 2));
+	saveAs(zip.generate({type:"blob"}), options.name + ".zip");
 };
 
 var DoSpriteAdd = function () { 
@@ -210,3 +213,46 @@ var LogConsoleMessage = function(type, msg) {
 	// TODO: Log to console tab
 	console.log(msg);
 };
+
+$(document).ready(function () {
+	var i = 0;
+	var keys = [];
+	var defaultSortBy = BasePacker.SortByDefault;
+
+	// add Sprite Packer options
+	keys = BasePacker.SORT_BY_KEY(packers);
+	for(i = 0; i < keys.length; i++) {
+		var $li = $("<li/>");
+		var $a = $("<a/>").attr("href","#null");
+		var item = packers[keys[i]];
+		if(item.isDefault) {
+			$a.text(item.name + " *");
+			$("#ddlSpritePacker").text(item.name);
+			defaultSortBy = item.defaultSortBy;
+		} else {
+			$a.text(item.name);
+		}
+		$li.append($a);
+		$("#ddlSpritePackerOptions").append($li);
+	}
+
+	// add Sort By options
+	keys = BasePacker.SORT_BY_KEY(BasePacker.SortBy);
+	for(i = 0; i < keys.length; i++) {
+		var $li = $("<li/>");
+		var $a = $("<a/>").attr("href","#null");
+		if(keys[i] == defaultSortBy) {
+			$("#ddlSortBy").text(keys[i]);
+		}
+		$a.text(keys[i]);
+		$li.append($a);
+		$("#ddlSortByOptions").append($li);
+	}
+	
+	$("#ddlSpritePackerOptions li a").click(function() { 
+		var result = UpdateDropDownValue("ddlSpritePacker", $(this));
+		$("#ddlSortBy").text(packers[$("#ddlSpritePacker").text()].defaultSortBy);
+		return result;
+	});
+	$("#ddlSortByOptions li a").click(function() { return UpdateDropDownValue("ddlSortBy", $(this)); });
+});

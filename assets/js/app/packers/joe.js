@@ -22,10 +22,10 @@ THE SOFTWARE.
 
 var packers = packers || {};
 
-function BasicPacker() {
-	BasePacker.call(this, "Basic");
+function JoePacker() {
+	BasePacker.call(this, "Joe", true); // Default Packer
 	var self = this;
-	this.defaultSortBy = "NAME";
+	this.defaultSortBy = "AREA_DESC";
 
 	// likely unused, but called for all packers before pack()
 	// returns error message, or empty array on success
@@ -44,4 +44,4 @@ function BasicPacker() {
 	};
 }
 
-(new BasicPacker()).register();
+(new JoePacker()).register();

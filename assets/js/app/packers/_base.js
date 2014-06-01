@@ -22,9 +22,11 @@ THE SOFTWARE.
 
 var packers = packers || {};
 
-function BasePacker(name) {
+function BasePacker(name, isDefault) {
 	var self = this;
 	this.name = name || "Null";
+	this.defaultSortBy = "NAME";
+	this.isDefault = isDefault || false;
   
 	// likely unused, but called for all packers before pack()
 	// returns error messages, or empty array on success
@@ -43,28 +45,78 @@ function BasePacker(name) {
 	};
 }
 
+BasePacker.SortBy = {};
+BasePacker.SortByDefault = "AREA_DESC"
+
 BasePacker.SORT_BY_KEY = function(images) {
 	return Object.keys(images).sort(function(a,b) {
 		return (a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0;
 	});
 };
+BasePacker.SortBy["NAME"] = BasePacker.SORT_BY_KEY;
+
+BasePacker.SORT_BY_KEY_DESC = function(images) {
+	return Object.keys(images).sort(function(a,b) {
+		return (a.toUpperCase() < b.toUpperCase()) ? 1 : (a.toUpperCase() > b.toUpperCase()) ? -1 : 0;
+	});
+};
+BasePacker.SortBy["NAME_DESC"] = BasePacker.SORT_BY_KEY_DESC;
+
+BasePacker.SORT_BY_WIDTH = function(images) {
+	return Object.keys(images).sort(function(a,b) {
+		return (images[a].width < images[b].width) ? -1 : (images[a].width > images[b].width) ? 1 :
+			// if width is same, use key to sort
+			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
+	});
+};
+BasePacker.SortBy["WIDTH"] = BasePacker.SORT_BY_WIDTH_DESC;
+
+BasePacker.SORT_BY_HEIGHT = function(images) {
+	return Object.keys(images).sort(function(a,b) {
+		return (images[a].height < images[b].height) ? -1 : (images[a].height > images[b].height) ? 1 : 
+			// if height is same, use key to sort
+			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
+	});
+};
+BasePacker.SortBy["HEIGHT"] = BasePacker.SORT_BY_HEIGHT;
 
 BasePacker.SORT_BY_WIDTH_DESC = function(images) {
 	return Object.keys(images).sort(function(a,b) {
-		return (images[a].width < images[b].width) ? 1 : (images[a].width > images[b].width) ? -1 : 0;
+		return (images[a].width < images[b].width) ? 1 : (images[a].width > images[b].width) ? -1 :
+			// if width is same, use key to sort
+			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
 	});
 };
+BasePacker.SortBy["WIDTH_DESC"] = BasePacker.SORT_BY_WIDTH_DESC;
 
 BasePacker.SORT_BY_HEIGHT_DESC = function(images) {
 	return Object.keys(images).sort(function(a,b) {
-		return (images[a].height < images[b].height) ? 1 : (images[a].height > images[b].height) ? -1 : 0;
+		return (images[a].height < images[b].height) ? 1 : (images[a].height > images[b].height) ? -1 :
+			// if height is same, use key to sort
+			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
 	});
 };
+BasePacker.SortBy["HEIGHT_DESC"] = BasePacker.SORT_BY_HEIGHT_DESC;
 
 BasePacker.SORT_BY_AREA_DESC = function(images) {
 	return Object.keys(images).sort(function(a,b) {
 		var area_a = images[a].width * images[a].height;
 		var area_b = images[b].width * images[b].height;
-		return (area_a < area_b) ? 1 : (area_a > area_b) ? -1 : 0;
+		return (area_a < area_b) ? 1 : (area_a > area_b) ? -1 :
+			// if area is same, use key to sort
+			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
 	});
 };
+BasePacker.SortBy["AREA_DESC"] = BasePacker.SORT_BY_AREA_DESC;
+
+BasePacker.SORT_BY_AREA = function(images) {
+	return Object.keys(images).sort(function(a,b) {
+		var area_a = images[a].width * images[a].height;
+		var area_b = images[b].width * images[b].height;
+		return (area_a < area_b) ? -1 : (area_a > area_b) ? 1 :
+			// if area is same, use key to sort
+			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
+	});
+};
+BasePacker.SortBy["AREA"] = BasePacker.SORT_BY_AREA_DESC;
+

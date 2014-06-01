@@ -141,6 +141,32 @@ THE SOFTWARE.
 					</tr>
 				
 					<tr><td colspan="3">&nbsp;</td></tr>
+					
+					<tr><td>Sprite&nbsp;Packer&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlSpritePacker">UNKNOWN</span> <span class="caret"></span></a>
+							  <ul id="ddlSpritePackerOptions" class="dropdown-menu">
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+					</tr>
+					
+					<tr><td>Sort&nbsp;By&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlSortBy">UNKNOWN</span> <span class="caret"></span></a>
+							  <ul id="ddlSortByOptions" class="dropdown-menu">
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+					</tr>
+					
+					<tr><td colspan="3">&nbsp;</td></tr>
 
 					<tr><td>Width&nbsp;</td>
 						<td>
@@ -343,14 +369,22 @@ THE SOFTWARE.
 		  <div class="modal-body">
 			<p><a href="https://github.com/groundh0g/FannyPack" target="_blank">FannyPack</a> is a spritesheet tool written in HTML &amp; JavaScript by <a href="https://github.com/groundh0g" target="_blank">@groundh0g</a>.<p>
 			<p>Original concept and inspiration from <a href="https://github.com/SebastianNette/PixiTexturePacker" target="_blank">PixiTexturePacker</a> by <a href="https://github.com/SebastianNette" target="_blank">@SebastianNette</a>.</p>
-			<p>Changes for FannyPack include UI redesign, removal of dependencies, addition of features, other tweaks -- like getting the darn thing to work in Chrome. :)</p>
-			<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+			<p>Sebastian was inspired by the <em>EXCELLENT</em> <a href="http://www.codeandweb.com/texturepacker" target="_blank">TexturePacker</a> tool, by Andreas Löw [<a href="https://github.com/CodeAndWeb" target="_blank">@CodeAndWeb</a>]. I personally own TexturePacker, and highly recommend it to all game developers. Unfortunately, I can't afford to use TP for the classes that I teach, so I took Sebastian's idea and ran with it.</p>
+			<p><strong>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 				IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 				FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 				AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 				LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 				OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-				THE SOFTWARE.</p>
+				THE SOFTWARE.</strong></p>
+			<p>This project uses modules from the following opensource and public domain projects: 
+				<a href="http://getbootstrap.com/2.3.2/index.html" target="_blank">Bootstrap&nbsp;v2.3.2</a>, 
+				<a href="https://github.com/eligrey/FileSaver.js" target="_blank">FileSaver</a>, 
+				<a href="https://github.com/douglascrockford/JSON-js" target="_blank">json2</a>, 
+				<a href="https://github.com/Stuk/jszip" target="_blank">jszip</a>, 
+				<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys" target="_blank">object-keys.js</a>, and 
+				<a href="http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/21963136#21963136" target="_blank">UUID</a>.
+			</p>
 		  </div>
 		  <div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Dismiss</button>
@@ -384,9 +418,11 @@ THE SOFTWARE.
 		<script src="assets/js/bootstrap.js"></script>
 		
 		<!-- utils -->
+		<script src="assets/js/app/util/object-keys.js"></script>
 		<script src="assets/js/app/util/guid.js"></script>
 		<script src="assets/js/app/util/json2.js"></script>
-		<script src="assets/js/app/util/object-keys.js"></script>
+		<script src="assets/js/app/util/jszip.js"></script>
+		<script src="assets/js/app/util/FileSaver.js"></script>
 		
 		<!-- objs -->
 		<script src="assets/js/app/options.js"></script>
@@ -395,6 +431,7 @@ THE SOFTWARE.
 		<!-- packers -->
 		<script src="assets/js/app/packers/_base.js"></script>
 		<script src="assets/js/app/packers/basic.js"></script>
+		<script src="assets/js/app/packers/joe.js"></script>
 		
 		<!-- page -->
 		<script src="assets/js/app/sheets.js"></script>
