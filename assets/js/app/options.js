@@ -34,10 +34,10 @@ function Options(copy) {
 	this.forceSquare = copy.forceSquare || "No";
 	this.includeAt2x = copy.includeAt2x || "No";
 	
-	this.doFixedSize = function() { return self.sizeMode === "Fixed Size"; };
-	this.doForcePowOf2 = function() { return self.constraint === "Power of Two"; };
-	this.doForceSquare = function() { return self.forceSquare === "Yes"; };
-	this.doIncludeAt2x = function() { return self.doIncludeAt2x === "Yes"; };
+	this.doFixedSize   = function() { return this.sizeMode === "Fixed Size"; };
+	this.doForcePowOf2 = function() { return this.constraint === "Power of Two"; };
+	this.doForceSquare = function() { return this.forceSquare === "Yes"; };
+	this.doIncludeAt2x = function() { return this.doIncludeAt2x === "Yes"; };
 
 	this.borderPadding = copy.borderPadding || 2;
 	this.shapePadding = copy.shapePadding || 2;
@@ -46,7 +46,7 @@ function Options(copy) {
 	this.trimMode = copy.trimMode || "None";
 	this.trimThreshold = copy.trimThreshold || 1;
 	
-	this.doTrim = function() { return self.trimMode === "Trim" && self.trimThreshold > 0; };
+	this.doTrim = function() { return this.trimMode === "Trim" && this.trimThreshold > 0; };
 	
 	this.read = function(obj) {
 		var opts = {};
@@ -77,48 +77,48 @@ function Options(copy) {
 			opts["trimThreshold"] = parseInt($("#txtTrimThreshold").val(),10);
 		}
 	
-		self.name = $.trim(opts.name || self.name);
-		self.dataFormat = $.trim(opts.dataFormat || self.dataFormat);
-		self.imageFormat = $.trim(opts.imageFormat || self.imageFormat);
+		this.name = $.trim(opts.name || this.name);
+		this.dataFormat = $.trim(opts.dataFormat || this.dataFormat);
+		this.imageFormat = $.trim(opts.imageFormat || this.imageFormat);
 
-		self.width = $.isNumeric(opts.width) ? opts.width : self.width;
-		self.height = $.isNumeric(opts.height) ? opts.height : self.width;
-		self.sizeMode = $.trim(opts.sizeMode || self.sizeMode);
-		self.constraint = $.trim(opts.constraint || self.constraint);
-		self.forceSquare = $.trim(opts.forceSquare || self.forceSquare);
-		self.includeAt2x = $.trim(opts.includeAt2x || self.includeAt2x);
+		this.width = $.isNumeric(opts.width) ? opts.width : this.width;
+		this.height = $.isNumeric(opts.height) ? opts.height : this.width;
+		this.sizeMode = $.trim(opts.sizeMode || this.sizeMode);
+		this.constraint = $.trim(opts.constraint || this.constraint);
+		this.forceSquare = $.trim(opts.forceSquare || this.forceSquare);
+		this.includeAt2x = $.trim(opts.includeAt2x || this.includeAt2x);
 
-		self.borderPadding = $.isNumeric(opts.borderPadding) ? opts.borderPadding : self.borderPadding;
-		self.shapePadding = $.isNumeric(opts.shapePadding) ? opts.shapePadding : self.shapePadding;
-		self.innerPadding = $.isNumeric(opts.innerPadding) ? opts.innerPadding : self.innerPadding;
+		this.borderPadding = $.isNumeric(opts.borderPadding) ? opts.borderPadding : this.borderPadding;
+		this.shapePadding  = $.isNumeric(opts.shapePadding) ? opts.shapePadding : this.shapePadding;
+		this.innerPadding  = $.isNumeric(opts.innerPadding) ? opts.innerPadding : this.innerPadding;
 
-		self.trimMode = $.trim(opts.trimMode || self.trimMode);
-		self.trimThreshold = $.isNumeric(opts.trimThreshold) ? opts.trimThreshold : self.trimThreshold;
+		this.trimMode = $.trim(opts.trimMode || this.trimMode);
+		this.trimThreshold = $.isNumeric(opts.trimThreshold) ? opts.trimThreshold : this.trimThreshold;
 	};
 	
 	this.write = function() {
-		return JSON.stringify(self, null, 2);
+		return JSON.stringify(this, null, 2);
 	};
 
 	this.updateUI = function() {
 		// refresh UI
-		$("#txtName").val(self["name"]);
-		$("#ddlDataFormat").text(self["dataFormat"]);
-		$("#ddlImageFormat").text(self["imageFormat"]);
+		$("#txtName").val(this["name"]);
+		$("#ddlDataFormat").text(this["dataFormat"]);
+		$("#ddlImageFormat").text(this["imageFormat"]);
 
-		$("#txtWidth").val(self["width"]);
-		$("#txtHeight").val(self["height"]);
-		$("#ddlSizeMode").text(self["sizeMode"]);
-		$("#ddlConstraint").text(self["constraint"]);
-		$("#ddlForceSquare").text(self["forceSquare"]);
-		$("#ddlIncludeAt2x").text(self["includeAt2x"]);
+		$("#txtWidth").val(this["width"]);
+		$("#txtHeight").val(this["height"]);
+		$("#ddlSizeMode").text(this["sizeMode"]);
+		$("#ddlConstraint").text(this["constraint"]);
+		$("#ddlForceSquare").text(this["forceSquare"]);
+		$("#ddlIncludeAt2x").text(this["includeAt2x"]);
 	
-		$("#txtBorderPadding").val(self["borderPadding"]);
-		$("#txtShapePadding").val(self["shapePadding"]);
-		$("#txtInnerPadding").val(self["innerPadding"]);
+		$("#txtBorderPadding").val(this["borderPadding"]);
+		$("#txtShapePadding").val(this["shapePadding"]);
+		$("#txtInnerPadding").val(this["innerPadding"]);
 
-		$("#ddlTrimMode").text(self["trimMode"]);
-		$("#txtTrimThreshold").val(self["trimThreshold"]);
+		$("#ddlTrimMode").text(this["trimMode"]);
+		$("#txtTrimThreshold").val(this["trimThreshold"]);
 	};
 	
 	this.equals = function(obj1, obj2) {
@@ -128,10 +128,10 @@ function Options(copy) {
 			// compare self values to UI values
 			var opts = new Options();
 			opts.read();
-			result = self.equals(self, opts);
+			result = this.equals(this, opts);
 		} else if(obj1 && obj1.name && obj2 == null) {
 			// compare self values to obj1 values
-			result = self.equals(self, obj1);
+			result = this.equals(this, obj1);
 		} else if(obj1 && obj1.name && obj2 && obj2.name) {
 			// compare obj1 values to obj2 values
 			result = 

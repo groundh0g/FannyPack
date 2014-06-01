@@ -24,7 +24,17 @@ var OnValueChanged = function() { return false; }
 
 var DoFileNew = function () { return false; };
 var DoFileOpen = function () { return false; };
-var DoFileSave = function () { return false; };
+
+var DoFileSave = function () { 
+	var options = new Options();
+	options.read();
+	var data = {
+		options: options,
+		images: imagePool
+	};
+	console.log(JSON.stringify(data, null, 2));
+};
+
 var DoSpriteAdd = function () { 
 	$("#popupFileModalTitle").text("Add Sprite(s)");
 	$("#popupFileModalDropLabel").text("Drag and drop image files here, or ...");
@@ -129,14 +139,15 @@ var ProcessSpriteAdd = function(files) {
 			$img.addClass("foo");
 			$img.attr("src", e.target.result);
 			$("#divWorkspaceContainerCrop").append($img);
-			AddSpriteToImagePool({
-				filename: this.filename,
-				type: this.filetype,
-				width: $img.css("width"),
-				height: $img.css("height"),
-				src: e.target.result,
-				guid: UUID.generate()
-			});
+			AddSpriteToImagePool(new Image(
+				null, // not a copy of existing image
+				this.filename,
+				this.filetype,
+				$img.css("width"),
+				$img.css("height"),
+				e.target.result,
+				UUID.generate()
+			));
 			$img.remove();
 		}
 		reader.readAsDataURL(file);
