@@ -63,13 +63,9 @@ $("#radioRightNav button").click(function() {
 		$("#divConsole").show();
 	}
 });
-// a#lnkSpritesBanner
-// div#divSpritesBannerContent
-// a#lnkLogBanner
-// span#lblLogCount
-// div#divLogBannerContent
 
 // -- POPUPS --
 $("#cmdUploadSprites").click(function(){ $("#uploadSprites").click(); });
+$("#cmdUploadProject").click(function(){ $("#uploadProject").click(); });
 
 DoToggleHelp();

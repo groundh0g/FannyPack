@@ -20,28 +20,50 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-var OnValueChanged = function() { return false; }
+var OnValueChanged = function() { 
+	BuildSpriteList();
+	UpdateConsole();
+	return false; 
+}
 
 var DoFileNew = function () { return false; };
-var DoFileOpen = function () { return false; };
+var DoFileOpen = function () { 
+	$("#popupFileModalTitle").text("Open Project");
+	$("#popupFileModalDropLabel").text("Drag and drop project file here, or ...");
+	$("#popupFileModalDropInfo").text("No project selected.");
+	$("#cmdUploadProject").show();
+	$("#cmdUploadSprites").hide();
+	$("#popupFileModal").modal("show");
+	return false; 
+};
 
 var DoFileSave = function () { 
 	var options = new Options();
 	options.read();
 	var data = {
+		application: "FannyPack",
+		version: FannyPack_SpriteSheet_Version,
+		url: "https://github.com/groundh0g/FannyPack",
 		options: options,
 		images: imagePool
 	};
 
-	var zip = new JSZip();
-	zip.file("project.json", JSON.stringify(data, null, 2));
-	saveAs(zip.generate({type:"blob"}), options.name + ".zip");
+// 	var zip = new JSZip();
+// 	zip.file("project.json", JSON.stringify(data, null, 2));
+// 	saveAs(zip.generate({type:"blob"}), options.name + ".zip");
+
+	saveAs(
+		new Blob([JSON.stringify(data, null, 2)], {type: "application/json"}), 
+		options.name + ".fanny"
+	);
 };
 
 var DoSpriteAdd = function () { 
 	$("#popupFileModalTitle").text("Add Sprite(s)");
 	$("#popupFileModalDropLabel").text("Drag and drop image files here, or ...");
 	$("#popupFileModalDropInfo").text("No file(s) selected.");
+	$("#cmdUploadProject").hide();
+	$("#cmdUploadSprites").show();
 	$("#popupFileModal").modal("show");
 	return false; 
 };		
@@ -118,19 +140,59 @@ var UpdateSpinBox = function (txtName, event, key) {
 	return false;
 }
 
+var ProcessProjectOpen = function(files) {
+	if(files && files.length) {
+		var file = files[0];
+		var reader = new FileReader();
+		reader.filename = file.name;
+		reader.filetype = file.type;
+		reader.onload = function(e) { 
+			try {
+				var project = $.parseJSON(e.target.result);
+				var options = new Options();
+				options.read(project.options);
+				options.updateUI();
+				imagePool = project.images;
+			} catch (e) {
+				LogConsoleMessage(ConsoleMessageTypes.ERROR, "Unable to open project.");
+				$("#tabConsole").click();
+			}
+			OnValueChanged();
+			return false;
+		};
+		reader.readAsText(file);
+	}
+
+	$("#uploadProject").val("");
+	$("#popupFileModal").modal("hide");
+
+	return false;
+};
+
 var fileHasChanges = false;
 var imagePool = {};
 var isProcessingFiles = false;
 var filesToProcess = {};
+var filesProcessedCount = 0;
+var filesErroredCount = 0;
 
 var ProcessSpriteAdd = function(files) {
+	ClearConsoleMessages();
+	
 	filesToProcess = {};
 	isProcessingFiles = true;
+	filesProcessedCount = 0;
+	filesErroredCount = 0;
+	
 	for(var i = 0; i < files.length; i++) {
 		var file = files[i];
 		var imageRegEx = /image.*/;
 	
-		if(!file.type.match(imageRegEx)) { continue; }
+		if(!file.type.match(imageRegEx)) { 
+			LogConsoleMessage(ConsoleMessageTypes.ERROR, "Image '" + file.name + "' failed to load.");
+			filesErroredCount++;
+			continue; 
+		}
 
 		filesToProcess[file.name] = true;
 
@@ -138,21 +200,26 @@ var ProcessSpriteAdd = function(files) {
 		reader.filename = file.name;
 		reader.filetype = file.type;
 		reader.onload = function(e) { 
-			var $img = $("<img />");
-			$img.addClass("foo");
-			$img.attr("src", e.target.result);
-			$("#divWorkspaceContainerCrop").append($img);
-			AddSpriteToImagePool(new Image(
-				null, // not a copy of existing image
-				this.filename,
-				this.filetype,
-				$img.css("width"),
-				$img.css("height"),
-				e.target.result,
-				UUID.generate()
-			));
-			$img.remove();
-		}
+			try {
+				var $img = $("<img />");
+				$img.addClass("foo");
+				$img.attr("src", e.target.result);
+				$("#divWorkspaceContainerCrop").append($img);
+				AddSpriteToImagePool(new ImageData(
+					null, // not a copy of existing image
+					this.filename,
+					this.filetype,
+					$img.css("width"),
+					$img.css("height"),
+					e.target.result,
+					UUID.generate()
+				));
+				$img.remove();
+			} catch(e) { 
+				LogConsoleMessage(ConsoleMessageTypes.ERROR, "Image '" + this.filename + "' failed to load.");
+				filesErroredCount++;
+			}
+		};
 		reader.readAsDataURL(file);
 	}
 	
@@ -165,14 +232,17 @@ var ProcessSpriteAdd = function(files) {
 };
 
 var AddSpriteToImagePool = function(img) {
-	// TODO: error checking
 	if(imagePool[img.filename]) {
-		LogConsoleMessage("warn", "Image '" + img.filename + "' already exists. Replacing.");
+		LogConsoleMessage(ConsoleMessageTypes.WARNING, "Image '" + img.filename + "' already exists. Replacing.");
 	}
 	imagePool[img.filename] = img;
 	if(filesToProcess[img.filename]) { 
 		delete filesToProcess[img.filename];
-		if(!isProcessingFiles && Object.keys(filesToProcess).length === 0) { BuildSpriteList(); } 
+		filesProcessedCount++;
+		if(!isProcessingFiles && Object.keys(filesToProcess).length === 0) { 
+			LogConsoleMessage(ConsoleMessageTypes.SUCCESS, "" + filesProcessedCount + " image(s) processed.");
+			OnValueChanged(); 
+		} 
 	}
 };
 
@@ -209,10 +279,75 @@ var PlaceSpritesOnWorkspace = function(map) {
 	}
 };
 
-var LogConsoleMessage = function(type, msg) {
-	// TODO: Log to console tab
-	console.log(msg);
+var ConsoleMessageTypes = {
+	"SUCCESS": "SUCCESS",
+	"WARNING": "WARNING",
+	"ERROR"  : "ERROR"
 };
+
+var consoleMessages = {
+	"SUCCESS": [],
+	"WARNING": [],
+	"ERROR"  : []
+};
+
+var ClearConsoleMessages = function() {
+	consoleMessages = {
+		"SUCCESS": [],
+		"WARNING": [],
+		"ERROR"  : []
+	};
+};
+
+var LogConsoleMessage = function(type, msg) {
+	if(consoleMessages[type]) {
+		consoleMessages[type].push(msg);
+	}
+	UpdateConsole();
+};
+
+var UpdateConsole = function() {
+	var hasMessage = false;
+	var hasError = false;
+
+	$("#lblLogCountNothing").hide();
+	$("#lblLogCountSUCCESS").hide();
+	$("#lblLogCountWARNING").hide();
+	$("#lblLogCountERROR").hide();
+	$("#divConsole").text("");
+
+	var keys = Object.keys(consoleMessages);
+	for(var i = 0; i < keys.length; i++) {
+		var msgs = consoleMessages[keys[i]];
+		if(msgs.length > 0) {
+			hasMessage = true;
+			if(keys[i] == ConsoleMessageTypes.ERROR) {
+				hasError = true;
+			}
+			$("#lblLogCount" + keys[i]).text(msgs.length);
+			$("#lblLogCount" + keys[i]).show();
+
+			for(var j = 0; j < msgs.length; j++) {
+				var $alert = $("<div/>").addClass("alert alert-" + keys[i].toLowerCase());
+				$alert.html("<strong>" + keys[i] + "</strong>: " + msgs[j]);
+				$("#divConsole").append($alert);
+			}
+		}
+	}
+	
+	if(!hasMessage) {
+		$("#lblLogCountNothing").show();
+		$("#divConsole").text("[No messages.]");
+	}
+	
+	if(hasError) {
+		$("#tabConsole").click();
+	}
+	
+	// seems silly to report success as badge
+	// comment out this line if you want it to show
+	$("#lblLogCountSUCCESS").hide();
+}
 
 $(document).ready(function () {
 	var i = 0;

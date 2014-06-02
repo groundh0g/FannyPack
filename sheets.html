@@ -345,9 +345,10 @@ THE SOFTWARE.
 				<div id="radioRightNav" class="btn-group">
 				  <button id="tabSprites" type="button" class="btn active">Sprites</button>
 				  <button id="tabConsole" type="button" class="btn">Console 
-				  	<span id="lblLogCountSuccess" class="badge badge-success">0</span>
-				  	<span id="lblLogCountWarning" class="badge badge-warning">0</span>
-				  	<span id="lblLogCountError" class="badge badge-important">0</span>
+				  	<span id="lblLogCountNothing" class="badge">0</span>
+				  	<span id="lblLogCountSUCCESS" class="badge badge-success" style="display:none;">0</span>
+				  	<span id="lblLogCountWARNING" class="badge badge-warning" style="display:none;">0</span>
+				  	<span id="lblLogCountERROR" class="badge badge-important" style="display:none;">0</span>
 				  </button>
 				</div>
 			</div>
@@ -379,6 +380,7 @@ THE SOFTWARE.
 				OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 				THE SOFTWARE.</strong></p>
 			<p>This project uses modules from the following opensource and public domain projects: 
+				<a href="https://github.com/eligrey/Blob.js" target="_blank">Blob</a>,
 				<a href="http://getbootstrap.com/2.3.2/index.html" target="_blank">Bootstrap</a>, 
 				<a href="https://github.com/eligrey/FileSaver.js" target="_blank">FileSaver</a>, 
 				<a href="http://code.jquery.com/jquery-1.8.3.js" target="_blank">jQuery</a>,
@@ -394,6 +396,7 @@ THE SOFTWARE.
 		</div>		
 
 		<INPUT id="uploadSprites" type="file" name="submitfile" multiple="multiple" style="display:none;" onchange="return ProcessSpriteAdd(this.files);" />
+		<INPUT id="uploadProject" type="file" name="submitfile" style="display:none;" onchange="return ProcessProjectOpen(this.files);" />
 
 		<div id="popupFileModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAddSpritesLabel" aria-hidden="true">
 		  <div class="modal-header">
@@ -404,6 +407,7 @@ THE SOFTWARE.
 		    <div class="dropzone">
 		    	<span id="popupFileModalDropLabel" style="text-decoration:line-through;">Drag and drop image files here, or ...</span>
 		    	<br/><br/><br/>
+		    	<a id="cmdUploadProject" class="btn btn-primary" href="#null">Click to Upload</a>
 		    	<a id="cmdUploadSprites" class="btn btn-primary" href="#null">Click to Upload</a>
 		    	<br/><br/><br/>
 		    	<span id="popupFileModalDropInfo">No file(s) selected.</span>
@@ -424,10 +428,11 @@ THE SOFTWARE.
 		<script src="assets/js/app/util/guid.js"></script>
 		<script src="assets/js/app/util/json2.js"></script>
 		<script src="assets/js/app/util/jszip.js"></script>
+		<script src="assets/js/app/util/Blob.js"></script>
 		<script src="assets/js/app/util/FileSaver.js"></script>
 		
 		<!-- objs -->
-		<script src="assets/js/app/image.js"></script>
+		<script src="assets/js/app/image-data.js"></script>
 		<script src="assets/js/app/options.js"></script>
 		<script src="assets/js/app/version.js"></script>
 	

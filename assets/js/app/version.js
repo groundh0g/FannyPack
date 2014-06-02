@@ -20,6 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+var FannyPack_SpriteSheet_Version = "0.1.0";
 $(document).ready(function () {
-	$(".versionPlaceholder").text("version 0.1.0");
+	$(".versionPlaceholder").text("version " + FannyPack_SpriteSheet_Version);
 });
