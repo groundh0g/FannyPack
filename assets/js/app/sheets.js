@@ -54,7 +54,7 @@ var DoFileSave = function () {
 
 	saveAs(
 		new Blob([JSON.stringify(data, null, 2)], {type: "application/json"}), 
-		options.name + ".fanny"
+		options.name + ".fpsheet"
 	);
 };
 
@@ -142,13 +142,16 @@ var UpdateSpinBox = function (txtName, event, key) {
 
 var ProcessProjectOpen = function(files) {
 	if(files && files.length) {
+		ClearConsoleMessages();
 		var file = files[0];
 		var reader = new FileReader();
 		reader.filename = file.name;
 		reader.filetype = file.type;
+		if(!file.name.toLowerCase().endsWith(".fpsheet")) {
+			LogConsoleMessage(ConsoleMessageTypes.WARNING, "File '" + file.name + "' has an invalid extension. Expected '*.fpsheet'. Attempting to load as project.");
+		}
 		reader.onload = function(e) { 
 			try {
-				ClearConsoleMessages();
 				var project = $.parseJSON(e.target.result);
 				var options = new Options();
 				options.read(project.options);
@@ -157,7 +160,6 @@ var ProcessProjectOpen = function(files) {
 				LogConsoleMessage(ConsoleMessageTypes.SUCCESS, "Project '" + this.filename + "' loaded.");
 			} catch (e) {
 				LogConsoleMessage(ConsoleMessageTypes.ERROR, "Unable to open '" + this.filename + "' project.");
-				$("#tabConsole").click();
 			}
 			OnValueChanged();
 			return false;
@@ -250,6 +252,7 @@ var AddSpriteToImagePool = function(img) {
 
 var BuildSpriteList = function() {
 	var keys = Object.keys(imagePool).sort(function(a,b){ return (a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0; });
+	$("#lblSpriteCount").text(keys.length);
 	$("#divSpritesList").html("");
 	if(keys.length === 0) {
 		$("#divSpritesList").text("[No sprites selected.]");
@@ -321,9 +324,9 @@ var UpdateConsole = function() {
 	var countMessages = countSuccess + countWarning + countError;
 	
 	var keys = [
-		ConsoleMessageTypes.SUCCESS,
+		ConsoleMessageTypes.ERROR,
 		ConsoleMessageTypes.WARNING,
-		ConsoleMessageTypes.ERROR
+		ConsoleMessageTypes.SUCCESS
 	];
 	
 	for(var i = 0; i < keys.length; i++) {
@@ -331,8 +334,8 @@ var UpdateConsole = function() {
 		var msgs = consoleMessages[key];
 		if(msgs.length > 0) {
 			for(var j = 0; j < msgs.length; j++) {
-				var $alert = $("<div/>").addClass("alert alert-" + key.toLowerCase());
-				$alert.html("<strong>" + key + "</strong>: " + msgs[j]);
+				var $alert = $("<div/>").addClass("alert alert-" + key.toLowerCase()).css("margin-bottom","2px");
+				$alert.html("<h4>" + key + ":</h4> " + msgs[j]);
 				$("#divConsole").append($alert);
 			}
 		}
@@ -342,20 +345,14 @@ var UpdateConsole = function() {
 		$("#lblLogCountERROR").text(countError);
 		$("#lblLogCountERROR").show();
 		$("#tabConsole").click();
-	}
-	
-	if(countWarning > 0) {
+	} else if(countWarning > 0) {
 		$("#lblLogCountWARNING").text(countWarning);
 		$("#lblLogCountWARNING").show();
-	}
-	
-	if(countSuccess > 0) {
+	} else if(countSuccess > 0) {
 		// seems silly to report success as badge, but ...
 		$("#lblLogCountSUCCESS").text(countSuccess);
 		$("#lblLogCountSUCCESS").show();
-	}
-	
-	if(countMessages == 0) {
+	} else { // if(countMessages === 0) {
 		$("#lblLogCountNothing").show();
 		$("#divConsole").text("[No messages.]");
 	}
