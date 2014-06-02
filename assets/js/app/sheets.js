@@ -148,13 +148,15 @@ var ProcessProjectOpen = function(files) {
 		reader.filetype = file.type;
 		reader.onload = function(e) { 
 			try {
+				ClearConsoleMessages();
 				var project = $.parseJSON(e.target.result);
 				var options = new Options();
 				options.read(project.options);
 				options.updateUI();
 				imagePool = project.images;
+				LogConsoleMessage(ConsoleMessageTypes.SUCCESS, "Project '" + this.filename + "' loaded.");
 			} catch (e) {
-				LogConsoleMessage(ConsoleMessageTypes.ERROR, "Unable to open project.");
+				LogConsoleMessage(ConsoleMessageTypes.ERROR, "Unable to open '" + this.filename + "' project.");
 				$("#tabConsole").click();
 			}
 			OnValueChanged();
@@ -307,46 +309,56 @@ var LogConsoleMessage = function(type, msg) {
 };
 
 var UpdateConsole = function() {
-	var hasMessage = false;
-	var hasError = false;
-
 	$("#lblLogCountNothing").hide();
 	$("#lblLogCountSUCCESS").hide();
 	$("#lblLogCountWARNING").hide();
 	$("#lblLogCountERROR").hide();
 	$("#divConsole").text("");
 
-	var keys = Object.keys(consoleMessages);
+	var countSuccess = consoleMessages[ConsoleMessageTypes.SUCCESS].length;
+	var countWarning = consoleMessages[ConsoleMessageTypes.WARNING].length;
+	var countError   = consoleMessages[ConsoleMessageTypes.ERROR].length;
+	var countMessages = countSuccess + countWarning + countError;
+	
+	var keys = [
+		ConsoleMessageTypes.SUCCESS,
+		ConsoleMessageTypes.WARNING,
+		ConsoleMessageTypes.ERROR
+	];
+	
 	for(var i = 0; i < keys.length; i++) {
-		var msgs = consoleMessages[keys[i]];
+		var key = keys[i];
+		var msgs = consoleMessages[key];
 		if(msgs.length > 0) {
-			hasMessage = true;
-			if(keys[i] == ConsoleMessageTypes.ERROR) {
-				hasError = true;
-			}
-			$("#lblLogCount" + keys[i]).text(msgs.length);
-			$("#lblLogCount" + keys[i]).show();
-
 			for(var j = 0; j < msgs.length; j++) {
-				var $alert = $("<div/>").addClass("alert alert-" + keys[i].toLowerCase());
-				$alert.html("<strong>" + keys[i] + "</strong>: " + msgs[j]);
+				var $alert = $("<div/>").addClass("alert alert-" + key.toLowerCase());
+				$alert.html("<strong>" + key + "</strong>: " + msgs[j]);
 				$("#divConsole").append($alert);
 			}
 		}
 	}
 	
-	if(!hasMessage) {
-		$("#lblLogCountNothing").show();
-		$("#divConsole").text("[No messages.]");
-	}
-	
-	if(hasError) {
+	if(countError > 0) {
+		$("#lblLogCountERROR").text(countError);
+		$("#lblLogCountERROR").show();
 		$("#tabConsole").click();
 	}
 	
-	// seems silly to report success as badge
-	// comment out this line if you want it to show
-	$("#lblLogCountSUCCESS").hide();
+	if(countWarning > 0) {
+		$("#lblLogCountWARNING").text(countWarning);
+		$("#lblLogCountWARNING").show();
+	}
+	
+	if(countSuccess > 0) {
+		// seems silly to report success as badge, but ...
+		$("#lblLogCountSUCCESS").text(countSuccess);
+		$("#lblLogCountSUCCESS").show();
+	}
+	
+	if(countMessages == 0) {
+		$("#lblLogCountNothing").show();
+		$("#divConsole").text("[No messages.]");
+	}
 }
 
 $(document).ready(function () {
