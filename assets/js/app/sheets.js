@@ -209,7 +209,7 @@ var ProcessSpriteAdd = function(files) {
 				$img.addClass("foo");
 				$img.attr("src", e.target.result);
 				$("#divWorkspaceContainerCrop").append($img);
-				AddSpriteToImagePool(new ImageData(
+				AddSpriteToImagePool(new ImageItem(
 					null, // not a copy of existing image
 					this.filename,
 					this.filetype,

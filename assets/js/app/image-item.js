@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-function ImageData(copy, filename, filetype, width, height, src, guid) {
+function ImageItem(copy, filename, filetype, width, height, src, guid) {
 	copy = copy || {};
 
 	this.filename = copy.filename || filename || "UNKNOWN";
