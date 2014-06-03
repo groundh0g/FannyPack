@@ -12,8 +12,8 @@
 			
 			var doNothing = function() { };
 			
-			var usr_options = options || {};
-			var usr_callback = callback || doNothing;
+			this.options = options || {};
+			this.callback = callback || doNothing;
 			
 			var source = null;
 			var frame = null;
