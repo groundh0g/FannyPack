@@ -32,9 +32,11 @@ $("#cmdToggleSettings").click(function() { return DoToggleSettings(); } )
 
 // -- LEFT SIDEBAR --
 $("#txtName").keyup(function(event) { return UpdateSpinBox("txtName", event, 13); });
-$("#ddlDataFormatOptions li a").click(function() { return UpdateDropDownValue("ddlDataFormat", $(this)); });
 $("#ddlImageFormatOptions li a").click(function() { return UpdateDropDownValue("ddlImageFormat", $(this)); });
+$("#ddlDataFormatOptions li a").click(function() { return UpdateDropDownValue("ddlDataFormat", $(this)); });
+$("#ddlNameInSheetOptions li a").click(function() { return UpdateDropDownValue("ddlNameInSheet", $(this)); });
 // NOTE: ddlSpritePacker and ddlSortBy are handled in $(document).ready(); [in sheets.js]
+$("#ddlAllowRotateOptions li a").click(function() { return UpdateDropDownValue("ddlAllowRotate", $(this)); });
 $("#txtWidthOptions li a").click(function() { return UpdateDropDownValueInput("txtWidth", $(this)); });
 $("#txtWidth").keyup(function(event) { return UpdateSpinBox("txtWidth", event); });
 $("#txtHeightOptions li a").click(function() { return UpdateDropDownValueInput("txtHeight", $(this)); });
@@ -46,11 +48,14 @@ $("#ddlIncludeAt2xOptions li a").click(function() { return UpdateDropDownValue("
 $("#txtBorderPadding").keyup(function(event) { return UpdateSpinBox("txtBorderPadding", event); });
 $("#txtShapePadding").keyup(function(event) { return UpdateSpinBox("txtShapePadding", event); });
 $("#txtInnerPadding").keyup(function(event) { return UpdateSpinBox("txtInnerPadding", event); });
+$("#ddlCleanAlphaOptions li a").click(function() { return UpdateDropDownValue("ddlCleanAlpha", $(this)); });
+$("#ddlColorMaskOptions li a").click(function() { return UpdateDropDownValue("ddlColorMask", $(this)); });
+$("#ddlAliasSpritesOptions li a").click(function() { return UpdateDropDownValue("ddlAliasSprites", $(this)); });
+$("#ddlDebugModeOptions li a").click(function() { return UpdateDropDownValue("ddlDebugMode", $(this)); });
 $("#ddlTrimModeOptions li a").click(function() { return UpdateDropDownValue("ddlTrimMode", $(this)); });
 $("#txtTrimThreshold").keyup(function(event) { return UpdateSpinBox("txtTrimThreshold", event); });
 $("#ddlAnimatedGifOptions li a").click(function() { return UpdateDropDownValue("ddlAnimatedGif", $(this)); });
 $("#ddlCompressProjectOptions li a").click(function() { return UpdateDropDownValue("ddlCompressProject", $(this)); });
-$("#ddlDebugModeOptions li a").click(function() { return UpdateDropDownValue("ddlDebugMode", $(this)); });
 
 // -- WORKSPACE TOOLBAR --
 $("#txtWorkspaceZoomOptions li a").click(function() { return UpdateDropDownValueInput("txtWorkspaceZoom", $(this)); });

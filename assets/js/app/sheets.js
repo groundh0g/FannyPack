@@ -70,14 +70,19 @@ var DoFileSave = function () {
 		images: imagePool
 	};
 
-// 	var zip = new JSZip();
-// 	zip.file("project.json", JSON.stringify(data, null, 2));
-// 	saveAs(zip.generate({type:"blob"}), options.name + ".zip");
-
-	saveAs(
-		new Blob([JSON.stringify(data, null, 2)], {type: "application/json"}), 
-		options.name + ".fpsheet"
-	);
+	if(options.doCompressProject()) {
+		var zip = new JSZip();
+		zip.file("project.json", JSON.stringify(data, null, 2));
+		saveAs(
+			zip.generate({type:"blob", compression:"DEFLATE"}), 
+			options.name + ".fpsheetz"
+		);
+	} else {
+		saveAs(
+			new Blob([JSON.stringify(data, null, 2)], {type: "application/json"}), 
+			options.name + ".fpsheet"
+		);
+	}
 	
 	persistedOptions = new Options();
 	persistedOptions.read();
@@ -173,25 +178,44 @@ var ProcessProjectOpen = function(files) {
 		var reader = new FileReader();
 		reader.filename = file.name;
 		reader.filetype = file.type;
-		if(!file.name.toLowerCase().endsWith(".fpsheet")) {
-			LogConsoleMessage(ConsoleMessageTypes.WARNING, "File '" + file.name + "' has an invalid extension. Expected '*.fpsheet'. Attempting to load as project.");
+
+		if(file.name.toLowerCase().endsWith(".fpsheet")) {
+			reader.isCompressed = false;
+		} else if(file.name.toLowerCase().endsWith(".fpsheetz")) {
+			reader.isCompressed = true;
+		} else {
+			reader.isCompressed = false;
+			LogConsoleMessage(ConsoleMessageTypes.WARNING, "File '" + file.name + "' has an invalid extension. Expected '*.fpsheet' or '*.fpsheetz'. Attempting to load as uncompressed project.");
 		}
+
 		reader.onload = function(e) { 
 			try {
-				var project = $.parseJSON(e.target.result);
+				var project = {};
+				if(this.isCompressed) {
+					var zip = new JSZip(e.target.result);
+					project = $.parseJSON(zip.file("project.json").asText());
+				} else {
+					project = $.parseJSON(e.target.result);
+				}
 				var options = new Options();
 				options.read(project.options);
 				options.updateUI();
+				persistedOptions.read(options);
 				imagePool = ImageItem.copyImagePool(project.images, true);
 				persistedImagePool = ImageItem.copyImagePool(imagePool);
 				LogConsoleMessage(ConsoleMessageTypes.SUCCESS, "Project '" + this.filename + "' loaded.");
 			} catch (e) {
-				LogConsoleMessage(ConsoleMessageTypes.ERROR, "Unable to open '" + this.filename + "' project.");
+				LogConsoleMessage(ConsoleMessageTypes.ERROR, "Unable to open '" + this.filename + "' project. [" + e + "]");
 			}
 			OnValueChanged();
 			return false;
 		};
-		reader.readAsText(file);
+
+		if(reader.isCompressed) {
+			reader.readAsBinaryString(file);
+		} else {
+			reader.readAsText(file);
+		}
 	}
 
 	$("#uploadProject").val("");
@@ -200,7 +224,6 @@ var ProcessProjectOpen = function(files) {
 	return false;
 };
 
-//var fileHasChanges = false;
 var imagePool = {};
 var isProcessingFiles = false;
 var filesToProcess = {};
@@ -305,6 +328,7 @@ var BuildSpriteList = function() {
 var PlaceSpritesOnWorkspace = function(map) {
 	var keys = Object.keys(imagePool).sort(function(a,b){ return (a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0; });
 	if(keys.length > 0) {
+		$("#divWorkspaceContainerCrop").html("");
 		$("#divWorkspaceContainerCrop").append(
 			$("<img/>")
 			.attr("src",imagePool[keys[0]].src)

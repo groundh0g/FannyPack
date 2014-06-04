@@ -24,12 +24,18 @@ function Options(copy) {
 	copy = copy || {};
 
 	this.name = copy.name || "Untitled";
-	this.dataFormat = copy.dataFormat || "JSON";
 	this.imageFormat = copy.imageFormat || "PNG";
+	this.dataFormat = copy.dataFormat || "JSON";
+	this.nameInSheet = copy.nameInSheet || "Strip Extension";
+	
+	this.doStripExtensions = function() { return this.nameInSheet === "Strip Extension"; };
 	
 	this.spritePacker = copy.spritePacker || "Joe";
 	this.sortBy = copy.sortBy || "AREA_DESC";
+	this.allowRotate = copy.allowRotate || "No";
 	
+	this.doAllowRotate = function() { return this.allowRotate === "Yes"; };
+
 	this.width = copy.width || 1024;
 	this.height = copy.height || 1024;
 	this.sizeMode = copy.sizeMode || "Max Size";
@@ -40,24 +46,30 @@ function Options(copy) {
 	this.doFixedSize   = function() { return this.sizeMode === "Fixed Size"; };
 	this.doForcePowOf2 = function() { return this.constraint === "Power of Two"; };
 	this.doForceSquare = function() { return this.forceSquare === "Yes"; };
-	this.doIncludeAt2x = function() { return this.doIncludeAt2x === "Yes"; };
+	this.doIncludeAt2x = function() { return this.includeAt2x === "Yes"; };
 
 	this.borderPadding = copy.borderPadding || 2;
 	this.shapePadding = copy.shapePadding || 2;
 	this.innerPadding = copy.innerPadding || 0;
 	
+	this.cleanAlpha = copy.cleanAlpha || "No";
+	this.colorMask = copy.colorMask || "No";
+	this.aliasSprites = copy.aliasSprites || "No";
+	this.debugMode = copy.debugMode || "No";
 	this.trimMode = copy.trimMode || "None";
 	this.trimThreshold = copy.trimThreshold || 1;
 
+	this.doCleanAlpha = function() { return this.cleanAlpha === "Yes"; };
+	this.doColorMask = function() { return this.colorMask === "Yes"; };
+	this.doAliasSprites = function() { return this.aliasSprites === "Yes"; };
+	this.doDebug = function() { return this.debugMode === "Yes"; };
 	this.doTrim = function() { return this.trimMode === "Trim" && this.trimThreshold > 0; };
 	
 	this.animatedGif = copy.animatedGif || "Use First Frame";
 	this.compressProject = copy.compressProject || "No";
-	this.debugMode = copy.debugMode || "No";
 	
 	this.doAnimatedGifExpand = function() { return this.animatedGif === "Extract Frames"; };
 	this.doCompressProject = function() { return this.compressProject === "Yes"; };
-	this.doDebug = function() { return this.debugMode === "Yes"; };
 	
 	this.read = function(obj) {
 		var opts = {};
@@ -70,11 +82,13 @@ function Options(copy) {
 		} else {
 			// read from UI
 			opts["name"] = $("#txtName").val();
-			opts["dataFormat"]  = $("#ddlDataFormat").text();
 			opts["imageFormat"] = $("#ddlImageFormat").text();
+			opts["dataFormat"]  = $("#ddlDataFormat").text();
+			opts["nameInSheet"] = $("#ddlNameInSheet").text();
 
 			opts["spritePacker"]  = $("#ddlSpritePacker").text();
 			opts["sortBy"]  = $("#ddlSortBy").text();
+			opts["allowRotate"]  = $("#ddlAllowRotate").text();
 	
 			opts["width"]  = parseInt($("#txtWidth").val(),10);
 			opts["height"] = parseInt($("#txtHeight").val(),10);
@@ -87,20 +101,25 @@ function Options(copy) {
 			opts["shapePadding"] = parseInt($("#txtShapePadding").val(),10);
 			opts["innerPadding"] = parseInt($("#txtInnerPadding").val(),10);
 
+			opts["cleanAlpha"]  = $("#ddlCleanAlpha").text();
+			opts["colorMask"]  = $("#ddlColorMask").text();
+			opts["aliasSprites"]  = $("#ddlAliasSprites").text();
+			opts["debugMode"]  = $("#ddlDebugMode").text();
 			opts["trimMode"]  = $("#ddlTrimMode").text();
 			opts["trimThreshold"] = parseInt($("#txtTrimThreshold").val(),10);
 
 			opts["animatedGif"]  = $("#ddlAnimatedGif").text();
 			opts["compressProject"]  = $("#ddlCompressProject").text();
-			opts["debugMode"]  = $("#ddlDebugMode").text();
 		}
 	
 		this.name = $.trim(opts.name || this.name);
-		this.dataFormat = $.trim(opts.dataFormat || this.dataFormat);
 		this.imageFormat = $.trim(opts.imageFormat || this.imageFormat);
+		this.dataFormat = $.trim(opts.dataFormat || this.dataFormat);
+		this.nameInSheet = $.trim(opts.nameInSheet || this.nameInSheet);
 
 		this.spritePacker = $.trim(opts.spritePacker || this.spritePacker);
 		this.sortBy = $.trim(opts.sortBy || this.sortBy);
+		this.allowRotate = $.trim(opts.allowRotate || this.allowRotate);
 
 		this.width = $.isNumeric(opts.width) ? opts.width : this.width;
 		this.height = $.isNumeric(opts.height) ? opts.height : this.width;
@@ -113,12 +132,15 @@ function Options(copy) {
 		this.shapePadding  = $.isNumeric(opts.shapePadding) ? opts.shapePadding : this.shapePadding;
 		this.innerPadding  = $.isNumeric(opts.innerPadding) ? opts.innerPadding : this.innerPadding;
 
+		this.cleanAlpha = $.trim(opts.cleanAlpha || this.cleanAlpha);
+		this.colorMask = $.trim(opts.colorMask || this.colorMask);
+		this.aliasSprites = $.trim(opts.aliasSprites || this.aliasSprites);
+		this.debugMode = $.trim(opts.debugMode || this.debugMode);
 		this.trimMode = $.trim(opts.trimMode || this.trimMode);
 		this.trimThreshold = $.isNumeric(opts.trimThreshold) ? opts.trimThreshold : this.trimThreshold;
 		
 		this.animatedGif = $.trim(opts.animatedGif || this.animatedGif);
 		this.compressProject = $.trim(opts.compressProject || this.compressProject);
-		this.debugMode = $.trim(opts.debugMode || this.debugMode);
 	};
 	
 	this.write = function() {
@@ -128,11 +150,13 @@ function Options(copy) {
 	this.updateUI = function() {
 		// refresh UI
 		$("#txtName").val(this["name"]);
-		$("#ddlDataFormat").text(this["dataFormat"]);
 		$("#ddlImageFormat").text(this["imageFormat"]);
+		$("#ddlDataFormat").text(this["dataFormat"]);
+		$("#ddlNameInSheet").text(this["nameInSheet"]);
 
 		$("#ddlSpritePacker").text(this["spritePacker"]);
 		$("#ddlSortBy").text(this["sortBy"]);
+		$("#ddlAllowRotate").text(this["allowRotate"]);
 		
 		$("#txtWidth").val(this["width"]);
 		$("#txtHeight").val(this["height"]);
@@ -145,12 +169,15 @@ function Options(copy) {
 		$("#txtShapePadding").val(this["shapePadding"]);
 		$("#txtInnerPadding").val(this["innerPadding"]);
 
+		$("#ddlCleanAlpha").text(this["cleanAlpha"]);
+		$("#ddlColorMask").text(this["colorMask"]);
+		$("#ddlAliasSprites").text(this["aliasSprites"]);
+		$("#ddlDebugMode").text(this["debugMode"]);
 		$("#ddlTrimMode").text(this["trimMode"]);
 		$("#txtTrimThreshold").val(this["trimThreshold"]);
 
 		$("#ddlAnimatedGif").text(this["animatedGif"]);
 		$("#ddlCompressProject").text(this["compressProject"]);
-		$("#ddlDebugMode").text(this["debugMode"]);
 	};
 	
 	this.equals = function(obj1, obj2) {
@@ -168,11 +195,13 @@ function Options(copy) {
 			// compare obj1 values to obj2 values
 			result = 
 				$.trim(obj1.name) === $.trim(obj2.name) &&
-				$.trim(obj1.dataFormat) === $.trim(obj2.dataFormat) &&
 				$.trim(obj1.imageFormat) === $.trim(obj2.imageFormat) &&
+				$.trim(obj1.dataFormat) === $.trim(obj2.dataFormat) &&
+				$.trim(obj1.nameInSheet) === $.trim(obj2.nameInSheet) &&
 
 				$.trim(obj1.spritePacker) === $.trim(obj2.spritePacker) &&
 				$.trim(obj1.sortBy) === $.trim(obj2.sortBy) &&
+				$.trim(obj1.allowRotate) === $.trim(obj2.allowRotate) &&
 
 				$.trim(obj1.width) === $.trim(obj2.width) &&
 				$.trim(obj1.height) === $.trim(obj2.height) &&
@@ -185,12 +214,15 @@ function Options(copy) {
 				$.trim(obj1.shapePadding) === $.trim(obj2.shapePadding) &&
 				$.trim(obj1.innerPadding) === $.trim(obj2.innerPadding) &&
 
+				$.trim(obj1.cleanAlpha) === $.trim(obj2.cleanAlpha) &&
+				$.trim(obj1.colorMask) === $.trim(obj2.colorMask) &&
+				$.trim(obj1.aliasSprites) === $.trim(obj2.aliasSprites) &&
+				$.trim(obj1.debugMode) === $.trim(obj2.debugMode) &&
 				$.trim(obj1.trimMode) === $.trim(obj2.trimMode) &&
 				$.trim(obj1.trimThreshold) === $.trim(obj2.trimThreshold) &&
 
 				$.trim(obj1.animatedGif) === $.trim(obj2.animatedGif) &&
-				$.trim(obj1.compressProject) === $.trim(obj2.compressProject) &&
-				$.trim(obj1.debugMode) === $.trim(obj2.debugMode);
+				$.trim(obj1.compressProject) === $.trim(obj2.compressProject);
 		}
 
 		return result;

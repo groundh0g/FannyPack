@@ -143,6 +143,19 @@ THE SOFTWARE.
 						</td>
 						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
 					</tr>
+					<tr><td title="">Name&nbsp;in&nbsp;Sheet</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlNameInSheet">Strip Extension</span> <span class="caret"></span></a>
+							  <ul id="ddlNameInSheetOptions" class="dropdown-menu">
+								<li><a href="#null">Strip Extension *</a></li>
+								<li><a href="#null">Keep Extension</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
+					</tr>
 				
 					<tr><td colspan="3"><div class="optionHeading">Algorithm</div></td></tr>
 					
@@ -163,6 +176,19 @@ THE SOFTWARE.
 							<div class="btn-group">
 							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlSortBy">UNKNOWN</span> <span class="caret"></span></a>
 							  <ul id="ddlSortByOptions" class="dropdown-menu">
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
+					</tr>
+					<tr><td title="">Allow&nbsp;Rotate&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlAllowRotate">No</span> <span class="caret"></span></a>
+							  <ul id="ddlAllowRotateOptions" class="dropdown-menu">
+								<li><a href="#null">Yes</a></li>
+								<li><a href="#null">No *</a></li>
 							  </ul>
 							</div>
 							</div>
@@ -243,8 +269,8 @@ THE SOFTWARE.
 							<div class="btn-group">
 							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlForceSquare">No</span> <span class="caret"></span></a>
 							  <ul id="ddlForceSquareOptions" class="dropdown-menu">
-								<li><a href="#null">No *</a></li>
 								<li><a href="#null">Yes</a></li>
+								<li><a href="#null">No *</a></li>
 							  </ul>
 							</div>
 							</div>
@@ -256,8 +282,8 @@ THE SOFTWARE.
 							<div class="btn-group">
 							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlIncludeAt2x">No</span> <span class="caret"></span></a>
 							  <ul id="ddlIncludeAt2xOptions" class="dropdown-menu">
-								<li><a href="#null">No *</a></li>
 								<li><a href="#null">Yes</a></li>
+								<li><a href="#null">No *</a></li>
 							  </ul>
 							</div>
 							</div>
@@ -280,8 +306,60 @@ THE SOFTWARE.
 						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
 					</tr>
 
-					<tr><td colspan="3"><div class="optionHeading">Trim</div></td></tr>
+					<tr><td colspan="3"><div class="optionHeading">Filters</div></td></tr>
 		
+					<tr><td title="">Clean&nbsp;Alpha&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlCleanAlpha">No</span> <span class="caret"></span></a>
+							  <ul id="ddlCleanAlphaOptions" class="dropdown-menu">
+								<li><a href="#null">Yes</a></li>
+								<li><a href="#null">No *</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
+					</tr>
+					<tr><td title="">Color&nbsp;Mask&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlColorMask">No</span> <span class="caret"></span></a>
+							  <ul id="ddlColorMaskOptions" class="dropdown-menu">
+								<li><a href="#null">Yes</a></li>
+								<li><a href="#null">No *</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
+					</tr>
+					<tr><td title="">Alias&nbsp;Sprites&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlAliasSprites">No</span> <span class="caret"></span></a>
+							  <ul id="ddlAliasSpritesOptions" class="dropdown-menu">
+								<li><a href="#null">Yes</a></li>
+								<li><a href="#null">No *</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
+					</tr>
+					<tr><td title="Draw shape borders.">Debug&nbsp;Mode&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlDebugMode">No</span> <span class="caret"></span></a>
+							  <ul id="ddlDebugModeOptions" class="dropdown-menu">
+								<li><a href="#null">Yes</a></li>
+								<li><a href="#null">No *</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
+					</tr>
 					<tr><td>Trim&nbsp;Mode&nbsp;</td>
 						<td><div class="btn-toolbar" style="margin:0;">
 							<div class="btn-group">
@@ -320,19 +398,6 @@ THE SOFTWARE.
 							<div class="btn-group">
 							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlCompressProject">No</span> <span class="caret"></span></a>
 							  <ul id="ddlCompressProjectOptions" class="dropdown-menu">
-								<li><a href="#null">Yes</a></li>
-								<li><a href="#null">No *</a></li>
-							  </ul>
-							</div>
-							</div>
-						</td>
-						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
-					</tr>
-					<tr><td title="Draw shape borders.">Debug&nbsp;Mode&nbsp;</td>
-						<td><div class="btn-toolbar" style="margin:0;">
-							<div class="btn-group">
-							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlDebugMode">No</span> <span class="caret"></span></a>
-							  <ul id="ddlDebugModeOptions" class="dropdown-menu">
 								<li><a href="#null">Yes</a></li>
 								<li><a href="#null">No *</a></li>
 							  </ul>
