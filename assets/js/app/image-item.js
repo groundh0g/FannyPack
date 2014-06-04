@@ -55,9 +55,12 @@ function ImageItem(copy, filename, filetype, width, height, src, guid) {
 	this.equals = function(obj1, obj2) {
 		var result = false;
 
+		obj1 = obj1 || null;
+		obj2 = obj2 || null;
+
 		if(obj1 == null && obj2 == null) {
 			// treat two nulls as not equal
-		} else if(obj1 && obj1.filenamename && obj2 == null) {
+		} else if(obj1 && obj1.filename && obj2 == null) {
 			// compare self values to obj1 values
 			result = this.equals(this, obj1);
 		} else if(obj1 && obj1.filename && obj2 && obj2.filename) {
@@ -77,7 +80,7 @@ function ImageItem(copy, filename, filetype, width, height, src, guid) {
 	};
 }
 
-ImageItem.prototype.compareImages = function(obj1, obj2) {
+ImageItem.compareImages = function(obj1, obj2) {
 	result = false;
 	if(obj1 && obj2 && obj1.equals) {
 		result = obj1.equals(obj2);
@@ -85,20 +88,39 @@ ImageItem.prototype.compareImages = function(obj1, obj2) {
 	return result;
 }
 
-ImageItem.prototype.compareImagePools = function(obj1, obj2) {
+ImageItem.compareImagePools = function(obj1, obj2) {
 	result = false;
 	if(obj1 && obj2) {
 		var keys1 = Object.keys(obj1).sort(function(a,b){ return (a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0; });
 		var keys2 = Object.keys(obj2).sort(function(a,b){ return (a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0; });
 		if(keys1.length == keys2.length) {
-			var result = true;
-			var same = true;
+			result = true;
 			for(var i=0; i<keys1.length; i++) {
 				var same = 
 					keys1[i] && (keys1[i] == keys2[i]) &&
 					ImageItem.compareImages(obj1[keys1[i]], obj2[keys2[i]]);
 				result &= (same) ? true : false;
 			}
+		}
+	}
+	return result;
+}
+
+ImageItem.copyImagePool = function(pool, deep) {
+	result = {};
+	if(pool) {
+		var keys = Object.keys(pool);
+		for(var i=0; i<keys.length; i++) {
+			var img = pool[keys[i]];
+			result[img.filename] = new ImageItem(
+				null, 
+				img.filename, 
+				img.filetype, 
+				img.width, 
+				img.height, 
+				deep ? img.src : "", 
+				img.guid
+			);
 		}
 	}
 	return result;

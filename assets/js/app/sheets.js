@@ -30,12 +30,12 @@ var OnValueChanged = function() {
 }
 
 var persistedOptions = {};
-var persistedImages = {};
+var persistedImagePool = {};
 
 var IsDirty = function() {
 	var current = new Options();
 	current.read();
-	return !(current.equals(persistedOptions) && ImageItem.compareImagePools(imagePool, persistedImages));
+	return !(current.equals(persistedOptions) && ImageItem.compareImagePools(imagePool, persistedImagePool));
 }
 
 var PromptUserIfDirty = function() {
@@ -81,7 +81,7 @@ var DoFileSave = function () {
 	
 	persistedOptions = new Options();
 	persistedOptions.read();
-	persistedImages = ImageItem.makeShallowCopyOfPool(imagePool);
+	persistedImagePool = ImageItem.copyImagePool(imagePool);
 };
 
 var DoSpriteAdd = function () { 
@@ -182,7 +182,8 @@ var ProcessProjectOpen = function(files) {
 				var options = new Options();
 				options.read(project.options);
 				options.updateUI();
-				imagePool = project.images;
+				imagePool = ImageItem.copyImagePool(project.images, true);
+				persistedImagePool = ImageItem.copyImagePool(imagePool);
 				LogConsoleMessage(ConsoleMessageTypes.SUCCESS, "Project '" + this.filename + "' loaded.");
 			} catch (e) {
 				LogConsoleMessage(ConsoleMessageTypes.ERROR, "Unable to open '" + this.filename + "' project.");
