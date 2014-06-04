@@ -98,8 +98,9 @@ THE SOFTWARE.
 					  </div>
 					  <div class="btn-group">
 						<a id="cmdToggleSettings" href="#null" class="btn"><i class="icon icon-wrench"></i> Settings</a>
-						<a id="cmdToggleHelp" href="#null" class="btn"><i class="icon icon-question-sign"></i> Tooltips</a>
+						<!--<a id="cmdToggleHelp" href="#null" class="btn"><i class="icon icon-question-sign"></i> Tooltips</a>-->
 					  </div>
+					  	<a id="cmdRefresh" href="#null" class="btn"><i class="icon icon-refresh"></i> Refresh</a>
 					</div>
 				</div>
 			</div>
@@ -107,10 +108,13 @@ THE SOFTWARE.
 			
 			<div id="divSidebarLeft" class="divSidebarLeft">
 				<table style="width:100%;">
+				
+					<tr><td colspan="3"><div class="optionHeading">Output</div></td></tr>
+				
 					<tr><td>Name&nbsp;</td>
 						<td><input id="txtName" type="text" value="Untitled" style="margin:0; width:140px;" />
 						</td>
-						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
 					</tr>
 					<tr><td>Image&nbsp;</td>
 						<td><div class="btn-toolbar" style="margin:0;">
@@ -124,7 +128,7 @@ THE SOFTWARE.
 							</div>
 							</div>
 						</td>
-						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
 					</tr>
 					<tr><td>Data&nbsp;</td>
 						<td><div class="btn-toolbar" style="margin:0;">
@@ -137,10 +141,10 @@ THE SOFTWARE.
 							</div>
 							</div>
 						</td>
-						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
 					</tr>
 				
-					<tr><td colspan="3">&nbsp;</td></tr>
+					<tr><td colspan="3"><div class="optionHeading">Algorithm</div></td></tr>
 					
 					<tr><td>Sprite&nbsp;Packer&nbsp;</td>
 						<td><div class="btn-toolbar" style="margin:0;">
@@ -151,7 +155,7 @@ THE SOFTWARE.
 							</div>
 							</div>
 						</td>
-						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
 					</tr>
 					
 					<tr><td>Sort&nbsp;By&nbsp;</td>
@@ -163,10 +167,10 @@ THE SOFTWARE.
 							</div>
 							</div>
 						</td>
-						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
 					</tr>
 					
-					<tr><td colspan="3">&nbsp;</td></tr>
+					<tr><td colspan="3"><div class="optionHeading">Dimensions</div></td></tr>
 
 					<tr><td>Width&nbsp;</td>
 						<td>
@@ -186,7 +190,7 @@ THE SOFTWARE.
 							  </ul>
 							</div>
 						</td>
-						<td class="tipcol"><i class="icon icon-question-sign" title="The width of the published image."></i></td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></td>
 					</tr>
 					<tr><td>Height&nbsp;</td>
 						<td>
@@ -206,9 +210,9 @@ THE SOFTWARE.
 							  </ul>
 							</div>
 						</td>
-						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
 					</tr>
-					<tr><td>Mode&nbsp;</td>
+					<tr><td>Size&nbsp;Mode&nbsp;</td>
 						<td><div class="btn-toolbar" style="margin:0;">
 							<div class="btn-group">
 							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlSizeMode">Max Size</span> <span class="caret"></span></a>
@@ -219,7 +223,7 @@ THE SOFTWARE.
 							</div>
 							</div>
 						</td>
-						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
 					</tr>
 					<tr><td>Constraint&nbsp;</td>
 						<td><div class="btn-toolbar" style="margin:0;">
@@ -232,7 +236,7 @@ THE SOFTWARE.
 							</div>
 							</div>
 						</td>
-						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
 					</tr>
 					<tr><td>Force&nbsp;Square&nbsp;</td>
 						<td><div class="btn-toolbar" style="margin:0;">
@@ -245,7 +249,7 @@ THE SOFTWARE.
 							</div>
 							</div>
 						</td>
-						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
 					</tr>
 					<tr><td>Include&nbsp;@2x</td>
 						<td><div class="btn-toolbar" style="margin:0;">
@@ -258,25 +262,25 @@ THE SOFTWARE.
 							</div>
 							</div>
 						</td>
-						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
 					</tr>
 		
-					<tr><td colspan="3">&nbsp;</td></tr>
+					<tr><td colspan="3"><div class="optionHeading">Padding</div></td></tr>
 
 					<tr><td>Border&nbsp;Padding&nbsp;</td>
 						<td><div class="input-append" style="margin:0;"><input id="txtBorderPadding" type="text" value="2" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
-						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
 					</tr>
 					<tr><td>Shape&nbsp;Padding&nbsp;</td>
 						<td><div class="input-append" style="margin:0;"><input id="txtShapePadding" type="text" value="2" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
-						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
 					</tr>
 					<tr><td>Inner&nbsp;Padding&nbsp;</td>
 						<td><div class="input-append" style="margin:0;"><input id="txtInnerPadding" type="text" value="0" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
-						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
 					</tr>
 
-					<tr><td colspan="3">&nbsp;</td></tr>
+					<tr><td colspan="3"><div class="optionHeading">Trim</div></td></tr>
 		
 					<tr><td>Trim&nbsp;Mode&nbsp;</td>
 						<td><div class="btn-toolbar" style="margin:0;">
@@ -289,19 +293,62 @@ THE SOFTWARE.
 							</div>
 							</div>
 						</td>
-						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
 					</tr>
 					<tr><td>Trim&nbsp;Threshold&nbsp;</td>
 						<td><div class="input-append" style="margin:0;"><input id="txtTrimThreshold" type="text" value="1" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
-						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
 					</tr>
 
-					<tr><td colspan="3">&nbsp;</td></tr>
+					<tr><td colspan="3"><div class="optionHeading">Advanced</div></td></tr>
 
+					<tr><td title="Extract animation frames.">Animated&nbsp;GIF&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlAnimatedGif">Use First Frame</span> <span class="caret"></span></a>
+							  <ul id="ddlAnimatedGifOptions" class="dropdown-menu">
+								<li><a href="#null">Use First Frame *</a></li>
+								<li><a href="#null">Extract Frames</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
+					</tr>
+					<tr><td title="Compress project file. Not human-readable.">ZIP&nbsp;Project&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlCompressProject">No</span> <span class="caret"></span></a>
+							  <ul id="ddlCompressProjectOptions" class="dropdown-menu">
+								<li><a href="#null">Yes</a></li>
+								<li><a href="#null">No *</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
+					</tr>
+					<tr><td title="Draw shape borders.">Debug&nbsp;Mode&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlDebugMode">No</span> <span class="caret"></span></a>
+							  <ul id="ddlDebugModeOptions" class="dropdown-menu">
+								<li><a href="#null">Yes</a></li>
+								<li><a href="#null">No *</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
+					</tr>
+
+<!--
 					<tr><td>&nbsp;</td>
 						<td><a class="btn btn-primary"><i class="icon icon-white icon-refresh"></i> Apply Changes</a></td>
-						<td class="tipcol"><i class="icon icon-question-sign" title="Title"></i></td>
+						<td class="tipcol"><i class="icon icon-question-signx" title="Title"></i></td>
 					</tr>
+-->
+					<tr><td colspan="3"><div><br/><br/><br/><br/></div></td></tr>
 
 				</table>
 			</div>
@@ -435,7 +482,7 @@ THE SOFTWARE.
 		<script src="assets/js/app/util/FileSaver.js"></script>
 		
 		<!-- objs -->
-		<script src="assets/js/app/image-data.js"></script>
+		<script src="assets/js/app/image-item.js"></script>
 		<script src="assets/js/app/options.js"></script>
 		<script src="assets/js/app/version.js"></script>
 	

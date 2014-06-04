@@ -20,14 +20,36 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+var suppressOnValueChanged = false;
 var OnValueChanged = function() { 
-	BuildSpriteList();
-	UpdateConsole();
+	if(!suppressOnValueChanged) { 
+		BuildSpriteList();
+		UpdateConsole();
+	}
 	return false; 
 }
 
+var persistedOptions = {};
+var persistedImages = {};
+
+var IsDirty = function() {
+	var current = new Options();
+	current.read();
+	return !(current.equals(persistedOptions) && ImageItem.compareImagePools(imagePool, persistedImages));
+}
+
+var PromptUserIfDirty = function() {
+	return IsDirty() ? "You have unsaved changes." : null;
+}
+
 var DoFileNew = function () { return false; };
-var DoFileOpen = function () { 
+var DoFileOpen = function () {
+	var prompt = PromptUserIfDirty();
+	if(prompt) {
+		if(!confirm(prompt)) {
+			return false;
+		}
+	}
 	$("#popupFileModalTitle").text("Open Project");
 	$("#popupFileModalDropLabel").text("Drag and drop project file here, or ...");
 	$("#popupFileModalDropInfo").text("No project selected.");
@@ -56,6 +78,10 @@ var DoFileSave = function () {
 		new Blob([JSON.stringify(data, null, 2)], {type: "application/json"}), 
 		options.name + ".fpsheet"
 	);
+	
+	persistedOptions = new Options();
+	persistedOptions.read();
+	persistedImages = ImageItem.makeShallowCopyOfPool(imagePool);
 };
 
 var DoSpriteAdd = function () { 
@@ -71,20 +97,20 @@ var DoSpriteRemove = function () { return false; };
 var DoPublish = function () { return false; };
 
 var isHelpVisible = true;
-var DoToggleHelp = function () {
-	if(isHelpVisible) {
-		$("td.tipcol").hide();
-		$("table.leftSidebar").css("width","274px");
-		$("td.leftSidebar").css("width","284px");
-		isHelpVisible = false;
-	} else {
-		$("td.leftSidebar").css("width","305px");
-		$("table.leftSidebar").css("width","295px");
-		$("td.tipcol").show();
-		isHelpVisible = true;
-	}
-	return false;
-}
+// var DoToggleHelp = function () {
+// 	if(isHelpVisible) {
+// 		$("td.tipcol").hide();
+// 		$("table.leftSidebar").css("width","274px");
+// 		$("td.leftSidebar").css("width","284px");
+// 		isHelpVisible = false;
+// 	} else {
+// 		$("td.leftSidebar").css("width","305px");
+// 		$("table.leftSidebar").css("width","295px");
+// 		$("td.tipcol").show();
+// 		isHelpVisible = true;
+// 	}
+// 	return false;
+// }
 
 var isSettingsVisible = true;
 var DoToggleSettings = function () {
@@ -173,7 +199,7 @@ var ProcessProjectOpen = function(files) {
 	return false;
 };
 
-var fileHasChanges = false;
+//var fileHasChanges = false;
 var imagePool = {};
 var isProcessingFiles = false;
 var filesToProcess = {};
@@ -235,9 +261,12 @@ var ProcessSpriteAdd = function(files) {
 	return false;
 };
 
-var AddSpriteToImagePool = function(img) {
+var AddSpriteToImagePool = function(img, keepGuid) {
 	if(imagePool[img.filename]) {
 		LogConsoleMessage(ConsoleMessageTypes.WARNING, "Image '" + img.filename + "' already exists. Replacing.");
+	}
+	if(!keepGuid) {
+		img.guid = UUID.generate();
 	}
 	imagePool[img.filename] = img;
 	if(filesToProcess[img.filename]) { 
@@ -399,4 +428,8 @@ $(document).ready(function () {
 		return result;
 	});
 	$("#ddlSortByOptions li a").click(function() { return UpdateDropDownValue("ddlSortBy", $(this)); });
+	
+	// reset IsDirty() flag
+	persistedOptions = new Options();
+	persistedOptions.read();
 });

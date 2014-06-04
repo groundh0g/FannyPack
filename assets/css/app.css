@@ -49,6 +49,23 @@ body {
 	padding:5px;
 }
 
+.optionHeading {
+	border-top:1px solid #666;
+	border-bottom:1px solid #666;
+	background-color:#888;
+	color:#fff;
+	font-size:1.2em;
+	font-weight:bold;
+	text-align:center;
+	vertical-align:middle;
+	margin-top:2px;
+	margin-bottom:2px;
+}
+
+.optionLabel {
+	cursor:default;
+}
+
 .divSidebarRightToolbar {
 	border:1px solid #000;
 	position:absolute; 

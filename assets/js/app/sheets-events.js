@@ -48,6 +48,9 @@ $("#txtShapePadding").keyup(function(event) { return UpdateSpinBox("txtShapePadd
 $("#txtInnerPadding").keyup(function(event) { return UpdateSpinBox("txtInnerPadding", event); });
 $("#ddlTrimModeOptions li a").click(function() { return UpdateDropDownValue("ddlTrimMode", $(this)); });
 $("#txtTrimThreshold").keyup(function(event) { return UpdateSpinBox("txtTrimThreshold", event); });
+$("#ddlAnimatedGifOptions li a").click(function() { return UpdateDropDownValue("ddlAnimatedGif", $(this)); });
+$("#ddlCompressProjectOptions li a").click(function() { return UpdateDropDownValue("ddlCompressProject", $(this)); });
+$("#ddlDebugModeOptions li a").click(function() { return UpdateDropDownValue("ddlDebugMode", $(this)); });
 
 // -- WORKSPACE TOOLBAR --
 $("#txtWorkspaceZoomOptions li a").click(function() { return UpdateDropDownValueInput("txtWorkspaceZoom", $(this)); });
@@ -68,4 +71,10 @@ $("#radioRightNav button").click(function() {
 $("#cmdUploadSprites").click(function(){ $("#uploadSprites").click(); });
 $("#cmdUploadProject").click(function(){ $("#uploadProject").click(); });
 
-DoToggleHelp();
+//DoToggleHelp();
+
+$(window).on('beforeunload', function(e) {
+	var prompt = PromptUserIfDirty();
+	if(e && typeof e.returnValue != "undefined") { e.returnValue = prompt; }
+	return prompt;
+});

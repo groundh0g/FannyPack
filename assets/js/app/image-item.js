@@ -67,12 +67,39 @@ function ImageItem(copy, filename, filetype, width, height, src, guid) {
 				$.trim(obj1.filetype) === $.trim(obj2.filetype) &&
 				$.trim(obj1.width) === $.trim(obj2.width) &&
 				$.trim(obj1.height) === $.trim(obj2.height) &&
-				$.trim(obj1.guid) === $.trim(obj2.guid) &&
+				$.trim(obj1.guid) === $.trim(obj2.guid); // &&
 
 				// TODO: consider whether this is needed - lots of data!
-				$.trim(obj1.src) === $.trim(obj2.src);
+				//$.trim(obj1.src) === $.trim(obj2.src);
 		}
 
 		return result;
 	};
+}
+
+ImageItem.prototype.compareImages = function(obj1, obj2) {
+	result = false;
+	if(obj1 && obj2 && obj1.equals) {
+		result = obj1.equals(obj2);
+	}
+	return result;
+}
+
+ImageItem.prototype.compareImagePools = function(obj1, obj2) {
+	result = false;
+	if(obj1 && obj2) {
+		var keys1 = Object.keys(obj1).sort(function(a,b){ return (a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0; });
+		var keys2 = Object.keys(obj2).sort(function(a,b){ return (a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0; });
+		if(keys1.length == keys2.length) {
+			var result = true;
+			var same = true;
+			for(var i=0; i<keys1.length; i++) {
+				var same = 
+					keys1[i] && (keys1[i] == keys2[i]) &&
+					ImageItem.compareImages(obj1[keys1[i]], obj2[keys2[i]]);
+				result &= (same) ? true : false;
+			}
+		}
+	}
+	return result;
 }

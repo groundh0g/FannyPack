@@ -48,8 +48,16 @@ function Options(copy) {
 	
 	this.trimMode = copy.trimMode || "None";
 	this.trimThreshold = copy.trimThreshold || 1;
-	
+
 	this.doTrim = function() { return this.trimMode === "Trim" && this.trimThreshold > 0; };
+	
+	this.animatedGif = copy.animatedGif || "Use First Frame";
+	this.compressProject = copy.compressProject || "No";
+	this.debugMode = copy.debugMode || "No";
+	
+	this.doAnimatedGifExpand = function() { return this.animatedGif === "Extract Frames"; };
+	this.doCompressProject = function() { return this.compressProject === "Yes"; };
+	this.doDebug = function() { return this.debugMode === "Yes"; };
 	
 	this.read = function(obj) {
 		var opts = {};
@@ -81,6 +89,10 @@ function Options(copy) {
 
 			opts["trimMode"]  = $("#ddlTrimMode").text();
 			opts["trimThreshold"] = parseInt($("#txtTrimThreshold").val(),10);
+
+			opts["animatedGif"]  = $("#ddlAnimatedGif").text();
+			opts["compressProject"]  = $("#ddlCompressProject").text();
+			opts["debugMode"]  = $("#ddlDebugMode").text();
 		}
 	
 		this.name = $.trim(opts.name || this.name);
@@ -103,6 +115,10 @@ function Options(copy) {
 
 		this.trimMode = $.trim(opts.trimMode || this.trimMode);
 		this.trimThreshold = $.isNumeric(opts.trimThreshold) ? opts.trimThreshold : this.trimThreshold;
+		
+		this.animatedGif = $.trim(opts.animatedGif || this.animatedGif);
+		this.compressProject = $.trim(opts.compressProject || this.compressProject);
+		this.debugMode = $.trim(opts.debugMode || this.debugMode);
 	};
 	
 	this.write = function() {
@@ -131,6 +147,10 @@ function Options(copy) {
 
 		$("#ddlTrimMode").text(this["trimMode"]);
 		$("#txtTrimThreshold").val(this["trimThreshold"]);
+
+		$("#ddlAnimatedGif").text(this["animatedGif"]);
+		$("#ddlCompressProject").text(this["compressProject"]);
+		$("#ddlDebugMode").text(this["debugMode"]);
 	};
 	
 	this.equals = function(obj1, obj2) {
@@ -166,7 +186,11 @@ function Options(copy) {
 				$.trim(obj1.innerPadding) === $.trim(obj2.innerPadding) &&
 
 				$.trim(obj1.trimMode) === $.trim(obj2.trimMode) &&
-				$.trim(obj1.trimThreshold) === $.trim(obj2.trimThreshold);
+				$.trim(obj1.trimThreshold) === $.trim(obj2.trimThreshold) &&
+
+				$.trim(obj1.animatedGif) === $.trim(obj2.animatedGif) &&
+				$.trim(obj1.compressProject) === $.trim(obj2.compressProject) &&
+				$.trim(obj1.debugMode) === $.trim(obj2.debugMode);
 		}
 
 		return result;
