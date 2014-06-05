@@ -73,8 +73,15 @@ THE SOFTWARE.
 					  <li class="">
 						<a href="./documentation.html" target="_blank">Documentation</a>
 					  </li>
-					  <li class="">
-						<a href="#popupAbout" role="button" data-toggle="modal">About</a>
+					  <li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">About<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="#popupAboutApp" role="button" data-toggle="modal">The App</a></li>
+							<li class="divider"></li>
+							<li><a href="#popupAboutAuthor" role="button" data-toggle="modal">The Author</a></li>
+							<li><a href="#popupAboutModules" role="button" data-toggle="modal">OSS Modules</a></li>
+							<li><a href="#popupAboutLicense" role="button" data-toggle="modal">License</a></li>
+						</ul>
 					  </li>
 					</ul>
 				</div>
@@ -477,32 +484,95 @@ THE SOFTWARE.
 			</div>
 		</div>
 
-		<div id="popupAbout" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAboutLabel" aria-hidden="true">
+		<div id="popupAboutApp" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAboutLabel" aria-hidden="true">
 		  <div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 			<h3 id="popupAboutLabel">About FannyPack <span class="versionPlaceholder">&nbsp;</span></h3>
 		  </div>
 		  <div class="modal-body">
-			<p><a href="https://github.com/groundh0g/FannyPack" target="_blank">FannyPack</a> is a spritesheet tool written in HTML &amp; JavaScript by <a href="https://github.com/groundh0g" target="_blank">@groundh0g</a>.<p>
-			<p>Original concept and inspiration from <a href="https://github.com/SebastianNette/PixiTexturePacker" target="_blank">PixiTexturePacker</a> by <a href="https://github.com/SebastianNette" target="_blank">@SebastianNette</a>, although none of his code was used on this project. 
-			   Sebastian was inspired by the <em>excellent</em> <a href="http://www.codeandweb.com/texturepacker" target="_blank">TexturePacker</a> software, by <a href="https://github.com/CodeAndWeb" target="_blank">Andreas Löw</a>. I personally own a TexturePacker license, and highly recommend it.</p>
-			<p><strong>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-				IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-				FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-				AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-				LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-				OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-				THE SOFTWARE.</strong></p>
-			<p>This project uses modules from the following opensource and public domain projects: 
-				<a href="https://github.com/eligrey/Blob.js" target="_blank">Blob</a>,
-				<a href="http://getbootstrap.com/2.3.2/index.html" target="_blank">Bootstrap</a>, 
-				<a href="https://github.com/eligrey/FileSaver.js" target="_blank">FileSaver</a>, 
-				<a href="http://code.jquery.com/jquery-1.8.3.js" target="_blank">jQuery</a>,
-				<a href="https://github.com/douglascrockford/JSON-js" target="_blank">json2</a>,
-				<a href="https://github.com/Stuk/jszip" target="_blank">jszip</a>, 
-				<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys" target="_blank">object-keys.js</a>, and 
-				<a href="http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/21963136#21963136" target="_blank">UUID</a>.
+			<p><a href="https://github.com/groundh0g/FannyPack" target="_blank">FannyPack</a> is a spritesheet and sprite font tool written in HTML &amp; JavaScript by <a href="https://github.com/groundh0g" target="_blank">@groundh0g</a>. The original concept and inspiration came from <a href="https://github.com/SebastianNette/PixiTexturePacker" target="_blank">PixiTexturePacker</a> by <a href="https://github.com/SebastianNette" target="_blank">@SebastianNette</a>, although none of his code was used on this project.</p>
+			<p>Sebastian, in turn, was inspired by the <em>excellent</em> <a href="http://www.codeandweb.com/texturepacker" target="_blank">TexturePacker</a> software, by <a href="https://github.com/CodeAndWeb" target="_blank">Andreas Löw</a>. I personally own a <a href="http://www.codeandweb.com/texturepacker" target="_blank">TexturePacker license</a>, and I highly recommend it to professional and hobbyist game developers alike.</p>
+			<p>I teach a game programming class for teens and tweens a couple of times each year. I didn't want to force the kids to buy a license for a tool that they might never use again. I came across Sebastian's app, and I was inspired to run a little further with the idea.</p>
+		  </div>
+		  <div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Dismiss</button>
+		  </div>
+		</div>		
+
+		<div id="popupAboutAuthor" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAboutLabel" aria-hidden="true">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="popupAboutLabel">About FannyPack <span class="headerSubtext"> ... the Author</span></h3>
+		  </div>
+		  <div class="modal-body">
+			<p>Joe Hall has been a professional software developer for nearly 25 years.</p>
+			<p>He worked as a programmer for Microsoft and IBM and he was the software architect for a Fortune 500 bank. He was the CTO of a ticket sales and servicing company and he started his own consulting company in 2006.</p>
+			<p>Joe makes his living writing desktop, web, and mobile device applications for businesses and governmental agencies, but game programming is his passion, and it was gaming that got him into programming in the first place.</p>
+			<p>He was a member of the original Xbox team and he joined the Visual Studio .NET team just after the Xbox was released in 2001. Joe is the author of <a href="http://www.amazon.com/XNA-Game-Studio-Express-Developing/dp/1598633686/ref=as_sl_pc_tf_mfw?&linkCode=wey&tag=coll06-20" target="_blank"><em>XNA Game Studio Express: Developing Games for Windows and the Xbox 360</em></a>, which was published in 2007.</p>
+			<p>Joe also <a href="http://groundh0g.deviantart.com/" target="_blank">dabbles</a> in sketching, cartooning, and creating 3D models. When you see his artistic creations, you'll understand why he makes his living as a programmer.</p>
+			<p>
+				<a href="https://github.com/groundh0g" target="_blank"><img src="./assets/img/social/Github.png" /></a> 
+				<a href="https://twitter.com/groundh0g" target="_blank"><img src="./assets/img/social/Twitter.png" /></a>  
+				<a href="https://www.facebook.com/groundh0g" target="_blank"><img src="./assets/img/social/Facebook.png" /></a> 
+				<a href="https://plus.google.com/+JosephHall_groundh0g/posts" target="_blank"><img src="./assets/img/social/GooglePlus.png" /></a>
 			</p>
+		  </div>
+		  <div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Dismiss</button>
+		  </div>
+		</div>		
+
+		<div id="popupAboutModules" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAboutLabel" aria-hidden="true">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="popupAboutLabel">About FannyPack <span class="headerSubtext"> ... the OSS Modules</span></h3>
+		  </div>
+		  <div class="modal-body">
+			<p>FannyPack uses the following opensource and public domain projects:</p>
+				<ul>
+					<li><a href="https://github.com/eligrey/Blob.js" target="_blank">Blob</a> - W3C Blob interface for browsers that do not support it</li>
+					<li><a href="http://getbootstrap.com/2.3.2/index.html" target="_blank">Bootstrap</a> - a framework for faster and easier web development</li>
+					<li><a href="https://github.com/eligrey/FileSaver.js" target="_blank">FileSaver</a> - W3C FileSaver interface for browsers that do not support it</li>
+					<li><a href="http://code.jquery.com/jquery-1.8.3.js" target="_blank">jQuery</a> - a fast, small, and feature-rich JavaScript library</li>
+					<li><a href="https://github.com/douglascrockford/JSON-js" target="_blank">json2</a> - JSON feature for browsers that do not support it</li>
+					<li><a href="https://github.com/Stuk/jszip" target="_blank">jszip</a> - create, read, and edit .zip files with Javascript</li>
+					<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys" target="_blank">object-keys.js</a> - Object.keys for browsers that do not support it</li>
+					<li><a href="http://stackoverflow.com/questions/280634/endswith-in-javascript/2548133#2548133" target="_blank">String.prototype.endsWith</a> - endsWith for browsers that don't support it</li>
+					<li><a href="http://stackoverflow.com/questions/646628/how-to-check-if-a-string-startswith-another-string/646643#646643" target="_blank">String.prototype.startsWith</a> - startsWith for browsers that don't support it</li>
+					<li><a href="http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/21963136#21963136" target="_blank">UUID</a> - a JavaScript module to create GUIDs</li>
+				</ul>
+			</p>
+		  </div>
+		  <div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Dismiss</button>
+		  </div>
+		</div>		
+
+		<div id="popupAboutLicense" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAboutLabel" aria-hidden="true">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="popupAboutLabel">About FannyPack <span class="headerSubtext"> ... the License [<a href="http://choosealicense.com/licenses/mit/" target="_blank">MIT</a>]</span></h3>
+		  </div>
+		  <div class="modal-body">
+			<p>Copyright (c) 2014 Joseph Hall (<a href="https://github.com/groundh0g" target="_blank">@groundh0g</a>)</p>
+
+			<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+			of this software and associated documentation files (the "Software"), to deal
+			in the Software without restriction, including without limitation the rights
+			to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+			copies of the Software, and to permit persons to whom the Software is
+			furnished to do so, subject to the following conditions:</p>
+
+			<p>The above copyright notice and this permission notice shall be included in all
+			copies or substantial portions of the Software.</p>
+
+			<p><strong>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+			IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+			FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+			AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+			LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+			OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+			SOFTWARE.</strong></p>
 		  </div>
 		  <div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Dismiss</button>
