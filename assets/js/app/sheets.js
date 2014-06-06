@@ -98,7 +98,22 @@ var DoSpriteAdd = function () {
 	$("#popupFileModal").modal("show");
 	return false; 
 };		
-var DoSpriteRemove = function () { return false; };
+var DoSpriteRemove = function () { 
+	ClearConsoleMessages();
+	var countDeleted = 0;
+	$(".spriteListItemSelected").each(function(e) {
+		delete imagePool[ImagePoolKeyFromSpritesListItemId($(this).attr("id"))];
+		countDeleted++;
+	});
+	if(countDeleted > 0) {
+		LogConsoleMessage(ConsoleMessageTypes.SUCCESS, "" + countDeleted + " sprite(s) removed.");
+	} else {
+		LogConsoleMessage(ConsoleMessageTypes.WARNING, "No sprites are selected. Nothing to remove.");
+	}
+	OnValueChanged(); 
+	return false; 
+};
+
 var DoPublish = function () { return false; };
 
 var isHelpVisible = true;
@@ -303,16 +318,30 @@ var AddSpriteToImagePool = function(img, keepGuid) {
 	}
 };
 
+var ImagePoolKeyFromSpritesListItemId = function(id) {
+	id = id.replace("img-","");
+	var result = null;
+	var keys = Object.keys(imagePool);
+	$.each(keys,function(ndx,key) {
+		if(imagePool[key].guid === id) {
+			result = imagePool[key].filename;
+			return false;
+		}
+	});
+	return result;
+};
+
 var BuildSpriteList = function() {
 	var keys = Object.keys(imagePool).sort(function(a,b){ return (a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0; });
 	$("#lblSpriteCount").text(keys.length);
-	$("#divSpritesList").html("");
+	$("#divSpritesList").empty();
 	if(keys.length === 0) {
 		$("#divSpritesList").text("[No sprites selected.]");
 	} else {
 		$.each(keys, function(idx, itm) { 
 			var $div = $("<div/>");
 			$div.addClass("divSpritesListItem");
+			$div.attr("id","img-" + imagePool[itm].guid);
 			var $img = $("<img/>");
 			$img.attr("src",imagePool[itm].src);
 			var $span = $("<span/>");
@@ -322,6 +351,24 @@ var BuildSpriteList = function() {
 			$("#divSpritesList").append($div);
 		});
 	}
+	
+	$(".divSpritesListItem").mouseenter(function(e) {
+		$(".divSpritesListItem").siblings().removeClass("spriteListItemHighlight");
+		$(this).addClass("spriteListItemHighlight");
+	});
+	
+	$(".divSpritesListItem").mouseleave(function(e) {
+		$(".divSpritesListItem").siblings().removeClass("spriteListItemHighlight");
+	});
+	
+	$(".divSpritesListItem").click(function(e) {
+		if($(this).hasClass("spriteListItemSelected")) {
+			$(this).removeClass("spriteListItemSelected");
+		} else {
+			$(this).addClass("spriteListItemSelected");
+		}
+	});
+	
 	PlaceSpritesOnWorkspace(null);
 };
 

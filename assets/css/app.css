@@ -126,6 +126,7 @@ body {
 	font-weight:bold;
 	overflow:hidden;
 	white-space:nowrap;
+	cursor:pointer;
 }
 
 .divSpritesListItem img {
@@ -141,6 +142,14 @@ body {
 	-ms-transform: rotate(90deg);
 	transform: rotate(90deg);
 	*/
+}
+
+.spriteListItemHighlight {
+	background-color:#def;
+}
+
+.spriteListItemSelected {
+	background-color:#abd;
 }
 
 .dropzone {
