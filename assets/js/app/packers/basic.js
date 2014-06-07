@@ -25,7 +25,8 @@ var packers = packers || {};
 function BasicPacker() {
 	BasePacker.call(this, "Basic");
 	var self = this;
-	this.defaultSortBy = "NAME";
+	this.defaultSortBy = "HEIGHT_DESC";
+	this.version = "0.1.0";
 
 	// likely unused, but called for all packers before pack()
 	// returns error message, or empty array on success
@@ -33,9 +34,9 @@ function BasicPacker() {
 	this.init = function() { return []; };
 	
 	// accepts array of imagePool entities, and set of options from left sidebar
-	// returns array of imagePool keys with their location & rotation) within the sheet
+	// returns collection of imagePool keys with their location & rotation) within the sheet
 	this.pack = function(images, options) { 
-		return []; 
+		return BasicPacker.doPack(images, options); 
 	};
 	
 	// add this packer to the list of available packers
@@ -45,3 +46,7 @@ function BasicPacker() {
 }
 
 (new BasicPacker()).register();
+
+BasicPacker.doPack = function(images, options) { 
+	return {}; 
+};

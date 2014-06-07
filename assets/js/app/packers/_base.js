@@ -34,9 +34,9 @@ function BasePacker(name, isDefault) {
 	this.init = function() { return []; };
 	
 	// accepts array of imagePool entities, and set of options from left sidebar
-	// returns array of imagePool keys with their location & rotation) within the sheet
+	// returns collection of imagePool keys with their location & rotation) within the sheet
 	this.pack = function(images, options) { 
-		return []; 
+		return {}; 
 	};
 	
 	// add this packer to the list of available packers

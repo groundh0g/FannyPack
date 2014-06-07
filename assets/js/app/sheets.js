@@ -42,7 +42,11 @@ var PromptUserIfDirty = function() {
 	return IsDirty() ? "You have unsaved changes." : null;
 }
 
-var DoFileNew = function () { return false; };
+var DoFileNew = function () { 
+	window.location.reload(true);
+	return false;
+};
+
 var DoFileOpen = function () {
 	var prompt = PromptUserIfDirty();
 	if(prompt) {
