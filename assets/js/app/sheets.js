@@ -469,7 +469,7 @@ $(document).ready(function () {
 	var defaultSortBy = BasePacker.SortByDefault;
 
 	// add Sprite Packer options
-	keys = BasePacker.SORT_BY_KEY(packers);
+	keys = BasePacker.SortBy["NAME"](packers);
 	for(i = 0; i < keys.length; i++) {
 		var $li = $("<li/>");
 		var $a = $("<a/>").attr("href","#null");
@@ -486,17 +486,15 @@ $(document).ready(function () {
 	}
 
 	// add Sort By options
-	keys = BasePacker.SORT_BY_KEY(BasePacker.SortBy);
+	keys = BasePacker.SortBy["NAME"](Object.keys(BasePacker.SortBy));
 	for(i = 0; i < keys.length; i++) {
 		var $li = $("<li/>");
 		var $a = $("<a/>").attr("href","#null");
-		if(keys[i] == defaultSortBy) {
-			$("#ddlSortBy").text(keys[i]);
-		}
 		$a.text(keys[i]);
 		$li.append($a);
 		$("#ddlSortByOptions").append($li);
 	}
+	$("#ddlSortBy").text(defaultSortBy);
 	
 	$("#ddlSpritePackerOptions li a").click(function() { 
 		var result = UpdateDropDownValue("ddlSpritePacker", $(this));

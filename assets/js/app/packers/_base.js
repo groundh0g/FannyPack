@@ -27,78 +27,165 @@ function BasePacker(name, isDefault) {
 	this.name = name || "Null";
 	this.defaultSortBy = "NAME";
 	this.isDefault = isDefault || false;
+	this.version = "0.1.0";
+	this.msgErrors = [];
+	this.msgWarnings = [];
   
 	// likely unused, but called for all packers before pack()
-	// returns error messages, or empty array on success
+	// sets warnings and error messages, if any
 	// this might be useful for checking browser compatibility?
-	this.init = function() { return []; };
+	var init = function() { 
+		this.msgErrors = [];
+		this.msgWarnings = [];
+		if(this.DoInit) { this.DoInit(); }
+	};
 	
 	// accepts array of imagePool entities, and set of options from left sidebar
 	// returns collection of imagePool keys with their location & rotation) within the sheet
-	this.pack = function(images, options) { 
-		return {}; 
+	this.pack = function(images, allOptions) { 
+		init();
+		var options = trimOptions(allOptions);
+		var result = {};
+		if(this.msgErrors.length === 0) {
+			var imgKeys = BasePacker.SortBy[options["sortBy"]](images);
+			if(this.DoPack) { 
+				result = this.DoPack(imgKeys, images, options, allOptions);
+			}
+		}
+		return result;
 	};
 	
+	var trimOptions = function(options) {
+		var opts = {};
+		var keys = Object.keys(options);
+		for(var i = 0; i < keys.length; i++) {
+			var key = keys[i];
+			if(typeof options[key] === "function") {
+				// ignore functions, only interested in values
+			} else {
+				switch(key) {
+					// ignore these, they're handled by main app
+					case "name":
+					case "imageFormat":
+					case "dataFormat":
+					case "nameInSheet":
+					case "includeAt2x":
+					case "cleanAlpha":
+					case "colorMask":
+					case "debugMode":
+					case "trimMode":
+					case "trimThreshold":
+					case "animatedGif":
+					case "compressProject":
+					case "aliasSprites":
+						if(key === "aliasSprites" && options.doAliasSprites()) { 
+							self.addWarning("Alias Sprites not yet implemented.");
+						}
+						break;
+					
+					// these are the packer-specific settings
+					case "spritePacker":
+					case "sortBy":
+					case "allowRotate":
+					case "width":
+					case "height":
+					case "sizeMode":
+					case "constraint":
+					case "forceSquare":
+					case "borderPadding":
+					case "shapePadding":
+					case "innerPadding":
+					case "spritePacker":
+					case "sortBy":
+					case "allowRotate":
+						// are we using the right packer?
+						if(key === "spritePacker" && this.name !== options[key]) {
+							self.addError("Sprite packer mismatch. Expected '" + options[key] + "', found '" + this.name + "'.");
+						}
+						// is the selected sortBy valid?
+						if(key === "sortBy" && typeof BasePacker.SortBy[options[key]] !== "function") {
+							self.addError("Unknown sort method, '" + options[key] + "'.");
+						}
+						// was rotate requested?
+						if(key === "allowRotate" && options.doAllowRotate()) { 
+							self.addWarning("Allow Rotate not yet implemented.");
+						}
+						opts[key] = options[key];
+						break;
+
+					// include future options that we can't know about today
+					default:
+						// if unused in packer, throw warning message? Maybe.
+						opts[key] = options[key];
+						break;
+				}
+			}
+		}
+		return opts;
+	};
+
+	this.addWarning = function(msg) {
+		self.msgWarnings.push(msg);
+	};
+
+	this.addError = function(msg) {
+		self.msgErrors.push(msg);
+	};
+
 	// add this packer to the list of available packers
 	this.register = function() {
-		packers[self.name] = self;
+		packers[this.name] = this;
 	};
 }
 
 BasePacker.SortBy = {};
-BasePacker.SortByDefault = "AREA_DESC"
+BasePacker.SortByDefault = "NAME";
 
-BasePacker.SORT_BY_KEY = function(images) {
+BasePacker.SortBy["NAME"] = function(images) {
 	return Object.keys(images).sort(function(a,b) {
 		return (a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0;
 	});
 };
-BasePacker.SortBy["NAME"] = BasePacker.SORT_BY_KEY;
 
-BasePacker.SORT_BY_KEY_DESC = function(images) {
+BasePacker.SortBy["NAME_DESC"] = function(images) {
 	return Object.keys(images).sort(function(a,b) {
 		return (a.toUpperCase() < b.toUpperCase()) ? 1 : (a.toUpperCase() > b.toUpperCase()) ? -1 : 0;
 	});
 };
-BasePacker.SortBy["NAME_DESC"] = BasePacker.SORT_BY_KEY_DESC;
 
-BasePacker.SORT_BY_WIDTH = function(images) {
+BasePacker.SortBy["WIDTH"] = function(images) {
 	return Object.keys(images).sort(function(a,b) {
 		return (images[a].width < images[b].width) ? -1 : (images[a].width > images[b].width) ? 1 :
 			// if width is same, use key to sort
 			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
 	});
 };
-BasePacker.SortBy["WIDTH"] = BasePacker.SORT_BY_WIDTH_DESC;
 
-BasePacker.SORT_BY_HEIGHT = function(images) {
+BasePacker.SortBy["HEIGHT"] = function(images) {
 	return Object.keys(images).sort(function(a,b) {
 		return (images[a].height < images[b].height) ? -1 : (images[a].height > images[b].height) ? 1 : 
 			// if height is same, use key to sort
 			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
 	});
 };
-BasePacker.SortBy["HEIGHT"] = BasePacker.SORT_BY_HEIGHT;
 
-BasePacker.SORT_BY_WIDTH_DESC = function(images) {
+BasePacker.SortBy["WIDTH_DESC"] = function(images) {
 	return Object.keys(images).sort(function(a,b) {
 		return (images[a].width < images[b].width) ? 1 : (images[a].width > images[b].width) ? -1 :
 			// if width is same, use key to sort
 			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
 	});
 };
-BasePacker.SortBy["WIDTH_DESC"] = BasePacker.SORT_BY_WIDTH_DESC;
 
-BasePacker.SORT_BY_HEIGHT_DESC = function(images) {
+BasePacker.SortBy["HEIGHT_DESC"] = function(images) {
 	return Object.keys(images).sort(function(a,b) {
 		return (images[a].height < images[b].height) ? 1 : (images[a].height > images[b].height) ? -1 :
 			// if height is same, use key to sort
 			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
 	});
 };
-BasePacker.SortBy["HEIGHT_DESC"] = BasePacker.SORT_BY_HEIGHT_DESC;
 
-BasePacker.SORT_BY_AREA_DESC = function(images) {
+BasePacker.SortBy["AREA_DESC"] = function(images) {
 	return Object.keys(images).sort(function(a,b) {
 		var area_a = images[a].width * images[a].height;
 		var area_b = images[b].width * images[b].height;
@@ -107,9 +194,8 @@ BasePacker.SORT_BY_AREA_DESC = function(images) {
 			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
 	});
 };
-BasePacker.SortBy["AREA_DESC"] = BasePacker.SORT_BY_AREA_DESC;
 
-BasePacker.SORT_BY_AREA = function(images) {
+BasePacker.SortBy["AREA"] = function(images) {
 	return Object.keys(images).sort(function(a,b) {
 		var area_a = images[a].width * images[a].height;
 		var area_b = images[b].width * images[b].height;
@@ -118,5 +204,3 @@ BasePacker.SORT_BY_AREA = function(images) {
 			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
 	});
 };
-BasePacker.SortBy["AREA"] = BasePacker.SORT_BY_AREA_DESC;
-

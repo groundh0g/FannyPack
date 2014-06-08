@@ -28,25 +28,11 @@ function JoePacker() {
 	this.defaultSortBy = "AREA_DESC";
 	this.version = "0.1.0";
 
-	// likely unused, but called for all packers before pack()
-	// returns error message, or empty array on success
-	// this might be useful for checking browser compatibility?
-	this.init = function() { return []; };
+	//this.DoInit = function() { };
 	
-	// accepts array of imagePool entities, and set of options from left sidebar
-	// returns collection of imagePool keys with their location & rotation) within the sheet
-	this.pack = function(images, options) { 
-		return JoePacker.doPack(images, options);
-	};
-	
-	// add this packer to the list of available packers
-	this.register = function() {
-		packers[self.name] = self;
+	this.DoPack = function(imgKeys, images, options, allOptions) { 
+		return {};
 	};
 }
 
 (new JoePacker()).register();
-
-JoePacker.doPack = function(images, options) { 
-	return {}; 
-};
