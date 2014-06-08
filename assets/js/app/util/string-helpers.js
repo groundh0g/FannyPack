@@ -7,18 +7,17 @@ if (typeof String.prototype.endsWith !== 'function') {
 
 // http://stackoverflow.com/questions/646628/how-to-check-if-a-string-startswith-another-string/646643#646643
 if (typeof String.prototype.startsWith !== 'function') {
-  // see below for better implementation!
-  String.prototype.startsWith = function (str){
-    return this.indexOf(str) === 0;
-  };
+    String.prototype.startsWith = function (str){
+        return this.indexOf(str) === 0;
+    };
 }
 
 // http://stackoverflow.com/questions/19196337/string-contains-doesnt-exist-while-working-in-chrome#19196456
 // (tweaked a bit, @groundh0g)
 if (typeof String.prototype.contains !== 'function') {
-   String.prototype.contains = function(str, startIndex) {
-     return -1 !== this.indexOf(str, startIndex);
-   };
+    String.prototype.contains = function(str, startIndex) {
+        return -1 !== this.indexOf(str, startIndex);
+    };
 }
 
 //http://stackoverflow.com/questions/202605/repeat-string-javascript#5450113
