@@ -21,14 +21,6 @@ if (typeof String.prototype.contains !== 'function') {
    };
 }
 
-// http://stackoverflow.com/questions/19196337/string-contains-doesnt-exist-while-working-in-chrome#19196456
-// (tweaked a bit, @groundh0g)
-if (typeof String.prototype.contains !== 'function') {
-   String.prototype.contains = function(str, startIndex) {
-	 return -1 !== this.indexOf(str, startIndex);
-   };
-}
-
 //http://stackoverflow.com/questions/202605/repeat-string-javascript#5450113
 // (tweaked a bit, @groundh0g)
 if (typeof String.prototype.repeat !== 'function') {
