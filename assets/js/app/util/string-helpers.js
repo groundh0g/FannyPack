@@ -17,24 +17,24 @@ if (typeof String.prototype.startsWith !== 'function') {
 // (tweaked a bit, @groundh0g)
 if (typeof String.prototype.contains !== 'function') {
    String.prototype.contains = function(str, startIndex) {
-	 return -1 !== this.indexOf(str, startIndex);
+     return -1 !== this.indexOf(str, startIndex);
    };
 }
 
 //http://stackoverflow.com/questions/202605/repeat-string-javascript#5450113
 // (tweaked a bit, @groundh0g)
 if (typeof String.prototype.repeat !== 'function') {
-	String.prototype.repeat = function(count) {
-		var result = "";
-		var pattern = this.valueOf();
-		var num = parseInt(count);
-		while (num > 1) {
-			if (num & 1) { result += pattern; }
-			pattern += pattern;
-			num >>= 1;
-		}
-		return result + pattern;
-	};
+    String.prototype.repeat = function(count) {
+        var result = "";
+        var pattern = this.valueOf();
+        var num = parseInt(count);
+        while (num > 1) {
+            if (num & 1) { result += pattern; }
+            pattern += pattern;
+            num >>= 1;
+        }
+        return result + pattern;
+    };
 }
 
 
