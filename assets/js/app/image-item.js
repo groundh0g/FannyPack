@@ -20,7 +20,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-function ImageItem(copy, filename, filetype, width, height, src, guid) {
+function ImageItem(copy, filename, filetype, width, height, src, guid, frameCount) {
+	var self = this;
+	
 	copy = copy || {};
 
 	this.filename = copy.filename || filename || "UNKNOWN";
@@ -29,6 +31,8 @@ function ImageItem(copy, filename, filetype, width, height, src, guid) {
 	this.height = parseInt(copy.height || height || "0");
 	this.src  = copy.src  || src  || "";
 	this.guid = copy.guid || guid || "00000000-0000-0000-0000-000000000000";
+	this.frameCount = parseInt(copy.frameCount  || frameCount  || "1");
+	this.frames = [];
 
 	this.read = function(obj) {
 		var img = {};
@@ -42,14 +46,19 @@ function ImageItem(copy, filename, filetype, width, height, src, guid) {
 	
 		this.filename = $.trim(img.filename || this.filename);
 		this.filetype = $.trim(img.filetype || this.filetype);
-		this.width  = $.isNumeric(img.width)  ? img.width  : this.width;
-		this.height = $.isNumeric(img.height) ? img.height : this.height;
+		this.width  = parseInt($.isNumeric(img.width)  ? img.width  : this.width);
+		this.height = parseInt($.isNumeric(img.height) ? img.height : this.height);
 		this.src  = img.src || "";
 		this.guid = $.trim(img.guid || "00000000-0000-0000-0000-000000000000");
+		this.frameCount = parseInt($.isNumeric(img.frameCount) ? img.frameCount : this.frameCount);
 	};
 	
 	this.write = function() {
-		return JSON.stringify(this, null, 2);
+		var framesCopy = this.frames;
+		this.frames = [];
+		var result = JSON.stringify(this, null, 2);
+		this.frames = framesCopy;
+		return result;
 	};
 
 	this.equals = function(obj1, obj2) {
@@ -70,13 +79,84 @@ function ImageItem(copy, filename, filetype, width, height, src, guid) {
 				$.trim(obj1.filetype) === $.trim(obj2.filetype) &&
 				$.trim(obj1.width) === $.trim(obj2.width) &&
 				$.trim(obj1.height) === $.trim(obj2.height) &&
-				$.trim(obj1.guid) === $.trim(obj2.guid); // &&
+				$.trim(obj1.guid) === $.trim(obj2.guid) &&
+
+				// TODO: should we even check frame count?
+				$.trim(obj1.frameCount) === $.trim(obj2.frameCount); // &&
 
 				// TODO: consider whether this is needed - lots of data!
 				//$.trim(obj1.src) === $.trim(obj2.src);
 		}
 
 		return result;
+	};
+
+	this.populateFrameDataComplete = true;
+	
+	this.populateFrameData = function(callbackCompleted) {
+		this.clearFrameData();
+		var loadMultiFrame =
+			this.filename.toLowerCase().endsWith(".gif") &&
+			$("#ddlAnimatedGif").text() === "Extract Frames";
+		if(loadMultiFrame) {
+			// fill frame data using libgif.js
+			self.populateFrameDataComplete = false;
+			var parser = new GifParser({}, function() {
+				var parsedFrames = parser.getFrames();
+				for(var i = 0; i < parsedFrames.length; i++) {
+					self.frames.push(parsedFrames[i]);
+				}
+				while(parsedFrames.length > 0) {
+					parsedFrames.pop();
+				}
+				self.populateFrameDataComplete = true;
+				if(callbackCompleted && typeof callbackCompleted === "function") { 
+					callbackCompleted(); 
+				}
+			});
+			try {
+				parser.loadFromDataUri(this.src);
+			} catch(e) {
+				self.populateFrameDataComplete = true;
+				if(callbackCompleted && typeof callbackCompleted === "function") { 
+					callbackCompleted(); 
+				}
+			}
+		} else {
+			var $img = $("<img/>");
+			// load single frame
+			$img.load(function() {
+				var w = this.width;
+				var h = this.height;
+				var canvas = document.createElement("canvas");
+				canvas.width = w;
+				canvas.height = h;
+				var context = canvas.getContext("2d");
+				context.drawImage(this, 0, 0, w, h);
+				self.frames.push(context.getImageData(0,0,w,h));
+				self.populateFrameDataComplete = true;
+				if(callbackCompleted && typeof callbackCompleted === "function") { 
+					callbackCompleted(); 
+				}
+			});
+			self.populateFrameDataComplete = false;
+			$img.attr("src", self.src);
+		}
+	};
+	
+	this.clearFrameData = function(callbackCompleted) {
+		self.populateFrameDataComplete = false;
+		if(this.frames) {
+			while(this.frames.length > 0) {
+				this.frames.pop();
+			}
+		} else {
+			this.frames = [];
+		}
+		self.populateFrameDataComplete = true;
+		if(callbackCompleted && typeof callbackCompleted === "function") { 
+			callbackCompleted(); 
+		}
 	};
 }
 
@@ -118,8 +198,9 @@ ImageItem.copyImagePool = function(pool, deep) {
 				img.filetype, 
 				img.width, 
 				img.height, 
-				deep ? img.src : "", 
-				img.guid
+				deep ? img.src : "",
+				img.guid,
+				img.frameCount
 			);
 		}
 	}
