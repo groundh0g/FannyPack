@@ -51,6 +51,8 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 		this.src  = img.src || "";
 		this.guid = $.trim(img.guid || "00000000-0000-0000-0000-000000000000");
 		this.frameCount = parseInt($.isNumeric(img.frameCount) ? img.frameCount : this.frameCount);
+
+		this.clearFrameData();
 	};
 	
 	this.write = function() {
@@ -92,26 +94,33 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 	};
 
 	this.populateFrameDataComplete = true;
-	
+	this.filterAppliedCleanAlpha = false;
+	this.filterAppliedColorMask = false;
+	this.filterAppliedAliasHashCalc = false;
+	this.filterAppliedTrimRectCalc = false;
+
+	// TEST: imagePool["_animated.gif"].populateFrameData(function() { console.log(imagePool["_animated.gif"].frames); });
 	this.populateFrameData = function(callbackCompleted) {
-		this.clearFrameData();
+		this.clearFrameData(); // also resets filter flags
+
 		var loadMultiFrame =
 			this.filename.toLowerCase().endsWith(".gif") &&
 			$("#ddlAnimatedGif").text() === "Extract Frames";
+
 		if(loadMultiFrame) {
-			// fill frame data using libgif.js
-			self.populateFrameDataComplete = false;
+			// fill frame data using libgif.js & libgifparser.js
+			this.populateFrameDataComplete = false;
 			var parser = new GifParser({}, function() {
 				var parsedFrames = parser.getFrames();
 				for(var i = 0; i < parsedFrames.length; i++) {
-					self.frames.push(parsedFrames[i]);
+					self.frames.push(parsedFrames[i].data);
 				}
 				while(parsedFrames.length > 0) {
 					parsedFrames.pop();
 				}
 				self.populateFrameDataComplete = true;
 				if(callbackCompleted && typeof callbackCompleted === "function") { 
-					callbackCompleted(); 
+					callbackCompleted(self);
 				}
 			});
 			try {
@@ -119,7 +128,7 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 			} catch(e) {
 				self.populateFrameDataComplete = true;
 				if(callbackCompleted && typeof callbackCompleted === "function") { 
-					callbackCompleted(); 
+					callbackCompleted(self); 
 				}
 			}
 		} else {
@@ -136,16 +145,16 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 				self.frames.push(context.getImageData(0,0,w,h));
 				self.populateFrameDataComplete = true;
 				if(callbackCompleted && typeof callbackCompleted === "function") { 
-					callbackCompleted(); 
+					callbackCompleted(self); 
 				}
 			});
-			self.populateFrameDataComplete = false;
-			$img.attr("src", self.src);
+			this.populateFrameDataComplete = false;
+			$img.attr("src", this.src);
 		}
 	};
 	
 	this.clearFrameData = function(callbackCompleted) {
-		self.populateFrameDataComplete = false;
+		this.populateFrameDataComplete = false;
 		if(this.frames) {
 			while(this.frames.length > 0) {
 				this.frames.pop();
@@ -153,12 +162,103 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 		} else {
 			this.frames = [];
 		}
-		self.populateFrameDataComplete = true;
+		
+		// reset filter flags, we've just cleared the raw image data
+		this.filterAppliedCleanAlpha = false;
+		this.filterAppliedColorMask = false;
+		this.filterAppliedAliasHashCalc = false;
+		this.filterAppliedTrimRectCalc = false;
+		
+		this.populateFrameDataComplete = true;
 		if(callbackCompleted && typeof callbackCompleted === "function") { 
-			callbackCompleted(); 
+			callbackCompleted(this); 
 		}
 	};
+	
+	var doNothing = function() { };
+	var applyFiltersCallbackCompleted = doNothing;
+
+	this.applyFilters = function(callbackCompleted) {
+		applyFiltersCallbackCompleted = callbackCompleted || doNothing;
+		if(this.frames.length > 0) {
+			doApplyFilters(this);
+		} else {
+			this.populateFrameData(doApplyFilters);
+		}
+	};
+	
+	var doApplyFilters = function(image) {
+		var opts = new Options();
+		opts.read();
+		
+		if(!image.filterAppliedCleanAlpha && opts.doCleanAlpha()) {
+			ImageItem.applyFilterCleanAlpha(image);
+		}
+		
+		if(!image.filterAppliedColorMask && opts.doColorMask()) {
+			ImageItem.applyFilterColorMask(image);
+		}
+		
+		if(!image.filterAppliedAliasHashCalc && opts.doAliasSprites()) {
+			ImageItem.applyFilterAliasHash(image);
+		}
+		
+		if(!image.filterAppliedTrimRectCalc && opts.doTrim()) {
+			ImageItem.applyFilterTrim(image);
+		}
+		
+		applyFiltersCallbackCompleted(image);
+		applyFiltersCallbackCompleted = doNothing;
+	};
 }
+
+ImageItem.applyFilterCleanAlpha = function(image) {
+	for(var i = 0; i < image.frames.length; i++) {
+		var data = image.frames[i].data;
+		var len = data.length;
+		for(var j = 3; j < len; j += 4) {
+			if(data[j] === 0) {
+				data[j-1] =
+				data[j-2] =
+				data[j-3] = 0;
+			}
+		}
+	}
+	image.filterAppliedCleanAlpha = true;
+};
+
+ImageItem.applyFilterColorMask = function(image) {
+	for(var i = 0; i < image.frames.length; i++) {
+		var data = image.frames[i].data;
+		var len = data.length;
+		if(len > 4 && data[3] !== 0) {
+			var color = [, data[1], data[2], data[3]];
+			for(var j = 3; j < len; j += 4) {
+				var match =
+					data[j-3] === data[0] &&
+					data[j-2] === data[1] &&
+					data[j-1] === data[2];
+				if(match) {
+					data[j-0] =
+					data[j-1] =
+					data[j-2] =
+					data[j-3] = 0;
+				}
+			}
+		}
+	}
+	image.filterAppliedColorMask = true;
+};
+
+ImageItem.applyFilterAliasHash = function(image) {
+	// TODO: implement "MD5:w:h"
+	image.filterAppliedAliasHashCalc = true;
+};
+
+ImageItem.applyFilterTrim = function(image) {
+	// TODO: scan for trim counts
+	image.filterAppliedTrimRectCalc = true;
+};
 
 ImageItem.compareImages = function(obj1, obj2) {
 	result = false;
