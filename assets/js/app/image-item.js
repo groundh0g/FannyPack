@@ -258,9 +258,8 @@ ImageItem.applyFilterColorMask = function(image) {
 ImageItem.applyFilterAliasHash = function(image) {
 	for(var i = 0; i < image.frames.length; i++) {
 		var data = base64.encode(image.frames[i].data);
-		image.frames[i].hash1 = CryptoJS.HmacMD5(data, "The First Hash").toString();
-		image.frames[i].hash2 = CryptoJS.HmacMD5(data, "El Segundo Hash").toString();
-		image.frames[i].hash3 = CryptoJS.HmacMD5(data, "La Troisième Hash").toString();
+		// Key is: CryptoJS.MD5("@groundh0g").toString();
+		image.frames[i].hash = CryptoJS.HmacSHA256(data, "717d58fdda1ce12b217f8593ef67d5e7").toString();
 	}
 	image.filterAppliedAliasHashCalc = true;
 };
