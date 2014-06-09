@@ -115,6 +115,7 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 				for(var i = 0; i < parsedFrames.length; i++) {
 					self.frames.push(parsedFrames[i].data);
 				}
+				self.frameCount = self.frames.length;
 				while(parsedFrames.length > 0) {
 					parsedFrames.pop();
 				}
@@ -143,6 +144,7 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 				var context = canvas.getContext("2d");
 				context.drawImage(this, 0, 0, w, h);
 				self.frames.push(context.getImageData(0,0,w,h));
+				self.frameCount = self.frames.length;
 				self.populateFrameDataComplete = true;
 				if(callbackCompleted && typeof callbackCompleted === "function") { 
 					callbackCompleted(self); 
@@ -162,6 +164,7 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 		} else {
 			this.frames = [];
 		}
+		// self.frameCount = self.frames.length;
 		
 		// reset filter flags, we've just cleared the raw image data
 		this.filterAppliedCleanAlpha = false;
@@ -204,7 +207,7 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 		}
 		
 		if(!image.filterAppliedTrimRectCalc && opts.doTrim()) {
-			ImageItem.applyFilterTrim(image);
+			ImageItem.applyFilterTrim(image, opts.trimThreshold || 1);
 		}
 		
 		applyFiltersCallbackCompleted(image);
@@ -232,12 +235,14 @@ ImageItem.applyFilterColorMask = function(image) {
 		var data = image.frames[i].data;
 		var len = data.length;
 		if(len > 4 && data[3] !== 0) {
-			var color = [, data[1], data[2], data[3]];
+			var r = data[0];
+			var g = data[1];
+			var b = data[2];
 			for(var j = 3; j < len; j += 4) {
 				var match =
-					data[j-3] === data[0] &&
-					data[j-2] === data[1] &&
-					data[j-1] === data[2];
+					data[j-3] === r &&
+					data[j-2] === g &&
+					data[j-1] === b;
 				if(match) {
 					data[j-0] =
 					data[j-1] =
@@ -251,12 +256,64 @@ ImageItem.applyFilterColorMask = function(image) {
 };
 
 ImageItem.applyFilterAliasHash = function(image) {
-	// TODO: implement "MD5:w:h"
+	for(var i = 0; i < image.frames.length; i++) {
+		var data = base64.encode(image.frames[i].data);
+		image.frames[i].hash1 = CryptoJS.HmacMD5(data, "The First Hash").toString();
+		image.frames[i].hash2 = CryptoJS.HmacMD5(data, "El Segundo Hash").toString();
+		image.frames[i].hash3 = CryptoJS.HmacMD5(data, "La Troisième Hash").toString();
+	}
 	image.filterAppliedAliasHashCalc = true;
 };
 
-ImageItem.applyFilterTrim = function(image) {
-	// TODO: scan for trim counts
+ImageItem.applyFilterTrim = function(image, trimThreshold) {
+	trimThreshold = trimThreshold - 1;
+	for(var i = 0; i < image.frames.length; i++) {
+		var data = image.frames[i].data;
+		var len = data.length;
+		var w = image.frames[i].width;
+		var h = image.frames[i].height;
+		
+		var top = -1;
+		var bottom = 0;
+		// scan vertical
+		for(var y = 0; y < h; y++) {
+			var hasOpaque = false;
+			for(var x = 3; x < w; x+= 4) {
+				if(data[y * w + x] > trimThreshold) {
+					hasOpaque = true;
+					break;
+				}
+			}
+			if(hasOpaque) {
+				if(top < 0) { top = y; }
+				bottom = y;
+			}
+		}
+		if(top < 0) { top = bottom; }
+		
+		var left = -1;
+		var right = 0;
+		// scan horizontal
+		for(var x = 3; x < w; x+= 4) {
+			var hasOpaque = false;
+			for(var y = 0; y < h; y++) {
+				if(data[y * w + x] > trimThreshold) {
+					hasOpaque = true;
+					break;
+				}
+			}
+			if(hasOpaque) {
+				if(left < 0) { left = x; }
+				right = x;
+			}
+		}
+		if(left < 0) { left = right; }
+		
+		image.frames[i].trimLeft = left;
+		image.frames[i].trimRight = right;
+		image.frames[i].trimTop = top;
+		image.frames[i].trimBottom = bottom;
+	}
 	image.filterAppliedTrimRectCalc = true;
 };
 
