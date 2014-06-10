@@ -101,13 +101,21 @@ THE SOFTWARE.
 						<a id="cmdSpriteRemove" href="#null" class="btn"><i class="icon icon-remove"></i> Remove</a>
 					  </div>
 					  <div class="btn-group">
+					  	<a id="cmdRefresh" href="#null" class="btn"><i class="icon icon-refresh"></i> Refresh</a>
 						<a id="cmdPublish" href="#null" class="btn"><i class="icon icon-share"></i> Publish</a>
 					  </div>
 					  <div class="btn-group">
 						<a id="cmdToggleSettings" href="#null" class="btn"><i class="icon icon-wrench"></i> Settings</a>
 						<!--<a id="cmdToggleHelp" href="#null" class="btn"><i class="icon icon-question-sign"></i> Tooltips</a>-->
 					  </div>
+<!--
+					  <div class="btn-group">
 					  	<a id="cmdRefresh" href="#null" class="btn"><i class="icon icon-refresh"></i> Refresh</a>
+					  </div>
+-->
+					  <div class="btn-group pull-right" style="">
+					  	<a id="cmdStatus" href="#null" class="btn btn-link" style="color:#000;">STATUS: <span id="txtStatusMessage">Ready</span>.</a>
+					  </div>
 					</div>
 				</div>
 			</div>
@@ -450,6 +458,11 @@ THE SOFTWARE.
 					<a id="cmdWorkspaceFitHeight" title="Fit Workspace Height" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-resize-vertical"></i></a>
 					<a id="cmdWorkspaceFit"       title="Fit to Workspace" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-resize-full"></i></a>
 				  </div>
+				  <div class="btn-group pull-right" style="width:200px;">
+					<div class="progress progress-info" style="height:30px; background-color:#889; background-image:none;">
+					  <div class="bar" style="width: 33%;"></div>
+					</div>
+				  </div>
 				</div>
 			</div>
 			
@@ -608,8 +621,8 @@ THE SOFTWARE.
 		</div>		
 
 		<!-- libs -->
-		<script src="assets/js/jquery-1.8.3.js"></script>
-		<script src="assets/js/bootstrap.js"></script>
+		<script type="text/javascript" src="assets/js/jquery-1.8.3.js"></script>
+		<script type="text/javascript" src="assets/js/bootstrap.js"></script>
 		
 		<!-- utils -->
 		<script type="text/javascript" src="assets/js/app/util/base64.js"></script>
@@ -625,18 +638,18 @@ THE SOFTWARE.
 		<script type="text/javascript" src="assets/js/app/util/libgifparser.js"></script>
 		
 		<!-- objs -->
-		<script src="assets/js/app/image-item.js"></script>
-		<script src="assets/js/app/options.js"></script>
-		<script src="assets/js/app/version.js"></script>
+		<script type="text/javascript" src="assets/js/app/image-item.js"></script>
+		<script type="text/javascript" src="assets/js/app/options.js"></script>
+		<script type="text/javascript" src="assets/js/app/version.js"></script>
 	
 		<!-- packers -->
-		<script src="assets/js/app/packers/_base.js"></script>
-		<script src="assets/js/app/packers/basic.js"></script>
-		<script src="assets/js/app/packers/joe.js"></script>
+		<script type="text/javascript" src="assets/js/app/packers/_base.js"></script>
+		<script type="text/javascript" src="assets/js/app/packers/basic.js"></script>
+		<script type="text/javascript" src="assets/js/app/packers/joe.js"></script>
 		
 		<!-- page -->
-		<script src="assets/js/app/sheets.js"></script>
-		<script src="assets/js/app/sheets-events.js"></script>
+		<script type="text/javascript" src="assets/js/app/sheets.js"></script>
+		<script type="text/javascript" src="assets/js/app/sheets-events.js"></script>
 		
 	</body>
 </html>
