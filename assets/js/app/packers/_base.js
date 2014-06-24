@@ -35,19 +35,16 @@ function BasePacker(name, isDefault) {
 	// likely unused, but called for all packers before pack()
 	// sets warnings and error messages, if any
 	// this might be useful for checking browser compatibility?
-	this.init = function() { 
-		this.msgErrors = [];
-		this.msgWarnings = [];
-		this.msgInfos = [];
-		if(this.DoInit) { this.DoInit(); }
+	var init = function() { 
+		self.msgErrors = [];
+		self.msgWarnings = [];
+		self.msgInfos = [];
+		if(self.DoInit) { self.DoInit(); }
 	};
 	
 	var doNothing = function () { }
-	
-	// Accepts an array of imagePool entities, and set of options from the left 
-	// sidebar. Builds collection of imagePool keys, with their location & rotation, 
-	// within the sheet, along with a "success" boolean property. 
-	// This is an asynchronous call.
+
+	// task variables rather than passing as params N times per second
 	this.DoPack_FrameCount = 0;
 	this.DoPack_ImageKeys = [];
 	this.DoPack_Images = {};
@@ -57,6 +54,11 @@ function BasePacker(name, isDefault) {
 	this.DoPack_StatusCallback = this.doNothing;
 	this.DoPack_FramesProcessed = 0;
 	this.DoPack_MaxFramesProcessed = 0;
+	
+	// Accepts an array of imagePool entities, and set of options from the left 
+	// sidebar. Builds collection of imagePool keys, with their location & rotation, 
+	// within the sheet, along with a "success" boolean property. 
+	// This is an asynchronous call.
 	this.pack = function(images, options, completeCallback, statusCallback) { 
 		var fnComplete = completeCallback || doNothing;
 		var fnStatus = statusCallback || doNothing;
@@ -71,7 +73,7 @@ function BasePacker(name, isDefault) {
 		self.DoPack_FramesProcessed = 0;
 		self.DoPack_MaxFramesProcessed = 0;
 
-		self.init();
+		init();
 		var opts = trimOptions(options);
 		
 		self.DoPack_FrameCount = 0;
@@ -99,10 +101,12 @@ function BasePacker(name, isDefault) {
 		this.addInfo("Discovered " + self.DoPack_FrameCount + " frame(s) to process.");
 
 		if(self.msgErrors.length === 0) {
-			var imgKeys = BasePacker.SortBy[options["sortBy"]](images);
-			if(self.DoPack) { 
-				setTimeout(self.DoPack, 0);
-				//self.DoPack(imgKeys, images, opts, options, fnComplete, fnStatus);
+			if(self.DoPack && typeof self.DoPack === "function") { 
+				self.DoPack_ImageKeys = BasePacker.SortBy[options["sortBy"]](images);
+				self.DoPack_Images = images;
+				self.DoPack_Options = opts;
+				self.DoPack_AllOptions = options;
+				setTimeout(doPackTask, 0);
 			} else {
 				self.addError("DoPack() not yet implemented in this packer.");
 				fnComplete( { success: false } );
@@ -111,7 +115,23 @@ function BasePacker(name, isDefault) {
 			fnComplete( { success: false } );
 		}
 	};
-	
+
+	var doPackTask = function() {
+		if(self.DoPack_MaxFramesProcessed < self.DoPack_FramesProcessed) {
+			self.DoPack_MaxFramesProcessed = self.DoPack_FramesProcessed;
+		}
+		
+		self.DoPack_StatusCallback(self.DoPack_MaxFramesProcessed);
+
+		if(self.DoPack_MaxFramesProcessed === self.DoPack_FrameCount) {
+			self.DoPack_CompleteCallback({ success: true });
+			return;
+		}
+		
+		self.DoPack();
+		setTimeout(doPackTask, 100);
+	};
+		
 	var trimOptions = function(options) {
 		var opts = {};
 		var keys = Object.keys(options);

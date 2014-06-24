@@ -30,28 +30,13 @@ function JoePacker() {
 
 	//this.DoInit = function() { };
 	
-// 	self.DoPack_FrameCount = 0;
-// 	self.DoPack_ImageKeys = [];
-// 	self.DoPack_Images = {};
-// 	self.DoPack_Options = {};
-// 	self.DoPack_AllOptions = {};
-	this.DoPack = function() { 
+	this.DoPack = function () {
 		if(self.DoPack_MaxFramesProcessed === 0) {
 			// TODO: first call
 		}
 		
-		if(self.DoPack_MaxFramesProcessed === self.DoPack_FrameCount) {
-			self.DoPack_CompleteCallback({ success: true });
-			return;
-		}
-		
-		if(self.DoPack_MaxFramesProcessed < self.DoPack_FramesProcessed) {
-			self.DoPack_MaxFramesProcessed = self.DoPack_FramesProcessed;
-		}
-		self.DoPack_StatusCallback(self.DoPack_MaxFramesProcessed);
-		
+		// TODO: real work
 		self.DoPack_FramesProcessed++;
-		setTimeout(self.DoPack, 1000);
 	};
 }
 

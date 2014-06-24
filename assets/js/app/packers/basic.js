@@ -30,8 +30,13 @@ function BasicPacker() {
 
 	//this.DoInit = function() { };
 	
-	this.DoPack = function(imgKeys, images, options, allOptions) { 
-		return {};
+	this.DoPack = function () {
+		if(self.DoPack_MaxFramesProcessed === 0) {
+			// TODO: first call
+		}
+		
+		// TODO: real work
+		self.DoPack_FramesProcessed++;
 	};
 }
 

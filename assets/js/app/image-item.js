@@ -103,9 +103,9 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 	this.populateFrameData = function(callbackCompleted) {
 		this.clearFrameData(); // also resets filter flags
 
-		var loadMultiFrame =
-			this.filename.toLowerCase().endsWith(".gif") &&
-			$("#ddlAnimatedGif").text() === "Extract Frames";
+		var loadMultiFrame = 
+			this.filename.toLowerCase().endsWith(".gif"); // &&
+			//$("#ddlAnimatedGif").text() === "Extract Frames";
 
 		if(loadMultiFrame) {
 			// fill frame data using libgif.js & libgifparser.js
