@@ -30,29 +30,67 @@ function BasePacker(name, isDefault) {
 	this.version = "0.1.0";
 	this.msgErrors = [];
 	this.msgWarnings = [];
+	this.msgInfos = [];
   
 	// likely unused, but called for all packers before pack()
 	// sets warnings and error messages, if any
 	// this might be useful for checking browser compatibility?
-	var init = function() { 
+	this.init = function() { 
 		this.msgErrors = [];
 		this.msgWarnings = [];
+		this.msgInfos = [];
 		if(this.DoInit) { this.DoInit(); }
 	};
 	
-	// accepts array of imagePool entities, and set of options from left sidebar
-	// returns collection of imagePool keys with their location & rotation) within the sheet
-	this.pack = function(images, allOptions) { 
-		init();
-		var options = trimOptions(allOptions);
-		var result = {};
-		if(this.msgErrors.length === 0) {
-			var imgKeys = BasePacker.SortBy[options["sortBy"]](images);
-			if(this.DoPack) { 
-				result = this.DoPack(imgKeys, images, options, allOptions);
+	var doNothing = function () { }
+	
+	// Accepts an array of imagePool entities, and set of options from the left 
+	// sidebar. Builds collection of imagePool keys, with their location & rotation, 
+	// within the sheet, along with a "success" boolean property. 
+	// This is an asynchronous call.
+	this.frameCount = 0;
+	this.pack = function(images, options, completeCallback, statusCallback) { 
+		var fnComplete = completeCallback || doNothing;
+		var fnStatus = statusCallback || doNothing;
+
+		self.init();
+		var opts = trimOptions(options);
+		
+		self.frameCount = 0;
+		var extractGifFrames = 
+			options &&
+			options.doAnimatedGifExpand &&
+			options.doAnimatedGifExpand();
+
+		var imageKeys = Object.keys(imagePool);
+
+		for(var i = 0; i < imageKeys.length; i++) {
+			if(extractGifFrames) {
+				self.frameCount += images[imageKeys[i]].frameCount;
+			} else {
+				self.frameCount++;
 			}
 		}
-		return result;
+		
+		if(self.frameCount < 1) {
+			self.addInfo("No sprites have been loaded. Nothing to do.");
+			fnComplete( { success: true } );
+			return;
+		}
+		
+		this.addInfo("Discovered " + self.frameCount + " frame(s) to process.");
+
+		if(self.msgErrors.length === 0) {
+			var imgKeys = BasePacker.SortBy[options["sortBy"]](images);
+			if(self.DoPack) { 
+				self.DoPack(imgKeys, images, opts, options, fnComplete, fnStatus);
+			} else {
+				self.addError("DoPack() not yet implemented in this packer.");
+				fnComplete( { success: false } );
+			}
+		} else {
+			fnComplete( { success: false } );
+		}
 	};
 	
 	var trimOptions = function(options) {
@@ -99,8 +137,8 @@ function BasePacker(name, isDefault) {
 					case "sortBy":
 					case "allowRotate":
 						// are we using the right packer?
-						if(key === "spritePacker" && this.name !== options[key]) {
-							self.addError("Sprite packer mismatch. Expected '" + options[key] + "', found '" + this.name + "'.");
+						if(key === "spritePacker" && self.name !== options[key]) {
+							self.addError("Sprite packer mismatch. Expected '" + options[key] + "', found '" + self.name + "'.");
 						}
 						// is the selected sortBy valid?
 						if(key === "sortBy" && typeof BasePacker.SortBy[options[key]] !== "function") {
@@ -116,7 +154,7 @@ function BasePacker(name, isDefault) {
 					// include future options that we can't know about today
 					default:
 						// if unused in packer, throw warning message? Maybe? Maybe not?
-						self.addWarning("Unknown option, '" + options[key] + "'. Passing to packer, but it may not be referenced.");
+						self.addWarning("Unknown option, '" + options[key] + "'. Passing to packer, but it may not be used.");
 						opts[key] = options[key];
 						break;
 				}
@@ -133,6 +171,10 @@ function BasePacker(name, isDefault) {
 		self.msgErrors.push(msg);
 	};
 
+	this.addInfo = function(msg) {
+		self.msgInfos.push(msg);
+	};
+
 	// add this packer to the list of available packers
 	this.register = function() {
 		packers[this.name] = this;
@@ -140,11 +182,10 @@ function BasePacker(name, isDefault) {
 }
 
 // http://stackoverflow.com/questions/109023/how-to-count-the-number-of-set-bits-in-a-32-bit-integer#109025
-// Note from @groundh0g:
 // This implementation is taken from a C/C++ example. Javascript supports integers in 
-// the range +/-2^53, but the >> operator in Javascript operates on 32-bit numbers.
-// So, this should be fine.
-// I don't think the canvas would support sizes as large as 1 << 32 anyway. =)
+// the range +/-2^53. The >> operator in Javascript operates on 32-bit numbers, so
+// this should be fine. I don't think the canvas would support sizes as large as 
+// 1 << 31 anyway. =) -- @groundh0g
 BasePacker.CountBits = function (i) {
     i = i - ((i >> 1) & 0x55555555);
     i = (i & 0x33333333) + ((i >> 2) & 0x33333333);

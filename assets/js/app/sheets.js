@@ -247,6 +247,7 @@ var imagePool = {};
 var isProcessingFiles = false;
 var filesToProcess = {};
 var filesProcessedCount = 0;
+var framesProcessedCount = 0;
 var filesErroredCount = 0;
 
 var ProcessSpriteAdd = function(files) {
@@ -255,6 +256,7 @@ var ProcessSpriteAdd = function(files) {
 	filesToProcess = {};
 	isProcessingFiles = true;
 	filesProcessedCount = 0;
+	framesProcessedCount = 0;
 	filesErroredCount = 0;
 	
 	for(var i = 0; i < files.length; i++) {
@@ -278,7 +280,7 @@ var ProcessSpriteAdd = function(files) {
 				$img.addClass("foo");
 				$img.attr("src", e.target.result);
 				$("#divWorkspaceContainerCrop").append($img);
-				AddSpriteToImagePool(new ImageItem(
+				var img = new ImageItem(
 					null, // not a copy of existing image
 					this.filename,
 					this.filetype,
@@ -286,10 +288,13 @@ var ProcessSpriteAdd = function(files) {
 					$img.css("height"),
 					e.target.result,
 					UUID.generate()
-				));
+				);
+				img.populateFrameData(AddSpriteToImagePool);
+				//AddSpriteToImagePool(img);
 				$img.remove();
-			} catch(e) { 
-				LogConsoleMessage(ConsoleMessageTypes.ERROR, "Image '" + this.filename + "' failed to load.");
+			} catch(ex) { 
+				LogConsoleMessage(ConsoleMessageTypes.ERROR, "Image '" + self.filename + "' failed to load.");
+				LogConsoleMessage(ConsoleMessageTypes.ERROR, "Exception: '" + ex + "'");
 				filesErroredCount++;
 			}
 		};
@@ -315,8 +320,13 @@ var AddSpriteToImagePool = function(img, keepGuid) {
 	if(filesToProcess[img.filename]) { 
 		delete filesToProcess[img.filename];
 		filesProcessedCount++;
+		framesProcessedCount += img.frameCount;
 		if(!isProcessingFiles && Object.keys(filesToProcess).length === 0) { 
-			LogConsoleMessage(ConsoleMessageTypes.SUCCESS, "" + filesProcessedCount + " image(s) processed.");
+			var msg = "" + filesProcessedCount + " image(s) processed.";
+			if(filesProcessedCount !== framesProcessedCount) {
+				msg = "" + filesProcessedCount + " image(s) with " + framesProcessedCount + " frame(s) processed.";
+			}
+			LogConsoleMessage(ConsoleMessageTypes.SUCCESS, msg);
 			OnValueChanged(); 
 		} 
 	}
@@ -373,39 +383,44 @@ var BuildSpriteList = function() {
 		}
 	});
 	
-	PlaceSpritesOnWorkspace(null);
+	//PlaceSpritesOnWorkspace(null);
+	PackSprites();
 };
 
-var PlaceSpritesOnWorkspace = function(map) {
-	var keys = Object.keys(imagePool).sort(function(a,b){ return (a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0; });
-	if(keys.length > 0) {
-		$("#divWorkspaceContainerCrop").html("");
-		$("#divWorkspaceContainerCrop").append(
-			$("<img/>")
-			.attr("src",imagePool[keys[0]].src)
-			.css("left","100px")
-			.css("top","100px")
-		);
-	}
-};
+// var PlaceSpritesOnWorkspace = function(map) {
+// 	var keys = Object.keys(imagePool).sort(function(a,b){ return (a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0; });
+// 	if(keys.length > 0) {
+// 		//$("#divWorkspaceContainerCrop").html("");
+// 		$("#divWorkspaceContainerCrop").empty();
+// 		$("#divWorkspaceContainerCrop").append(
+// 			$("<img/>")
+// 			.attr("src",imagePool[keys[0]].src)
+// 			.css("left","100px")
+// 			.css("top","100px")
+// 		);
+// 	}
+// };
 
 var ConsoleMessageTypes = {
 	"SUCCESS": "SUCCESS",
 	"WARNING": "WARNING",
-	"ERROR"  : "ERROR"
+	"ERROR"  : "ERROR",
+	"INFO"   : "INFO"
 };
 
 var consoleMessages = {
 	"SUCCESS": [],
 	"WARNING": [],
-	"ERROR"  : []
+	"ERROR"  : [],
+	"INFO"   : []
 };
 
 var ClearConsoleMessages = function() {
 	consoleMessages = {
 		"SUCCESS": [],
 		"WARNING": [],
-		"ERROR"  : []
+		"ERROR"  : [],
+		"INFO"   : []
 	};
 };
 
@@ -421,16 +436,19 @@ var UpdateConsole = function() {
 	$("#lblLogCountSUCCESS").hide();
 	$("#lblLogCountWARNING").hide();
 	$("#lblLogCountERROR").hide();
+	$("#lblLogCountINFO").hide();
 	$("#divConsole").text("");
 
 	var countSuccess = consoleMessages[ConsoleMessageTypes.SUCCESS].length;
 	var countWarning = consoleMessages[ConsoleMessageTypes.WARNING].length;
 	var countError   = consoleMessages[ConsoleMessageTypes.ERROR].length;
-	var countMessages = countSuccess + countWarning + countError;
+	var countInfo    = consoleMessages[ConsoleMessageTypes.INFO].length;
+	var countMessages = countSuccess + countWarning + countError + countInfo;
 	
 	var keys = [
 		ConsoleMessageTypes.ERROR,
 		ConsoleMessageTypes.WARNING,
+		ConsoleMessageTypes.INFO,
 		ConsoleMessageTypes.SUCCESS
 	];
 	
@@ -453,6 +471,9 @@ var UpdateConsole = function() {
 	} else if(countWarning > 0) {
 		$("#lblLogCountWARNING").text(countWarning);
 		$("#lblLogCountWARNING").show();
+	} else if(countInfo > 0) {
+		$("#lblLogCountINFO").text(countInfo);
+		$("#lblLogCountINFO").show();
 	} else if(countSuccess > 0) {
 		// seems silly to report success as badge, but ...
 		$("#lblLogCountSUCCESS").text(countSuccess);
@@ -461,7 +482,75 @@ var UpdateConsole = function() {
 		$("#lblLogCountNothing").show();
 		$("#divConsole").text("[No messages.]");
 	}
-}
+};
+
+var CurrentPacker = null;
+var PackSprites = function(clearConsole) {
+	if(clearConsole === true) {
+		ClearConsoleMessages();
+	}
+	var options = new Options();
+	options.read();
+	CurrentPacker = packers[options["spritePacker"]];
+	CurrentPacker.pack(imagePool, options, OnPackComplete, OnPackStatusUpdate);
+};
+
+var OnPackComplete = function(result) {
+	var packer = CurrentPacker;
+	
+	var msgs = packer.msgErrors;
+	for(var i = 0; i < msgs.length; i++) {
+		LogConsoleMessage(ConsoleMessageTypes.ERROR, msgs[i]);
+	}
+
+	msgs = packer.msgWarnings;
+	for(var i = 0; i < msgs.length; i++) {
+		LogConsoleMessage(ConsoleMessageTypes.WARNING, msgs[i]);
+	}
+
+	msgs = packer.msgInfos;
+	for(var i = 0; i < msgs.length; i++) {
+		LogConsoleMessage(ConsoleMessageTypes.INFO, msgs[i]);
+	}
+
+	$("#divWorkspaceContainerCrop").empty();
+	if(result && result.success === true) {
+		LogConsoleMessage(ConsoleMessageTypes.SUCCESS, "Processed " + packer.frameCount + " frame(s).");
+		$("#txtStatusMessage").text("Ready.");
+		// TODO: Draw sprite sheet to canvas
+		// TODO: Get image data as dataUrl
+		// TODO: Resize #divWorkspaceContainer (sized to actual W & H)
+		// TODO: Resize #divWorkspaceContainerCrop (smaller of Max W & H or actual W & H)
+		// TODO: Add image to #divWorkspaceContainerCrop
+	} else {
+		$("#txtStatusMessage").text("Completed with errors.");
+	}
+	
+	$("#progressBar").css("width", "0");
+
+	UpdateConsole();
+};
+
+var OnPackStatusUpdate = function(count) {
+	if(isNullOrUndefined(count)) {
+		$("#txtStatusMessage").text("Ready.");
+		$("#progressBar").css("width", "0");
+	} else {
+		var packer = CurrentPacker;
+		var percentComplete = 100.0;
+
+		if(packer.frameCount === 0) {
+			$("#txtStatusMessage").text("Ready.");
+			$("#progressBar").css("width", "0");
+		} else {
+			percentComplete = 100.0 * parseFloat(count) / parseFloat(packer.frameCount);
+			percentComplete = percentComplete > 100.0 ? 100.0 : percentComplete;
+			percentComplete = percentComplete <   0.0 ?   0.0 : percentComplete;
+			$("#progressBar").css("width", "" + parseInt(percentComplete) + "%");
+			$("#txtStatusMessage").text("Processing " + count + " of " + packer.frameCount + " frame(s).");
+		}
+	}
+};
 
 $(document).ready(function () {
 	var i = 0;

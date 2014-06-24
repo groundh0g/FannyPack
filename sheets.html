@@ -114,7 +114,7 @@ THE SOFTWARE.
 					  </div>
 -->
 					  <div class="btn-group pull-right" style="">
-					  	<a id="cmdStatus" href="#null" class="btn btn-link" style="color:#000;">STATUS: <span id="txtStatusMessage">Ready</span>.</a>
+					  	<a id="cmdStatus" href="#null" class="btn btn-link" style="color:#000;">STATUS: <span id="txtStatusMessage">Ready.</span></a>
 					  </div>
 					</div>
 				</div>
@@ -460,7 +460,7 @@ THE SOFTWARE.
 				  </div>
 				  <div class="btn-group pull-right" style="width:200px;">
 					<div class="progress progress-info" style="height:30px; background-color:#889; background-image:none;">
-					  <div class="bar" style="width: 33%;"></div>
+					  <div id="progressBar" class="bar" style="width:0;"></div>
 					</div>
 				  </div>
 				</div>
@@ -483,6 +483,7 @@ THE SOFTWARE.
 				  	<span id="lblLogCountSUCCESS" class="badge badge-success" style="display:none;">0</span>
 				  	<span id="lblLogCountWARNING" class="badge badge-warning" style="display:none;">0</span>
 				  	<span id="lblLogCountERROR" class="badge badge-important" style="display:none;">0</span>
+				  	<span id="lblLogCountINFO" class="badge badge-info" style="display:none;">0</span>
 				  </button>
 				</div>
 			</div>
@@ -628,6 +629,7 @@ THE SOFTWARE.
 		<script type="text/javascript" src="assets/js/app/util/base64.js"></script>
 		<script type="text/javascript" src="assets/js/app/util/hmac-sha256.js"></script>
 		<script type="text/javascript" src="assets/js/app/util/object-keys.js"></script>
+		<script type="text/javascript" src="assets/js/app/util/param-helpers.js"></script>
 		<script type="text/javascript" src="assets/js/app/util/string-helpers.js"></script>
 		<script type="text/javascript" src="assets/js/app/util/guid.js"></script>
 		<script type="text/javascript" src="assets/js/app/util/json2.js"></script>

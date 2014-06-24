@@ -26,6 +26,7 @@ $("#cmdFileOpen").click(function() { return DoFileOpen(); });
 $("#cmdFileSave").click(function() { return DoFileSave(); });
 $("#cmdSpriteAdd").click(function() { return DoSpriteAdd(); });
 $("#cmdSpriteRemove").click(function() { return DoSpriteRemove(); });
+$("#cmdRefresh").click(function() { OnValueChanged(); });
 $("#cmdPublish").click(function() { return DoPublish(); });
 $("#cmdToggleHelp").click(function() { return DoToggleHelp(); });
 $("#cmdToggleSettings").click(function() { return DoToggleSettings(); } )
