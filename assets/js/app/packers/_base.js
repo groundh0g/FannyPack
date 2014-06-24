@@ -48,15 +48,33 @@ function BasePacker(name, isDefault) {
 	// sidebar. Builds collection of imagePool keys, with their location & rotation, 
 	// within the sheet, along with a "success" boolean property. 
 	// This is an asynchronous call.
-	this.frameCount = 0;
+	this.DoPack_FrameCount = 0;
+	this.DoPack_ImageKeys = [];
+	this.DoPack_Images = {};
+	this.DoPack_Options = {};
+	this.DoPack_AllOptions = {};
+	this.DoPack_CompleteCallback = this.doNothing;
+	this.DoPack_StatusCallback = this.doNothing;
+	this.DoPack_FramesProcessed = 0;
+	this.DoPack_MaxFramesProcessed = 0;
 	this.pack = function(images, options, completeCallback, statusCallback) { 
 		var fnComplete = completeCallback || doNothing;
 		var fnStatus = statusCallback || doNothing;
 
+		self.DoPack_FrameCount = 0;
+		self.DoPack_ImageKeys = [];
+		self.DoPack_Images = {};
+		self.DoPack_Options = {};
+		self.DoPack_AllOptions = {};
+		self.DoPack_CompleteCallback = fnComplete;
+		self.DoPack_StatusCallback = fnStatus;
+		self.DoPack_FramesProcessed = 0;
+		self.DoPack_MaxFramesProcessed = 0;
+
 		self.init();
 		var opts = trimOptions(options);
 		
-		self.frameCount = 0;
+		self.DoPack_FrameCount = 0;
 		var extractGifFrames = 
 			options &&
 			options.doAnimatedGifExpand &&
@@ -66,24 +84,25 @@ function BasePacker(name, isDefault) {
 
 		for(var i = 0; i < imageKeys.length; i++) {
 			if(extractGifFrames) {
-				self.frameCount += images[imageKeys[i]].frameCount;
+				self.DoPack_FrameCount += images[imageKeys[i]].frameCount;
 			} else {
-				self.frameCount++;
+				self.DoPack_FrameCount++;
 			}
 		}
 		
-		if(self.frameCount < 1) {
+		if(self.DoPack_FrameCount < 1) {
 			self.addInfo("No sprites have been loaded. Nothing to do.");
 			fnComplete( { success: true } );
 			return;
 		}
 		
-		this.addInfo("Discovered " + self.frameCount + " frame(s) to process.");
+		this.addInfo("Discovered " + self.DoPack_FrameCount + " frame(s) to process.");
 
 		if(self.msgErrors.length === 0) {
 			var imgKeys = BasePacker.SortBy[options["sortBy"]](images);
 			if(self.DoPack) { 
-				self.DoPack(imgKeys, images, opts, options, fnComplete, fnStatus);
+				setTimeout(self.DoPack, 0);
+				//self.DoPack(imgKeys, images, opts, options, fnComplete, fnStatus);
 			} else {
 				self.addError("DoPack() not yet implemented in this packer.");
 				fnComplete( { success: false } );

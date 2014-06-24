@@ -21,8 +21,11 @@ THE SOFTWARE.
 */
 
 var suppressOnValueChanged = false;
-var OnValueChanged = function() { 
-	if(!suppressOnValueChanged) { 
+var OnValueChanged = function(preserveLog) {
+	if(preserveLog !== true) {
+		ClearConsoleMessages();
+	} 
+	if(suppressOnValueChanged === false) { 
 		BuildSpriteList();
 		UpdateConsole();
 	}
@@ -324,7 +327,7 @@ var AddSpriteToImagePool = function(img, keepGuid) {
 		if(!isProcessingFiles && Object.keys(filesToProcess).length === 0) { 
 			var msg = "" + filesProcessedCount + " image(s) processed.";
 			if(filesProcessedCount !== framesProcessedCount) {
-				msg = "" + filesProcessedCount + " image(s) with " + framesProcessedCount + " frame(s) processed.";
+				msg = "" + filesProcessedCount + " image(s) with " + framesProcessedCount + " frame(s).";
 			}
 			LogConsoleMessage(ConsoleMessageTypes.SUCCESS, msg);
 			OnValueChanged(); 
@@ -515,7 +518,7 @@ var OnPackComplete = function(result) {
 
 	$("#divWorkspaceContainerCrop").empty();
 	if(result && result.success === true) {
-		LogConsoleMessage(ConsoleMessageTypes.SUCCESS, "Processed " + packer.frameCount + " frame(s).");
+		LogConsoleMessage(ConsoleMessageTypes.SUCCESS, "Processed " + packer.DoPack_FrameCount + " frame(s).");
 		$("#txtStatusMessage").text("Ready.");
 		// TODO: Draw sprite sheet to canvas
 		// TODO: Get image data as dataUrl
@@ -539,15 +542,15 @@ var OnPackStatusUpdate = function(count) {
 		var packer = CurrentPacker;
 		var percentComplete = 100.0;
 
-		if(packer.frameCount === 0) {
+		if(packer.DoPack_FrameCount === 0) {
 			$("#txtStatusMessage").text("Ready.");
 			$("#progressBar").css("width", "0");
 		} else {
-			percentComplete = 100.0 * parseFloat(count) / parseFloat(packer.frameCount);
+			percentComplete = 100.0 * parseFloat(count) / parseFloat(packer.DoPack_FrameCount);
 			percentComplete = percentComplete > 100.0 ? 100.0 : percentComplete;
 			percentComplete = percentComplete <   0.0 ?   0.0 : percentComplete;
 			$("#progressBar").css("width", "" + parseInt(percentComplete) + "%");
-			$("#txtStatusMessage").text("Processing " + count + " of " + packer.frameCount + " frame(s).");
+			$("#txtStatusMessage").text("Processing " + count + " of " + packer.DoPack_FrameCount + " frame(s).");
 		}
 	}
 };
