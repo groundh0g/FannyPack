@@ -33,6 +33,7 @@ var isNullOrUndefined = function(obj) {
 // -- @groundh0g
 // ----------------------------------------------------------------------------------
 var countBits = function (i) {
+	i = parseInt(i);
     i = i - ((i >> 1) & 0x55555555);
     i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
     return (((i + (i >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
@@ -50,7 +51,7 @@ var isPowerOfTwo = function (i) {
 // Round up if not Po2, Same value if Po2 -- @groundh0g
 // ----------------------------------------------------
 var roundUpToPowerOfTwo = function (x) { 
-    x = x - 1;
+    x = parseInt(x) - 1;
     x = x | (x >> 1);
     x = x | (x >> 2);
     x = x | (x >> 4);
@@ -58,4 +59,3 @@ var roundUpToPowerOfTwo = function (x) {
     x = x | (x >>16);
     return x + 1;
 };
-

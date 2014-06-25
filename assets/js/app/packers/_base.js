@@ -107,10 +107,52 @@ function BasePacker(name, isDefault) {
 		if(self.msgErrors.length === 0) {
 			if(self.DoPack && typeof self.DoPack === "function") {
 				// start packing!
+				var widthInit = 1;
+				var widthMax = parseInt(options.width);
+				var heightInit = 1;
+				var heightMax = parseInt(options.height);
+				
+				if(options.doForcePowOf2()) {
+					var widthPo2 = roundUpToPowerOfTwo(widthMax);
+					if(widthMax !== widthPo2) {
+						this.addWarning("Power of Two is specified, but width [" + widthMax + "] does not conform. Setting value to [" + widthPo2 + "].");
+						widthMax = widthPo2;
+					}
+					var heightPo2 = roundUpToPowerOfTwo(heightMax);
+					if(heightMax !== heightPo2) {
+						this.addWarning("Power of Two is specified, but height [" + heightMax + "] does not conform. Setting value to [" + heightPo2 + "].");
+						heightMax = heightPo2;
+					}
+				}
+				
+				if(options.doForceSquare()) {
+					if(widthMax != heightMax) {
+						var maxSize = Math.max(widthMax, heightMax);
+						this.addWarning("Force Square is specified, but width [" + widthMax + "] and height [" + heightMax + "] are different. Setting both to largest value [" + maxSize + "].");
+						widthMax = heightMax = maxSize;
+					}
+				}
+				
+				if(options.doFixedSize()) {
+					widthInit = widthMax;
+					heightInit = heightMax;
+				}
+				
+				self.width           = widthInit;
+				self.MAX_WIDTH       = widthMax;
+				self.height          = heightInit;
+				self.MAX_HEIGHT      = heightMax;
+				self.forcePowerOfTwo = options.doForcePowOf2();
+				self.forceSquare     = options.doForceSquare();
+				self.paddingShape    = parseInt(options.shapePadding  || 0);
+				self.paddingBorder   = parseInt(options.borderPadding || 0);
+				self.paddingInner    = parseInt(options.innerPadding  || 0);
+				
 				self.DoPack_ImageKeys = BasePacker.SortBy[options["sortBy"]](images);
 				self.DoPack_Images = images;
 				self.DoPack_Options = opts;
 				self.DoPack_AllOptions = options;
+				
 				setTimeout(doPackTask, 0);
 			} else {
 				// oops. not sure what to do. packer isn't implemented.
@@ -246,21 +288,21 @@ function BasePacker(name, isDefault) {
 									self.addWarning("Allow Rotate not yet implemented.");
 								}
 								break;
-							case "borderPadding":
-								if(options[key] > 0) {
-									self.addWarning("Sprite border padding not yet implemented.");
-								}
-								break;
-							case "shapePadding":
-								if(options[key] > 0) {
-									self.addWarning("Sprite shape padding not yet implemented.");
-								}
-								break;
-							case "innerPadding":
-								if(options[key] > 0) {
-									self.addWarning("Sprite inner padding not yet implemented.");
-								}
-								break;
+// 							case "borderPadding":
+// 								if(options[key] > 0) {
+// 									self.addWarning("Sprite border padding not yet implemented.");
+// 								}
+// 								break;
+// 							case "shapePadding":
+// 								if(options[key] > 0) {
+// 									self.addWarning("Sprite shape padding not yet implemented.");
+// 								}
+// 								break;
+// 							case "innerPadding":
+// 								if(options[key] > 0) {
+// 									self.addWarning("Sprite inner padding not yet implemented.");
+// 								}
+// 								break;
 						}
 						opts[key] = options[key];
 						break;

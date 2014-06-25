@@ -30,6 +30,21 @@ function BasicPacker() {
 
 	this.DoInit = function() { };
 	
+// 	self.width           = widthInit;
+// 	self.MAX_WIDTH       = widthMax;
+// 	self.height          = heightInit;
+// 	self.MAX_HEIGHT      = heightMax;
+// 	self.forcePowerOfTwo = options.doForcePowOf2();
+// 	self.forceSquare     = options.doForceSquare();
+// 	self.paddingShape    = parseInt(options.shapePadding  || 0);
+// 	self.paddingBorder   = parseInt(options.borderPadding || 0);
+// 	self.paddingInner    = parseInt(options.innerPadding  || 0);
+// 	
+// 	self.DoPack_ImageKeys = BasePacker.SortBy[options["sortBy"]](images);
+// 	self.DoPack_Images = images;
+// 	self.DoPack_Options = opts;
+// 	self.DoPack_AllOptions = options;
+
 	this.DoPack = function () {
 		if(self.DoPack_MaxFramesProcessed === 0) {
 			// TODO: first call
