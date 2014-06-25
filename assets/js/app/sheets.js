@@ -439,7 +439,7 @@ var UpdateConsole = function() {
 	$("#lblLogCountWARNING").hide();
 	$("#lblLogCountERROR").hide();
 	$("#lblLogCountINFO").hide();
-	$("#divConsole").text("");
+	$("#divConsole").empty();
 
 	var countSuccess = consoleMessages[ConsoleMessageTypes.SUCCESS].length;
 	var countWarning = consoleMessages[ConsoleMessageTypes.WARNING].length;
@@ -517,6 +517,27 @@ var OnPackComplete = function(result) {
 
 	$("#divWorkspaceContainerCrop").empty();
 	if(result && result.success === true) {
+		$("#divWorkspaceContainerCrop")
+			.css("width",  packer.width  + "px")
+			.css("height", packer.height + "px");
+			
+		// -------------------------------------------------
+		// this is where the magic happens. =) -- @groundhog
+		// -------------------------------------------------
+		var buffer = document.createElement('canvas');
+		buffer.width = packer.width;
+		buffer.height = packer.height;
+		var ctx = buffer.getContext('2d');
+		$(Object.keys(imagePool)).each(function(ndx1,key) {
+			$(imagePool[key].frames).each(function(ndx2,frame) {
+				if(frame.rectSprite) {
+					ctx.putImageData(frame, frame.rectSprite.x, frame.rectSprite.y);
+				}
+			});
+		});
+		$("#divWorkspaceContainerCrop").append(buffer);
+		// -------------------------------------------------
+
 		LogConsoleMessage(ConsoleMessageTypes.SUCCESS, "Processed " + packer.DoPack_FrameCount + " frame(s).");
 		$("#txtStatusMessage").text("Ready.");
 		// TODO: Draw sprite sheet to canvas

@@ -48,10 +48,79 @@ function BasicPacker() {
 	this.DoPack = function () {
 		if(self.DoPack_MaxFramesProcessed === 0) {
 			// TODO: first call
+			self.ImageIndex = 0;
+			self.FrameIndex = 0;
+			self.CurrentX = 0;
+			self.CurrentY = 0;
+			self.MaxY = 0;
 		}
 		
-		// TODO: real work
-		self.DoPack_FramesProcessed++;
+		// place sprite
+		var image = self.DoPack_Images[self.DoPack_ImageKeys[self.ImageIndex]];
+		var frameCount = self.DoPack_AllOptions.doAnimatedGifExpand() ? image.frameCount : 1;
+		for(var i = 0; i < frameCount; i++) {
+		
+			// won't fit width? grow if possible.
+			while(self.CurrentX + image.width > self.width && self.width < self.MAX_WIDTH) {
+				if(self.forcePowerOfTwo) {
+					self.width = Math.min(self.MAX_WIDTH, roundUpToPowerOfTwo(self.width + 1));
+				} else {
+					self.width = Math.min(self.MAX_WIDTH, self.CurrentX + image.width);
+				}
+				
+				if(self.forceSquare) {
+					self.height = Math.min(self.MAX_HEIGHT, self.width);
+				}
+			}
+			
+			// still won't fit? move to next row.
+			if(self.CurrentX + image.width > self.width) {
+				self.CurrentX = 0;
+				self.CurrentY = self.MaxY;
+			}
+
+			// still won't fit? we have a problem.
+			if(self.CurrentX + image.width > self.width) {
+				self.addError("Image [" + self.ImageIndex + "] at Frame [" + self.FrameIndex + "] with Name [" + image.filename + "] won't fit specified width constraints.");
+			} else {
+				// won't fit height? grow if possible.
+				while(self.CurrentY + image.height > self.height && self.height < self.MAX_HEIGHT) {
+					if(self.forcePowerOfTwo) {
+						self.height = Math.min(self.MAX_HEIGHT, roundUpToPowerOfTwo(self.height + 1));
+					} else {
+						self.height = Math.min(self.MAX_HEIGHT, self.CurrentY + image.height);
+					}
+				
+					if(self.forceSquare) {
+						self.width = Math.min(self.MAX_WIDTH, self.height);
+					}
+				}
+			
+				// still won't fit? we have a problem.
+				if(self.CurrentY + image.height > self.height) {
+					self.addError("Image [" + self.ImageIndex + "] at Frame [" + self.FrameIndex + "] with Name [" + image.filename + "] won't fit specified height constraints.");
+				}
+			}
+
+			if(self.msgErrors.length > 0) {
+				self.DoPack_FramesProcessed = self.DoPack_FrameCount;
+			} else {
+				self.MaxY = Math.max(self.MaxY, self.CurrentY + image.height);
+				image.frames[i].rectSprite = {
+					x: self.CurrentX,
+					y: self.CurrentY,
+					w: image.width,
+					h: image.height,
+					r: false
+				};
+			
+				self.CurrentX += image.width;
+			}
+			
+			self.DoPack_FramesProcessed++;
+		}
+		self.ImageIndex++;
+		self.FrameIndex = 0;
 	};
 }
 
