@@ -28,7 +28,7 @@ function JoePacker() {
 	this.defaultSortBy = "AREA_DESC";
 	this.version = "0.1.0";
 
-	//this.DoInit = function() { };
+	this.DoInit = function() { };
 	
 	this.DoPack = function () {
 		if(self.DoPack_MaxFramesProcessed === 0) {

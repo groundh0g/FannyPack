@@ -325,12 +325,11 @@ var AddSpriteToImagePool = function(img, keepGuid) {
 		filesProcessedCount++;
 		framesProcessedCount += img.frameCount;
 		if(!isProcessingFiles && Object.keys(filesToProcess).length === 0) { 
+			var opts = new Options();
+			opts.read();
 			var msg = "" + filesProcessedCount + " image(s) processed.";
-			if(filesProcessedCount !== framesProcessedCount) {
-				msg = "" + filesProcessedCount + " image(s) with " + framesProcessedCount + " frame(s).";
-			}
 			LogConsoleMessage(ConsoleMessageTypes.SUCCESS, msg);
-			OnValueChanged(); 
+			OnValueChanged(true); 
 		} 
 	}
 };

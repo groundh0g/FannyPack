@@ -28,62 +28,62 @@ function BasePacker(name, isDefault) {
 	this.defaultSortBy = "NAME";
 	this.isDefault = isDefault || false;
 	this.version = "0.1.0";
-	this.msgErrors = [];
-	this.msgWarnings = [];
-	this.msgInfos = [];
-  
-	// likely unused, but called for all packers before pack()
-	// sets warnings and error messages, if any
+
+	// collections of messages, cleared again in init()
+ 	this.msgErrors = [];
+ 	this.msgWarnings = [];
+ 	this.msgInfos = [];
+
+	// a valid, do-nothing placeholder method
+	var doNothing = function () { };
+	
+	// likely unused, but called for all packers at start of pack()
+	// sets warnings and error messages, if any. inits DoPack params
 	// this might be useful for checking browser compatibility?
-	var init = function() { 
+	var init = function(completeCallback, statusCallback) { 
+		// clear messages
 		self.msgErrors = [];
 		self.msgWarnings = [];
 		self.msgInfos = [];
-		if(self.DoInit) { self.DoInit(); }
-	};
-	
-	var doNothing = function () { }
-
-	// task variables rather than passing as params N times per second
-	this.DoPack_FrameCount = 0;
-	this.DoPack_ImageKeys = [];
-	this.DoPack_Images = {};
-	this.DoPack_Options = {};
-	this.DoPack_AllOptions = {};
-	this.DoPack_CompleteCallback = this.doNothing;
-	this.DoPack_StatusCallback = this.doNothing;
-	this.DoPack_FramesProcessed = 0;
-	this.DoPack_MaxFramesProcessed = 0;
-	
-	// Accepts an array of imagePool entities, and set of options from the left 
-	// sidebar. Builds collection of imagePool keys, with their location & rotation, 
-	// within the sheet, along with a "success" boolean property. 
-	// This is an asynchronous call.
-	this.pack = function(images, options, completeCallback, statusCallback) { 
-		var fnComplete = completeCallback || doNothing;
-		var fnStatus = statusCallback || doNothing;
-
+		
+		// task variables rather than passing as params N times per pack frame
 		self.DoPack_FrameCount = 0;
 		self.DoPack_ImageKeys = [];
 		self.DoPack_Images = {};
 		self.DoPack_Options = {};
 		self.DoPack_AllOptions = {};
-		self.DoPack_CompleteCallback = fnComplete;
-		self.DoPack_StatusCallback = fnStatus;
+		self.DoPack_CompleteCallback = completeCallback || self.DoPack_CompleteCallback || doNothing;
+		self.DoPack_StatusCallback   = statusCallback   || self.DoPack_StatusCallback   || doNothing;
 		self.DoPack_FramesProcessed = 0;
 		self.DoPack_MaxFramesProcessed = 0;
+		
+		if(self.DoInit && typeof self.DoInit === "function") { self.DoInit(); }
+	};
+	
+	// Accepts an array of image pool entities (a collection of zero or more ImageItem 
+	// objects), as well as a trimmed and full ser of options from the left sidebar. 
+	// Marks each image pool entity with their location & rotation within the sheet. 
+	// Return value to callbackComplete includes a "success" boolean property. 
+	// This is an asynchronous call.
+	this.pack = function(images, options, completeCallback, statusCallback) { 
 
-		init();
+		init(completeCallback, statusCallback); // all the self.DoPack_XXX variables are initialized here
+
+		// if callbacks were specified, use them
+		var fnComplete = completeCallback || self.DoPack_CompleteCallback || doNothing;
+		var fnStatus   = statusCallback   || self.DoPack_StatusCallback   || doNothing;
+		
+		// hand self.DoPack() the subset of options that it cares about
 		var opts = trimOptions(options);
 		
-		self.DoPack_FrameCount = 0;
+		// count frames of animated GIFs, or just use first frame?
 		var extractGifFrames = 
 			options &&
 			options.doAnimatedGifExpand &&
 			options.doAnimatedGifExpand();
 
+		// count frames to process, order of ImageItem keys is irrelevant
 		var imageKeys = Object.keys(imagePool);
-
 		for(var i = 0; i < imageKeys.length; i++) {
 			if(extractGifFrames) {
 				self.DoPack_FrameCount += images[imageKeys[i]].frameCount;
@@ -92,48 +92,65 @@ function BasePacker(name, isDefault) {
 			}
 		}
 		
+		// sanity check total frame count
 		if(self.DoPack_FrameCount < 1) {
+			// if there aren't any frames, ignore call to pack()
 			self.addInfo("No sprites have been loaded. Nothing to do.");
 			fnComplete( { success: true } );
 			return;
+		} else {
+			// report frame count, which may be greater than image count
+			this.addInfo("Discovered " + self.DoPack_FrameCount + " frame(s) in " + imageKeys.length + " image(s).");
 		}
-		
-		this.addInfo("Discovered " + self.DoPack_FrameCount + " frame(s) to process.");
 
+		// no errors were set in self.DoInit() or trimOptions(); start processing frames
 		if(self.msgErrors.length === 0) {
-			if(self.DoPack && typeof self.DoPack === "function") { 
+			if(self.DoPack && typeof self.DoPack === "function") {
+				// start packing!
 				self.DoPack_ImageKeys = BasePacker.SortBy[options["sortBy"]](images);
 				self.DoPack_Images = images;
 				self.DoPack_Options = opts;
 				self.DoPack_AllOptions = options;
 				setTimeout(doPackTask, 0);
 			} else {
+				// oops. not sure what to do. packer isn't implemented.
 				self.addError("DoPack() not yet implemented in this packer.");
 				fnComplete( { success: false } );
 			}
+		// errors were set in self.DoInit() or trimOptions(); don't process frames
 		} else {
 			fnComplete( { success: false } );
 		}
 	};
 
+	// handle the pseudo-threading tasks for self.DoPack()
 	var doPackTask = function() {
+		// have we made forward progress? previous frames may be revisited!
 		if(self.DoPack_MaxFramesProcessed < self.DoPack_FramesProcessed) {
 			self.DoPack_MaxFramesProcessed = self.DoPack_FramesProcessed;
 		}
 		
+		// let UI know what we're up to
+		// report how far we've progressed, ignoring revisited frames
+		// (I don't want the progress bar jumping back and forth, so use max frame count)
 		self.DoPack_StatusCallback(self.DoPack_MaxFramesProcessed);
 
+		// holy bat crap - we're done!
 		if(self.DoPack_MaxFramesProcessed === self.DoPack_FrameCount) {
 			self.DoPack_CompleteCallback({ success: true });
 			return;
 		}
 		
+		// repeatedly call self.DoPack() until all sprite frames have been placed
 		self.DoPack();
-		setTimeout(doPackTask, 100);
+		setTimeout(doPackTask, 100); // TODO: drop timeout to zero or one; I just want to see it working for now
 	};
-		
+
+	// some options are handled globally, some are handled by the packer implementation
 	var trimOptions = function(options) {
-		var opts = {};
+		var opts = {}; // the packer-specific options
+		
+		// sift options into global or packer-specific collections
 		var keys = Object.keys(options);
 		for(var i = 0; i < keys.length; i++) {
 			var key = keys[i];
@@ -155,8 +172,43 @@ function BasePacker(name, isDefault) {
 					case "animatedGif":
 					case "compressProject":
 					case "aliasSprites":
-						if(key === "aliasSprites" && options.doAliasSprites()) { 
-							self.addWarning("Alias Sprites not yet implemented.");
+						switch(key) {
+							case "aliasSprites": 
+								// was sprite aliasing requested?
+								if(options.doAliasSprites()) {
+									self.addWarning("Alias Sprites not yet implemented.");
+								}
+								break;
+							case "includeAt2x":
+								// was @2x requested?
+								if(options.doIncludeAt2x()) {
+									self.addWarning("Include @2x not yet implemented.");
+								}
+								break;
+							case "cleanAlpha":
+								// was clean alpha requested?
+								if(options.doCleanAlpha()) {
+									self.addWarning("Clean alpha not yet implemented.");
+								}
+								break;
+							case "colorMask":
+								// was color masking requested?
+								if(options.doColorMask()) {
+									self.addWarning("Color mask not yet implemented.");
+								}
+								break;
+							case "debugMode":
+								// was debug mode requested?
+								if(options.doDebug()) {
+									self.addWarning("Debug mode not yet implemented.");
+								}
+								break;
+							case "trimMode":
+								// was sprite trimming requested?
+								if(options.doTrim()) {
+									self.addWarning("Trim sprites not yet implemented.");
+								}
+								break;
 						}
 						break;
 					
@@ -175,17 +227,25 @@ function BasePacker(name, isDefault) {
 					case "spritePacker":
 					case "sortBy":
 					case "allowRotate":
-						// are we using the right packer?
-						if(key === "spritePacker" && self.name !== options[key]) {
-							self.addError("Sprite packer mismatch. Expected '" + options[key] + "', found '" + self.name + "'.");
-						}
-						// is the selected sortBy valid?
-						if(key === "sortBy" && typeof BasePacker.SortBy[options[key]] !== "function") {
-							self.addError("Unknown sort method, '" + options[key] + "'.");
-						}
-						// was rotate requested?
-						if(key === "allowRotate" && options.doAllowRotate()) { 
-							self.addWarning("Allow Rotate not yet implemented.");
+						switch(key) {
+							case "spritePacker":
+								// are we using the right packer?
+								if(self.name != options[key]) {
+									self.addError("Sprite packer mismatch. Expected '" + options[key] + "', found '" + self.name + "'.");
+								}
+								break;
+							case "sortBy":
+								// does sort method exist?
+								if(typeof BasePacker.SortBy[options[key]] !== "function") {
+									self.addError("Unknown sort method, '" + options[key] + "'.");
+								}
+								break;
+							case "allowRotate":
+								// was rotation requested?
+								if(options.doAllowRotate()) {
+									self.addWarning("Allow Rotate not yet implemented.");
+								}
+								break;
 						}
 						opts[key] = options[key];
 						break;
@@ -193,7 +253,7 @@ function BasePacker(name, isDefault) {
 					// include future options that we can't know about today
 					default:
 						// if unused in packer, throw warning message? Maybe? Maybe not?
-						self.addWarning("Unknown option, '" + options[key] + "'. Passing to packer, but it may not be used.");
+						self.addInfo("Unknown option, '" + options[key] + "'. Passing to packer, but it may not be used.");
 						opts[key] = options[key];
 						break;
 				}
@@ -202,36 +262,32 @@ function BasePacker(name, isDefault) {
 		return opts;
 	};
 
-	this.addWarning = function(msg) {
-		self.msgWarnings.push(msg);
-	};
+	// manage the various types of messages
+	this.addWarning = function(msg) { self.msgWarnings.push(msg); };
+	this.addError   = function(msg) { self.msgErrors.push(msg); };
+	this.addInfo    = function(msg) { self.msgInfos.push(msg); };
 
-	this.addError = function(msg) {
-		self.msgErrors.push(msg);
-	};
-
-	this.addInfo = function(msg) {
-		self.msgInfos.push(msg);
-	};
-
-	// add this packer to the list of available packers
-	this.register = function() {
-		packers[this.name] = this;
-	};
+	// add this packer instance to the list of available packers
+	this.register = function() { packers[this.name] = this; };
 }
 
 // http://stackoverflow.com/questions/109023/how-to-count-the-number-of-set-bits-in-a-32-bit-integer#109025
+// ----------------------------------------------------------------------------------
 // This implementation is taken from a C/C++ example. Javascript supports integers in 
 // the range +/-2^53. The >> operator in Javascript operates on 32-bit numbers, so
 // this should be fine. I don't think the canvas would support sizes as large as 
-// 1 << 31 anyway. =) -- @groundh0g
+// 1 << 31 anyway. =) 
+// -- @groundh0g
+// ----------------------------------------------------------------------------------
 BasePacker.CountBits = function (i) {
     i = i - ((i >> 1) & 0x55555555);
     i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
     return (((i + (i >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
 };
 
+// ----------------------------------
 // [VERY] simple helper -- @groundh0g
+// ----------------------------------
 BasePacker.IsPowerOfTwo = function (i) { 
     return BasePacker.CountBits(i) === 1; 
 };
@@ -270,14 +326,6 @@ BasePacker.SortBy["WIDTH"] = function(images) {
 	});
 };
 
-BasePacker.SortBy["HEIGHT"] = function(images) {
-	return Object.keys(images).sort(function(a,b) {
-		return (images[a].height < images[b].height) ? -1 : (images[a].height > images[b].height) ? 1 : 
-			// if height is same, use key to sort
-			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
-	});
-};
-
 BasePacker.SortBy["WIDTH_DESC"] = function(images) {
 	return Object.keys(images).sort(function(a,b) {
 		return (images[a].width < images[b].width) ? 1 : (images[a].width > images[b].width) ? -1 :
@@ -286,10 +334,28 @@ BasePacker.SortBy["WIDTH_DESC"] = function(images) {
 	});
 };
 
+BasePacker.SortBy["HEIGHT"] = function(images) {
+	return Object.keys(images).sort(function(a,b) {
+		return (images[a].height < images[b].height) ? -1 : (images[a].height > images[b].height) ? 1 : 
+			// if height is same, use key to sort
+			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
+	});
+};
+
 BasePacker.SortBy["HEIGHT_DESC"] = function(images) {
 	return Object.keys(images).sort(function(a,b) {
 		return (images[a].height < images[b].height) ? 1 : (images[a].height > images[b].height) ? -1 :
 			// if height is same, use key to sort
+			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
+	});
+};
+
+BasePacker.SortBy["AREA"] = function(images) {
+	return Object.keys(images).sort(function(a,b) {
+		var area_a = images[a].width * images[a].height;
+		var area_b = images[b].width * images[b].height;
+		return (area_a < area_b) ? -1 : (area_a > area_b) ? 1 :
+			// if area is same, use key to sort
 			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
 	});
 };
@@ -304,12 +370,3 @@ BasePacker.SortBy["AREA_DESC"] = function(images) {
 	});
 };
 
-BasePacker.SortBy["AREA"] = function(images) {
-	return Object.keys(images).sort(function(a,b) {
-		var area_a = images[a].width * images[a].height;
-		var area_b = images[b].width * images[b].height;
-		return (area_a < area_b) ? -1 : (area_a > area_b) ? 1 :
-			// if area is same, use key to sort
-			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
-	});
-};
