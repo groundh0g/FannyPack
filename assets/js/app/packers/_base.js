@@ -246,6 +246,21 @@ function BasePacker(name, isDefault) {
 									self.addWarning("Allow Rotate not yet implemented.");
 								}
 								break;
+							case "borderPadding":
+								if(options[key] > 0) {
+									self.addWarning("Sprite border padding not yet implemented.");
+								}
+								break;
+							case "shapePadding":
+								if(options[key] > 0) {
+									self.addWarning("Sprite shape padding not yet implemented.");
+								}
+								break;
+							case "innerPadding":
+								if(options[key] > 0) {
+									self.addWarning("Sprite inner padding not yet implemented.");
+								}
+								break;
 						}
 						opts[key] = options[key];
 						break;
