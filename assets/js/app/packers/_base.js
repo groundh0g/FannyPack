@@ -286,38 +286,6 @@ function BasePacker(name, isDefault) {
 	this.register = function() { packers[this.name] = this; };
 }
 
-// http://stackoverflow.com/questions/109023/how-to-count-the-number-of-set-bits-in-a-32-bit-integer#109025
-// ----------------------------------------------------------------------------------
-// This implementation is taken from a C/C++ example. Javascript supports integers in 
-// the range +/-2^53. The >> operator in Javascript operates on 32-bit numbers, so
-// this should be fine. I don't think the canvas would support sizes as large as 
-// 1 << 31 anyway. =) 
-// -- @groundh0g
-// ----------------------------------------------------------------------------------
-BasePacker.CountBits = function (i) {
-    i = i - ((i >> 1) & 0x55555555);
-    i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
-    return (((i + (i >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
-};
-
-// ----------------------------------
-// [VERY] simple helper -- @groundh0g
-// ----------------------------------
-BasePacker.IsPowerOfTwo = function (i) { 
-    return BasePacker.CountBits(i) === 1; 
-};
-
-// http://www.hackersdelight.org/hdcodetxt/clp2.c.txt
-BasePacker.RoundUpToPowerOfTwo = function (x) { 
-    x = x - 1;
-    x = x | (x >> 1);
-    x = x | (x >> 2);
-    x = x | (x >> 4);
-    x = x | (x >> 8);
-    x = x | (x >>16);
-    return x + 1;
-};
-
 BasePacker.SortBy = {};
 BasePacker.SortByDefault = "NAME";
 
