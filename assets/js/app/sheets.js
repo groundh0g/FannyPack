@@ -537,6 +537,105 @@ var OnPackComplete = function(result) {
 				}
 			});
 		});
+		
+		//this.doAliasSprites = function() { return this.aliasSprites === "Yes"; };
+		//this.doTrim = function() { return this.trimMode === "Trim" && this.trimThreshold > 0; };
+
+		var wasProcessed = false;
+		var doColorMask = packer && packer.DoPack_AllOptions && packer.DoPack_AllOptions.doColorMask && packer.DoPack_AllOptions.doColorMask();
+		var doDebug = packer && packer.DoPack_AllOptions && packer.DoPack_AllOptions.doDebug && packer.DoPack_AllOptions.doDebug();
+		var doCleanAlpha = packer && packer.DoPack_AllOptions && packer.DoPack_AllOptions.doCleanAlpha && packer.DoPack_AllOptions.doCleanAlpha();
+		if(doColorMask || doDebug || doCleanAlpha) {
+			var imgData = ctx.getImageData(0, 0, packer.width, packer.height);
+			var data = imgData.data;
+			$(Object.keys(imagePool)).each(function(ndx1,key) {
+				$(imagePool[key].frames).each(function(ndx2,frame) {
+					if(frame.rectSprite) {
+						var left   = frame.rectSprite.x;
+						var top    = frame.rectSprite.y;
+						var width  = frame.rectSprite.w;
+						var height = frame.rectSprite.h;
+						var indexRed   = 0;
+						var indexGreen = 1;
+						var indexBlue  = 2;
+						var indexAlpha = 3;
+						
+						// apply post-processing filter, ColorMask
+						if(doColorMask) {
+							var indexRect = top * packer.width * 4 + left * 4;
+							if(data[indexRect + indexAlpha] > 0) {
+								wasProcessed = true;
+								var r = data[indexRect + indexRed];
+								var g = data[indexRect + indexGreen];
+								var b = data[indexRect + indexBlue];
+								var a = data[indexRect + indexAlpha];
+								for(var y = 0; y < height; y++) {
+									for(var x = 0; x < width; x++) {
+										var index = indexRect + y * packer.width * 4 + x * 4;
+										var match =
+											r == data[index + indexRed]   &&
+											g == data[index + indexGreen] &&
+											b == data[index + indexBlue]  &&
+											a == data[index + indexAlpha];
+										if(match) {
+											data[index + indexRed] = 
+											data[index + indexGreen] =
+											data[index + indexBlue] = 
+											data[index + indexAlpha] = 0;
+										}
+									}
+								}
+							}
+						}
+						
+						// apply post-processing filter, DebugMode
+						if(doDebug) {
+							var indexRect = top * packer.width * 4 + left * 4;
+							wasProcessed = true;
+							for(var y = 0; y < height; y++) {
+								var edgeY = y == 0 || y == (height - 1);
+								for(var x = 0; x < width; x++) {
+									var edgeX = x == 0 || x == (width - 1);
+									var index = indexRect + y * packer.width * 4 + x * 4;
+									if(edgeX || edgeY) {
+										data[index + indexRed]   = 255;
+										data[index + indexGreen] = 0;
+										data[index + indexBlue]  = 0;
+										data[index + indexAlpha] = 255;
+									} else {
+										data[index + indexRed] = (data[index + indexRed] + 255) / 2;
+										data[index + indexGreen] /= 2;
+										data[index + indexBlue]  /= 2;
+										data[index + indexAlpha]  = 255;
+									}
+								}
+							}
+						}
+					}
+				});
+			});
+			
+			// apply post-processing filter, CleanAlpha 
+			if(doCleanAlpha) {
+				wasProcessed = true;
+				for(var y = 0; y < packer.height; y++) {
+					for(var x = 0; x < packer.width; x++) {
+						var index = y * packer.width * 4 + x * 4;
+						if(data[index + 3] == 0) {
+							data[index + 0] = 
+							data[index + 1] = 
+							data[index + 2] = 0;
+						}
+					}
+				}
+			}
+			
+			if(wasProcessed) { 
+				ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+				ctx.putImageData(imgData, 0, 0); 
+			}
+		}
+		
 		$("#divWorkspaceContainerCrop").append(buffer);
 		// -------------------------------------------------
 
@@ -549,6 +648,9 @@ var OnPackComplete = function(result) {
 		// TODO: Add image to #divWorkspaceContainerCrop
 	} else {
 		$("#txtStatusMessage").text("Completed with errors.");
+		$("#divWorkspaceContainerCrop")
+			.css("width",  packer.width  + "32px")
+			.css("height", packer.height + "32px");
 	}
 	
 	$("#progressBar").css("width", "0");

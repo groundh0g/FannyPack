@@ -236,24 +236,24 @@ function BasePacker(name, isDefault) {
 									self.addWarning("Include @2x not yet implemented.");
 								}
 								break;
-							case "cleanAlpha":
-								// was clean alpha requested?
-								if(options.doCleanAlpha()) {
-									self.addWarning("Clean alpha not yet implemented.");
-								}
-								break;
-							case "colorMask":
-								// was color masking requested?
-								if(options.doColorMask()) {
-									self.addWarning("Color mask not yet implemented.");
-								}
-								break;
-							case "debugMode":
-								// was debug mode requested?
-								if(options.doDebug()) {
-									self.addWarning("Debug mode not yet implemented.");
-								}
-								break;
+//							case "cleanAlpha":
+//								// was clean alpha requested?
+//								if(options.doCleanAlpha()) {
+//									self.addWarning("Clean alpha not yet implemented.");
+//								}
+//								break;
+//							case "colorMask":
+//								// was color masking requested?
+//								if(options.doColorMask()) {
+//									self.addWarning("Color mask not yet implemented.");
+//								}
+//								break;
+//							case "debugMode":
+//								// was debug mode requested?
+//								if(options.doDebug()) {
+//									self.addWarning("Debug mode not yet implemented.");
+//								}
+//								break;
 							case "trimMode":
 								// was sprite trimming requested?
 								if(options.doTrim()) {
@@ -326,6 +326,37 @@ function BasePacker(name, isDefault) {
 			}
 		}
 		return opts;
+	};
+
+	// handle resizing; assumes pack (and, therefore, init) have been called
+	this.Resize = function(minWidth, minHeight) {
+		var wOrig = self.width;
+		var hOrig = self.height;
+		minWidth  = parseInt(minWidth  || (self.width  + 16));
+		minHeight = parseInt(minHeight || (self.height + 16));
+		if(self.width >= self.height) {
+			// increase height
+			self.height = minHeight;
+			if(self.forcePowerOfTwo) { 
+				self.height = Math.min(self.MAX_HEIGHT, roundUpToPowerOfTwo(self.height)); 
+			}
+
+			if(self.forceSquare) {
+				self.width = Math.min(self.MAX_WIDTH, self.height);
+			}
+		} else {
+			// increase width
+			self.width = minWidth;
+			if(self.forcePowerOfTwo) { 
+				self.width = Math.min(self.MAX_WIDTH, roundUpToPowerOfTwo(self.width)); 
+			}
+
+			if(self.forceSquare) {
+				self.height = Math.min(self.MAX_HEIGHT, self.width);
+			}
+		}
+		
+		return wOrig != self.width || hOrig != self.height;
 	};
 
 	// manage the various types of messages
