@@ -50,7 +50,7 @@ function BasicPacker() {
 		var hOrig = self.height;
 		minWidth  = parseInt(minWidth  || (self.width  + 16));
 		minHeight = parseInt(minHeight || (self.height + 16));
-		if(self.width > self.height) {
+		if(self.width >= self.height) {
 			// increase height
 			self.height = minHeight;
 			if(self.forcePowerOfTwo) { 
