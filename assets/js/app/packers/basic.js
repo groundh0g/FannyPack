@@ -45,9 +45,40 @@ function BasicPacker() {
 // 	self.DoPack_Options = opts;
 // 	self.DoPack_AllOptions = options;
 
+	this.Resize = function(minWidth, minHeight) {
+		var wOrig = self.width;
+		var hOrig = self.height;
+		minWidth  = parseInt(minWidth  || (self.width  + 16));
+		minHeight = parseInt(minHeight || (self.height + 16));
+		if(self.width > self.height) {
+			// increase height
+			self.height = minHeight;
+			if(self.forcePowerOfTwo) { 
+				self.height = Math.min(self.MAX_HEIGHT, roundUpToPowerOfTwo(self.height)); 
+			}
+
+			if(self.forceSquare) {
+				self.width = Math.min(self.MAX_WIDTH, self.height);
+			}
+		} else {
+			// increase width
+			self.width = minWidth;
+			if(self.forcePowerOfTwo) { 
+				self.width = Math.min(self.MAX_WIDTH, roundUpToPowerOfTwo(self.width)); 
+			}
+
+			if(self.forceSquare) {
+				self.height = Math.min(self.MAX_HEIGHT, self.width);
+			}
+		}
+		
+		return wOrig != self.width || hOrig != self.height;
+	};
+
 	this.DoPack = function () {
 		if(self.DoPack_MaxFramesProcessed === 0) {
 			// TODO: first call
+			self.DoPack_FramesProcessed = 0;
 			self.ImageIndex = 0;
 			self.FrameIndex = 0;
 			self.CurrentX = 0;
@@ -58,69 +89,52 @@ function BasicPacker() {
 		// place sprite
 		var image = self.DoPack_Images[self.DoPack_ImageKeys[self.ImageIndex]];
 		var frameCount = self.DoPack_AllOptions.doAnimatedGifExpand() ? image.frameCount : 1;
-		for(var i = 0; i < frameCount; i++) {
-		
-			// won't fit width? grow if possible.
-			while(self.CurrentX + image.width > self.width && self.width < self.MAX_WIDTH) {
-				if(self.forcePowerOfTwo) {
-					self.width = Math.min(self.MAX_WIDTH, roundUpToPowerOfTwo(self.width + 1));
-				} else {
-					self.width = Math.min(self.MAX_WIDTH, self.CurrentX + image.width);
-				}
-				
-				if(self.forceSquare) {
-					self.height = Math.min(self.MAX_HEIGHT, self.width);
-				}
-			}
+		var i = self.FrameIndex;
+		//for(var i = 0; i < frameCount; i++) {
+			var fitsWidth  = ((self.CurrentX + image.width)  <= self.width);
+			var fitsHeight = ((self.CurrentY + image.height) <= self.height);
+			var fitsOnNextRow = 
+				(self.CurrentY + image.height <= self.height) &&
+				(image.width <= self.width);
 			
-			// still won't fit? move to next row.
-			if(self.CurrentX + image.width > self.width) {
+			if(fitsWidth && fitsHeight) {
+				// place at current loc
+				// nothing to do, that's the default behavior
+			} else if(!fitsWidth && fitsOnNextRow) {
+				// place on next row
 				self.CurrentX = 0;
 				self.CurrentY = self.MaxY;
-			}
-
-			// still won't fit? we have a problem.
-			if(self.CurrentX + image.width > self.width) {
-				self.addError("Image [" + self.ImageIndex + "] at Frame [" + self.FrameIndex + "] with Name [" + image.filename + "] won't fit specified width constraints.");
-			} else {
-				// won't fit height? grow if possible.
-				while(self.CurrentY + image.height > self.height && self.height < self.MAX_HEIGHT) {
-					if(self.forcePowerOfTwo) {
-						self.height = Math.min(self.MAX_HEIGHT, roundUpToPowerOfTwo(self.height + 1));
-					} else {
-						self.height = Math.min(self.MAX_HEIGHT, self.CurrentY + image.height);
-					}
-				
-					if(self.forceSquare) {
-						self.width = Math.min(self.MAX_WIDTH, self.height);
-					}
-				}
-			
-				// still won't fit? we have a problem.
-				if(self.CurrentY + image.height > self.height) {
-					self.addError("Image [" + self.ImageIndex + "] at Frame [" + self.FrameIndex + "] with Name [" + image.filename + "] won't fit specified height constraints.");
+			} else { // if(!fitsWidth && !fitsOnNextRow) {
+				if(self.Resize(self.CurrentX + image.width, self.CurrentY + image.height)) {
+					// exit loop and start over
+					self.DoPack_MaxFramesProcessed = 0;
+					self.DoPack_FramesProcessed = 0;
+					return; 
+				} else {
+					// we have a problem; won't fit; stop trying
+					self.addError("Image [" + self.ImageIndex + "] at Frame [" + self.FrameIndex + "] with Name [" + image.filename + "] won't fit specified constraints.");
+					self.DoPack_FramesProcessed = self.DoPack_FrameCount;
+					return;
 				}
 			}
-
-			if(self.msgErrors.length > 0) {
-				self.DoPack_FramesProcessed = self.DoPack_FrameCount;
-			} else {
-				self.MaxY = Math.max(self.MaxY, self.CurrentY + image.height);
-				image.frames[i].rectSprite = {
-					x: self.CurrentX,
-					y: self.CurrentY,
-					w: image.width,
-					h: image.height,
-					r: false
-				};
 			
-				self.CurrentX += image.width;
-			}
-			
+			self.MaxY = Math.max(self.MaxY, self.CurrentY + image.height);
+			image.frames[i].rectSprite = {
+				x: self.CurrentX,
+				y: self.CurrentY,
+				w: image.width,
+				h: image.height,
+				r: false
+			};
+		
+			self.CurrentX += image.width;
 			self.DoPack_FramesProcessed++;
+		//}
+		self.FrameIndex++;
+		if(self.FrameIndex >= frameCount) {
+			self.ImageIndex++;
+			self.FrameIndex = 0;
 		}
-		self.ImageIndex++;
-		self.FrameIndex = 0;
 	};
 }
 

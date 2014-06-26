@@ -180,3 +180,12 @@ body {
 	font-size:0.75em;
 	color:#888;
 }
+
+// http://stackoverflow.com/questions/9622043/turn-off-bootstraps-css3-transitions-on-progress-bars#9622873
+.progress .bar {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -ms-transition: none;
+    -o-transition: none;
+    transition: none;
+}

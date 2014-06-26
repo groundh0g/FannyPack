@@ -91,6 +91,15 @@ function BasePacker(name, isDefault) {
 				self.DoPack_FrameCount++;
 			}
 		}
+
+		// clear previous packing results
+  		$(Object.keys(imagePool)).each(function(ndx1,key) {
+			$(imagePool[key].frames).each(function(ndx2,frame) {
+				if(frame.rectSprite) {
+					delete frame["rectSprite"];
+				}
+			});
+		});
 		
 		// sanity check total frame count
 		if(self.DoPack_FrameCount < 1) {
@@ -185,7 +194,7 @@ function BasePacker(name, isDefault) {
 		
 		// repeatedly call self.DoPack() until all sprite frames have been placed
 		self.DoPack();
-		setTimeout(doPackTask, 100); // TODO: drop timeout to zero or one; I just want to see it working for now
+		setTimeout(doPackTask, 10); // TODO: drop timeout to zero or one; I just want to see it working for now
 	};
 
 	// some options are handled globally, some are handled by the packer implementation

@@ -491,6 +491,7 @@ var PackSprites = function(clearConsole) {
 	if(clearConsole === true) {
 		ClearConsoleMessages();
 	}
+	$("#divWorkspaceContainerCrop").empty();
 	var options = new Options();
 	options.read();
 	CurrentPacker = packers[options["spritePacker"]];
@@ -528,7 +529,8 @@ var OnPackComplete = function(result) {
 		buffer.width = packer.width;
 		buffer.height = packer.height;
 		var ctx = buffer.getContext('2d');
-		$(Object.keys(imagePool)).each(function(ndx1,key) {
+		ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  		$(Object.keys(imagePool)).each(function(ndx1,key) {
 			$(imagePool[key].frames).each(function(ndx2,frame) {
 				if(frame.rectSprite) {
 					ctx.putImageData(frame, frame.rectSprite.x, frame.rectSprite.y);
@@ -598,7 +600,7 @@ $(document).ready(function () {
 	}
 
 	// add Sort By options
-	keys = BasePacker.SortBy["NAME"](Object.keys(BasePacker.SortBy));
+	keys = BasePacker.SortBy["NAME"](BasePacker.SortBy);
 	for(i = 0; i < keys.length; i++) {
 		var $li = $("<li/>");
 		var $a = $("<a/>").attr("href","#null");
