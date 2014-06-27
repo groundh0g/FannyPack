@@ -31,7 +31,7 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 	this.height = parseInt(copy.height || height || "0");
 	this.src  = copy.src  || src  || "";
 	this.guid = copy.guid || guid || "00000000-0000-0000-0000-000000000000";
-	this.frameCount = parseInt(copy.frameCount  || frameCount  || "1");
+	this.frameCount = 0; //parseInt(copy.frameCount  || frameCount  || "1");
 	this.frames = [];
 
 	this.read = function(obj) {
@@ -40,8 +40,8 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 			// read from JSON
 			var img = $.parseJSON(obj);
 		} else if(obj && obj.name) {
-			// copy from another Options instance
-			img = obj;
+			// copy from another ImageItem instance
+			img = new ImageItem(obj);
 		}
 	
 		this.filename = $.trim(img.filename || this.filename);
@@ -93,23 +93,20 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 		return result;
 	};
 
-	this.populateFrameDataComplete = true;
+	this.populateFrameDataComplete = false;
 	this.filterAppliedCleanAlpha = false;
 	this.filterAppliedColorMask = false;
 	this.filterAppliedAliasHashCalc = false;
 	this.filterAppliedTrimRectCalc = false;
 
-	// TEST: imagePool["_animated.gif"].populateFrameData(function() { console.log(imagePool["_animated.gif"].frames); });
 	this.populateFrameData = function(callbackCompleted) {
 		this.clearFrameData(); // also resets filter flags
 
 		var loadMultiFrame = 
-			this.filename.toLowerCase().endsWith(".gif"); // &&
-			//$("#ddlAnimatedGif").text() === "Extract Frames";
+			this.filename.toLowerCase().endsWith(".gif");
 
 		if(loadMultiFrame) {
 			// fill frame data using libgif.js & libgifparser.js
-			this.populateFrameDataComplete = false;
 			var parser = new GifParser({}, function() {
 				var parsedFrames = parser.getFrames();
 				for(var i = 0; i < parsedFrames.length; i++) {
@@ -126,8 +123,7 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 			});
 			try {
 				parser.loadFromDataUri(this.src);
-			} catch(e) {
-				self.populateFrameDataComplete = true;
+			} catch(ex) {
 				if(callbackCompleted && typeof callbackCompleted === "function") { 
 					callbackCompleted(self); 
 				}
@@ -150,13 +146,11 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 					callbackCompleted(self); 
 				}
 			});
-			this.populateFrameDataComplete = false;
 			$img.attr("src", this.src);
 		}
 	};
 	
-	this.clearFrameData = function(callbackCompleted) {
-		this.populateFrameDataComplete = false;
+	this.clearFrameData = function() {
 		if(this.frames) {
 			while(this.frames.length > 0) {
 				this.frames.pop();
@@ -164,7 +158,6 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 		} else {
 			this.frames = [];
 		}
-		// self.frameCount = self.frames.length;
 		
 		// reset filter flags, we've just cleared the raw image data
 		this.filterAppliedCleanAlpha = false;
@@ -172,10 +165,9 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 		this.filterAppliedAliasHashCalc = false;
 		this.filterAppliedTrimRectCalc = false;
 		
-		this.populateFrameDataComplete = true;
-		if(callbackCompleted && typeof callbackCompleted === "function") { 
-			callbackCompleted(this); 
-		}
+		// reset frameCount / data state
+		this.frameCount = this.frames.length;
+		this.populateFrameDataComplete = false;
 	};
 	
 	var doNothing = function() { };
