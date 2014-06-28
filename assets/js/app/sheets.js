@@ -22,13 +22,18 @@ THE SOFTWARE.
 
 var suppressOnValueChanged = false;
 var OnValueChanged = function(preserveLog) {
+	if(isOpeningProject === true) { return; }
+	if(isPacking === true) { return; }
+	
 	if(preserveLog !== true) {
 		ClearConsoleMessages();
 	} 
+	
 	if(suppressOnValueChanged === false) { 
 		BuildSpriteList();
 		UpdateConsole();
 	}
+	
 	return false; 
 }
 
@@ -69,12 +74,21 @@ var DoFileOpen = function () {
 var DoFileSave = function () { 
 	var options = new Options();
 	options.read();
+	
+	// make a frameless copy of the imagePool (saves LOTS of space)
+	var imgData = ImageItem.copyImagePool(imagePool, true);
+	$(Object.keys(imgData)).each(function(index, item) {
+		imgData[item].frames = [];
+		imgData[item].frameCount = 0;
+		imgData[item].populateFrameDataComplete = false;
+	});
+	
 	var data = {
 		application: "FannyPack",
 		version: FannyPack_SpriteSheet_Version,
 		url: "https://github.com/groundh0g/FannyPack",
 		options: options,
-		images: imagePool
+		images: imgData
 	};
 
 	if(options.doCompressProject()) {
@@ -193,6 +207,7 @@ var UpdateSpinBox = function (txtName, event, key) {
 	return false;
 }
 
+var isOpeningProject = false;
 var ProcessProjectOpen = function(files) {
 	if(files && files.length) {
 		ClearConsoleMessages();
@@ -223,16 +238,29 @@ var ProcessProjectOpen = function(files) {
 				options.read(project.options);
 				options.updateUI();
 				persistedOptions.read(options);
-				imagePool = ImageItem.copyImagePool(project.images, true);
-				persistedImagePool = ImageItem.copyImagePool(imagePool);
+				imagePool = {};
+
+				// read image data into a temp pool, populate real pool as if new load
+				var tempImagePool = ImageItem.copyImagePool(project.images, true);
+				$(Object.keys(tempImagePool)).each(function(index, item) {
+					tempImagePool[item].populateFrameData(AddSpriteToImagePool);
+					filesToProcess[item] = true;
+				});
+
+				// isOpeningProject = false; // <- moved to AddSpriteToImagePool
+				isProcessingFiles = false;
+
 				LogConsoleMessage(ConsoleMessageTypes.SUCCESS, "Project '" + this.filename + "' loaded.");
-			} catch (e) {
-				LogConsoleMessage(ConsoleMessageTypes.ERROR, "Unable to open '" + this.filename + "' project. [" + e + "]");
+			} catch (ex) {
+				LogConsoleMessage(ConsoleMessageTypes.ERROR, "Unable to open '" + this.filename + "' project. [" + ex + "]");
 			}
-			OnValueChanged();
+			//OnValueChanged();
 			return false;
 		};
 
+		isOpeningProject = true;
+		isProcessingFiles = true;
+		
 		if(reader.isCompressed) {
 			reader.readAsBinaryString(file);
 		} else {
@@ -316,7 +344,7 @@ var AddSpriteToImagePool = function(img, keepGuid) {
 	if(imagePool[img.filename]) {
 		LogConsoleMessage(ConsoleMessageTypes.WARNING, "Image '" + img.filename + "' already exists. Replacing.");
 	}
-	if(!keepGuid) {
+	if(!keepGuid && !isOpeningProject) {
 		img.guid = UUID.generate();
 	}
 	imagePool[img.filename] = img;
@@ -329,7 +357,8 @@ var AddSpriteToImagePool = function(img, keepGuid) {
 			opts.read();
 			var msg = "" + filesProcessedCount + " image(s) processed.";
 			LogConsoleMessage(ConsoleMessageTypes.SUCCESS, msg);
-			OnValueChanged(true); 
+			isOpeningProject = false;
+			OnValueChanged(true);
 		} 
 	}
 };
@@ -385,23 +414,8 @@ var BuildSpriteList = function() {
 		}
 	});
 	
-	//PlaceSpritesOnWorkspace(null);
 	PackSprites();
 };
-
-// var PlaceSpritesOnWorkspace = function(map) {
-// 	var keys = Object.keys(imagePool).sort(function(a,b){ return (a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0; });
-// 	if(keys.length > 0) {
-// 		//$("#divWorkspaceContainerCrop").html("");
-// 		$("#divWorkspaceContainerCrop").empty();
-// 		$("#divWorkspaceContainerCrop").append(
-// 			$("<img/>")
-// 			.attr("src",imagePool[keys[0]].src)
-// 			.css("left","100px")
-// 			.css("top","100px")
-// 		);
-// 	}
-// };
 
 var ConsoleMessageTypes = {
 	"SUCCESS": "SUCCESS",
@@ -486,12 +500,56 @@ var UpdateConsole = function() {
 	}
 };
 
-var CurrentPacker = null;
-var PackSprites = function(clearConsole) {
-	if(clearConsole === true) {
-		ClearConsoleMessages();
+var EnableToolbarButtons = function(enable) {
+	var controls = [
+		"cmdFileNew",
+		"cmdFileOpen",
+		"cmdFileSave",
+		"cmdSpriteAdd",
+		"cmdSpriteRemove",
+		"cmdRefresh",
+		"cmdPublish",
+		"cmdToggleSettings",
+	];
+	
+	if(enable) {
+		$(controls).each(function(index, item) {
+			$("#" + item).removeClass("disabled");
+		});
+	} else {
+		$(controls).each(function(index, item) {
+			$("#" + item).addClass("disabled");
+		});
 	}
+};
+
+var EnableLeftNavButtons = function(enable) {
+	var txtControls = [
+		"txtName",
+	];
+	
+	if(enable) {
+		$("#divSidebarLeft input").removeAttr("disabled");
+		$("#divSidebarLeft a.dropdown-toggle").removeClass("disabled");
+	} else {
+		$("#divSidebarLeft input").attr("disabled", "disabled");
+		$("#divSidebarLeft a.dropdown-toggle").addClass("disabled");
+	}
+};
+
+
+var CurrentPacker = null;
+var isPacking = false;
+var PackSprites = function(clearConsole) {
+	if(isPacking === true) { return; }
+
+	isPacking = true;
+	if(clearConsole === true) { ClearConsoleMessages(); }
+	EnableToolbarButtons(false);
+	EnableLeftNavButtons(false);
 	$("#divWorkspaceContainerCrop").empty();
+	$("#divWorkspaceContainerCrop").css("width","32px").css("height", "32px");
+	$("#divWorkspaceContainer").css("width","32px").css("height", "32px");
 	var options = new Options();
 	options.read();
 	CurrentPacker = packers[options["spritePacker"]];
@@ -533,7 +591,11 @@ var OnPackComplete = function(result) {
   		$(Object.keys(imagePool)).each(function(ndx1,key) {
 			$(imagePool[key].frames).each(function(ndx2,frame) {
 				if(frame.rectSprite) {
-					ctx.putImageData(frame, frame.rectSprite.x, frame.rectSprite.y);
+					ctx.putImageData(
+						frame,
+						frame.rectSprite.x + (frame.rectSprite.dx || 0),
+						frame.rectSprite.y + (frame.rectSprite.dy || 0)
+					);
 				}
 			});
 		});
@@ -551,8 +613,8 @@ var OnPackComplete = function(result) {
 			$(Object.keys(imagePool)).each(function(ndx1,key) {
 				$(imagePool[key].frames).each(function(ndx2,frame) {
 					if(frame.rectSprite) {
-						var left   = frame.rectSprite.x;
-						var top    = frame.rectSprite.y;
+						var left   = frame.rectSprite.x + (frame.rectSprite.dx || 0);
+						var top    = frame.rectSprite.y + (frame.rectSprite.dy || 0);
 						var width  = frame.rectSprite.w;
 						var height = frame.rectSprite.h;
 						var indexRed   = 0;
@@ -560,29 +622,28 @@ var OnPackComplete = function(result) {
 						var indexBlue  = 2;
 						var indexAlpha = 3;
 						
+						var indexRect = top * packer.width * 4 + left * 4;
+						
 						// apply post-processing filter, ColorMask
-						if(doColorMask) {
-							var indexRect = top * packer.width * 4 + left * 4;
-							if(data[indexRect + indexAlpha] > 0) {
-								wasProcessed = true;
-								var r = data[indexRect + indexRed];
-								var g = data[indexRect + indexGreen];
-								var b = data[indexRect + indexBlue];
-								var a = data[indexRect + indexAlpha];
-								for(var y = 0; y < height; y++) {
-									for(var x = 0; x < width; x++) {
-										var index = indexRect + y * packer.width * 4 + x * 4;
-										var match =
-											r == data[index + indexRed]   &&
-											g == data[index + indexGreen] &&
-											b == data[index + indexBlue]  &&
-											a == data[index + indexAlpha];
-										if(match) {
-											data[index + indexRed] = 
-											data[index + indexGreen] =
-											data[index + indexBlue] = 
-											data[index + indexAlpha] = 0;
-										}
+						if(doColorMask && data[indexRect + indexAlpha] > 0) {
+							wasProcessed = true;
+							var r = data[indexRect + indexRed];
+							var g = data[indexRect + indexGreen];
+							var b = data[indexRect + indexBlue];
+							var a = data[indexRect + indexAlpha];
+							for(var y = 0; y < height; y++) {
+								for(var x = 0; x < width; x++) {
+									var index = indexRect + y * packer.width * 4 + x * 4;
+									var match =
+										r == data[index + indexRed]   &&
+										g == data[index + indexGreen] &&
+										b == data[index + indexBlue]  &&
+										a == data[index + indexAlpha];
+									if(match) {
+										data[index + indexRed] = 
+										data[index + indexGreen] =
+										data[index + indexBlue] = 
+										data[index + indexAlpha] = 0;
 									}
 								}
 							}
@@ -599,14 +660,14 @@ var OnPackComplete = function(result) {
 									var index = indexRect + y * packer.width * 4 + x * 4;
 									if(edgeX || edgeY) {
 										data[index + indexRed]   = 255;
+										//data[index + indexGreen] /= 3;
+										//data[index + indexBlue]  /= 3;
+										data[index + indexAlpha] = 255;
+									} else if(data[index + indexAlpha] < 4){
+										data[index + indexRed]   = 255;
 										data[index + indexGreen] = 0;
 										data[index + indexBlue]  = 0;
-										data[index + indexAlpha] = 255;
-									} else {
-										data[index + indexRed] = (data[index + indexRed] + 255) / 2;
-										data[index + indexGreen] /= 2;
-										data[index + indexBlue]  /= 2;
-										data[index + indexAlpha]  = 255;
+										data[index + indexAlpha] = 128;
 									}
 								}
 							}
@@ -640,6 +701,12 @@ var OnPackComplete = function(result) {
 		// -------------------------------------------------
 
 		LogConsoleMessage(ConsoleMessageTypes.SUCCESS, "Processed " + packer.DoPack_FrameCount + " frame(s).");
+		
+		if(isOpeningProject) {
+			persistedImagePool = ImageItem.copyImagePool(imagePool);
+			isOpeningProject = false;
+		}
+		
 		$("#txtStatusMessage").text("Ready.");
 		// TODO: Draw sprite sheet to canvas
 		// TODO: Get image data as dataUrl
@@ -653,8 +720,11 @@ var OnPackComplete = function(result) {
 			.css("height", packer.height + "32px");
 	}
 	
+	EnableToolbarButtons(true);
+	EnableLeftNavButtons(true);
 	$("#progressBar").css("width", "0");
 
+	isPacking = false;
 	UpdateConsole();
 };
 
