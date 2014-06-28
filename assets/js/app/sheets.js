@@ -357,7 +357,10 @@ var AddSpriteToImagePool = function(img, keepGuid) {
 			opts.read();
 			var msg = "" + filesProcessedCount + " image(s) processed.";
 			LogConsoleMessage(ConsoleMessageTypes.SUCCESS, msg);
-			isOpeningProject = false;
+			if(isOpeningProject) {
+				persistedImagePool = ImageItem.copyImagePool(imagePool);
+				isOpeningProject = false;
+			}
 			OnValueChanged(true);
 		} 
 	}
@@ -702,10 +705,10 @@ var OnPackComplete = function(result) {
 
 		LogConsoleMessage(ConsoleMessageTypes.SUCCESS, "Processed " + packer.DoPack_FrameCount + " frame(s).");
 		
-		if(isOpeningProject) {
-			persistedImagePool = ImageItem.copyImagePool(imagePool);
-			isOpeningProject = false;
-		}
+//		if(isOpeningProject) {
+//			persistedImagePool = ImageItem.copyImagePool(imagePool);
+//			isOpeningProject = false;
+//		}
 		
 		$("#txtStatusMessage").text("Ready.");
 		// TODO: Draw sprite sheet to canvas

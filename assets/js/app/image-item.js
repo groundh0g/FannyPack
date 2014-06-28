@@ -81,10 +81,10 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 				$.trim(obj1.filetype) === $.trim(obj2.filetype) &&
 				$.trim(obj1.width) === $.trim(obj2.width) &&
 				$.trim(obj1.height) === $.trim(obj2.height) &&
-				$.trim(obj1.guid) === $.trim(obj2.guid) &&
+				$.trim(obj1.guid) === $.trim(obj2.guid); // &&
 
 				// TODO: should we even check frame count?
-				$.trim(obj1.frameCount) === $.trim(obj2.frameCount); // &&
+				//$.trim(obj1.frameCount) === $.trim(obj2.frameCount); // &&
 
 				// TODO: consider whether this is needed - lots of data!
 				//$.trim(obj1.src) === $.trim(obj2.src);
@@ -323,7 +323,7 @@ ImageItem.compareImagePools = function(obj1, obj2) {
 		var keys2 = Object.keys(obj2).sort(function(a,b){ return (a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0; });
 		if(keys1.length == keys2.length) {
 			result = true;
-			for(var i=0; i<keys1.length; i++) {
+			for(var i = 0; result && i < keys1.length; i++) {
 				var same = 
 					keys1[i] && (keys1[i] == keys2[i]) &&
 					ImageItem.compareImages(obj1[keys1[i]], obj2[keys2[i]]);
