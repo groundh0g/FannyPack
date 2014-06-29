@@ -153,9 +153,19 @@ function BasePacker(name, isDefault) {
 				self.MAX_HEIGHT      = heightMax;
 				self.forcePowerOfTwo = options.doForcePowOf2();
 				self.forceSquare     = options.doForceSquare();
-				self.paddingShape    = parseInt(options.shapePadding  || 0);
-				self.paddingBorder   = parseInt(options.borderPadding || 0);
-				self.paddingInner    = parseInt(options.innerPadding  || 0);
+				self.paddingShape    = Math.max(0, parseInt(options.shapePadding  || 0));
+				self.paddingBorder   = Math.max(0, parseInt(options.borderPadding || 0));
+				self.paddingInner    = Math.max(0, parseInt(options.innerPadding  || 0));
+				self.trimThreshold   = Math.max(0, Math.min(255, parseInt(options.trimThreshold || 0)));
+
+				if(options.doTrim()) {
+					if(self.trimThreshold > 254) {
+						this.addWarning("Trimming was enabled, but the threshold is too high [" + self.trimThreshold + "]. All pixels would be trimmed. Ignoring.");
+						self.trimThreshold = 0;
+					}
+				} else {
+					self.trimThreshold = 0;
+				}
 				
 				self.DoPack_ImageKeys = BasePacker.SortBy[options["sortBy"]](images);
 				self.DoPack_Images = images;

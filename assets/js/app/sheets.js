@@ -260,6 +260,9 @@ var ProcessProjectOpen = function(files) {
 
 		isOpeningProject = true;
 		isProcessingFiles = true;
+		filesProcessedCount = 0;
+		framesProcessedCount = 0;
+		filesErroredCount = 0;		
 		
 		if(reader.isCompressed) {
 			reader.readAsBinaryString(file);
@@ -543,10 +546,12 @@ var EnableLeftNavButtons = function(enable) {
 
 var CurrentPacker = null;
 var isPacking = false;
+var isPackingStartTime = null;
 var PackSprites = function(clearConsole) {
 	if(isPacking === true) { return; }
 
 	isPacking = true;
+	isPackingStartTime = new Date();
 	if(clearConsole === true) { ClearConsoleMessages(); }
 	EnableToolbarButtons(false);
 	EnableLeftNavButtons(false);
@@ -703,7 +708,10 @@ var OnPackComplete = function(result) {
 		$("#divWorkspaceContainerCrop").append(buffer);
 		// -------------------------------------------------
 
-		LogConsoleMessage(ConsoleMessageTypes.SUCCESS, "Processed " + packer.DoPack_FrameCount + " frame(s).");
+		var isPackingEndTime = new Date();
+		var elapsedSeconds = parseInt(isPackingEndTime - isPackingStartTime) / 1000.0;
+
+		LogConsoleMessage(ConsoleMessageTypes.SUCCESS, "Processed " + packer.DoPack_FrameCount + " frames in " + elapsedSeconds + " seconds.");
 		
 //		if(isOpeningProject) {
 //			persistedImagePool = ImageItem.copyImagePool(imagePool);
