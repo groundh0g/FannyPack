@@ -94,10 +94,8 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 	};
 
 	this.populateFrameDataComplete = false;
-	this.filterAppliedCleanAlpha = false;
-	this.filterAppliedColorMask = false;
-	this.filterAppliedAliasHashCalc = false;
-	this.filterAppliedTrimRectCalc = false;
+	this.filterAppliedAliasHash = false;
+	this.filterAppliedTrimRect = false;
 
 	this.populateFrameData = function(callbackCompleted) {
 		this.clearFrameData(); // also resets filter flags
@@ -116,6 +114,7 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 				while(parsedFrames.length > 0) {
 					parsedFrames.pop();
 				}
+				self.postProcess();
 				self.populateFrameDataComplete = true;
 				if(callbackCompleted && typeof callbackCompleted === "function") { 
 					callbackCompleted(self);
@@ -141,6 +140,7 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 				context.drawImage(this, 0, 0, w, h);
 				self.frames.push(context.getImageData(0,0,w,h));
 				self.frameCount = self.frames.length;
+				self.postProcess();
 				self.populateFrameDataComplete = true;
 				if(callbackCompleted && typeof callbackCompleted === "function") { 
 					callbackCompleted(self); 
@@ -158,106 +158,45 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 		} else {
 			this.frames = [];
 		}
-		
+
 		// reset filter flags, we've just cleared the raw image data
-		this.filterAppliedCleanAlpha = false;
-		this.filterAppliedColorMask = false;
-		this.filterAppliedAliasHashCalc = false;
-		this.filterAppliedTrimRectCalc = false;
+		this.filterAppliedAliasHash = false;
+		this.filterAppliedTrimRect = false;
 		
 		// reset frameCount / data state
 		this.frameCount = this.frames.length;
 		this.populateFrameDataComplete = false;
 	};
 	
-	var doNothing = function() { };
-	var applyFiltersCallbackCompleted = doNothing;
-
-	this.applyFilters = function(callbackCompleted) {
-		applyFiltersCallbackCompleted = callbackCompleted || doNothing;
-		if(this.frames.length > 0) {
-			doApplyFilters(this);
-		} else {
-			this.populateFrameData(doApplyFilters);
+	this.postProcess = function(callback, trimThreshold) {
+		ImageItem.applyFilterAliasHash(self);
+		ImageItem.applyFilterTrim(self, trimThreshold || (new Options().read()).trimThreshold);
+		if(callback && typeof callback === "function") {
+			callback(self);
 		}
-	};
-	
-	var doApplyFilters = function(image) {
-		var opts = new Options();
-		opts.read();
-		
-		if(!image.filterAppliedCleanAlpha && opts.doCleanAlpha()) {
-			ImageItem.applyFilterCleanAlpha(image);
-		}
-		
-		if(!image.filterAppliedColorMask && opts.doColorMask()) {
-			ImageItem.applyFilterColorMask(image);
-		}
-		
-		if(!image.filterAppliedAliasHashCalc && opts.doAliasSprites()) {
-			ImageItem.applyFilterAliasHash(image);
-		}
-		
-		if(!image.filterAppliedTrimRectCalc && opts.doTrim()) {
-			ImageItem.applyFilterTrim(image, opts.trimThreshold || 1);
-		}
-		
-		applyFiltersCallbackCompleted(image);
-		applyFiltersCallbackCompleted = doNothing;
-	};
+	}
 }
 
-ImageItem.applyFilterCleanAlpha = function(image) {
-	for(var i = 0; i < image.frames.length; i++) {
-		var data = image.frames[i].data;
-		var len = data.length;
-		for(var j = 3; j < len; j += 4) {
-			if(data[j] === 0) {
-				data[j-1] =
-				data[j-2] =
-				data[j-3] = 0;
-			}
-		}
-	}
-	image.filterAppliedCleanAlpha = true;
-};
-
-ImageItem.applyFilterColorMask = function(image) {
-	for(var i = 0; i < image.frames.length; i++) {
-		var data = image.frames[i].data;
-		var len = data.length;
-		if(len > 4 && data[3] !== 0) {
-			var r = data[0];
-			var g = data[1];
-			var b = data[2];
-			for(var j = 3; j < len; j += 4) {
-				var match =
-					data[j-3] === r &&
-					data[j-2] === g &&
-					data[j-1] === b;
-				if(match) {
-					data[j-0] =
-					data[j-1] =
-					data[j-2] =
-					data[j-3] = 0;
-				}
-			}
-		}
-	}
-	image.filterAppliedColorMask = true;
-};
+// Shhh! Don't tell anyone! =)
+ImageItem.SUPER_SECRET_HASH_KEY = CryptoJS.SHA256("@groundh0g").toString(CryptoJS.enc.Hex);
 
 ImageItem.applyFilterAliasHash = function(image) {
 	for(var i = 0; i < image.frames.length; i++) {
 		var data = base64.encode(image.frames[i].data);
-		// Key is: CryptoJS.MD5("@groundh0g").toString();
-		image.frames[i].hash = CryptoJS.HmacSHA256(data, "717d58fdda1ce12b217f8593ef67d5e7").toString();
+		image.frames[i].hash1 = CryptoJS.HmacSHA256(data, ImageItem.SUPER_SECRET_HASH_KEY).toString(CryptoJS.enc.Hex);
+		image.frames[i].hash2 = CryptoJS.HmacMD5(data, ImageItem.SUPER_SECRET_HASH_KEY).toString(CryptoJS.enc.Hex);
 	}
-	image.filterAppliedAliasHashCalc = true;
+	image.filterAppliedAliasHash = true;
 };
 
 ImageItem.applyFilterTrim = function(image, trimThreshold) {
-	trimThreshold = trimThreshold - 1;
+	if(trimThreshold) {
+		trimThreshold = parseInt(trimThreshold) - 1;
+	} else {
+		// trimming all pixels makes no sense.
+		return;
+	}
+	
 	for(var i = 0; i < image.frames.length; i++) {
 		var data = image.frames[i].data;
 		var len = data.length;
@@ -300,12 +239,20 @@ ImageItem.applyFilterTrim = function(image, trimThreshold) {
 		}
 		if(left < 0) { left = right; }
 		
-		image.frames[i].trimLeft = left;
-		image.frames[i].trimRight = right;
-		image.frames[i].trimTop = top;
-		image.frames[i].trimBottom = bottom;
+		image.frames[i].rectSpriteTrim = {
+			x: left,
+			y: top,
+			w: right - left,
+			h: bottom - top,
+			r: false,
+			// -------------
+			leftTrim:   left, 
+			topTrim:    top, 
+			rightTrim:  right,
+			bottomTrim: bottom
+		};
 	}
-	image.filterAppliedTrimRectCalc = true;
+	image.filterAppliedTrimRect = true;
 };
 
 ImageItem.compareImages = function(obj1, obj2) {

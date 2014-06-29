@@ -141,6 +141,8 @@ function Options(copy) {
 		
 		this.animatedGif = $.trim(opts.animatedGif || this.animatedGif);
 		this.compressProject = $.trim(opts.compressProject || this.compressProject);
+		
+		return this;
 	};
 	
 	this.write = function() {
