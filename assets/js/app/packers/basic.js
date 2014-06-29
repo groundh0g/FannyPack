@@ -23,7 +23,7 @@ THE SOFTWARE.
 var packers = packers || {};
 
 function BasicPacker() {
-	BasePacker.call(this, "Basic");
+	BasePacker.call(this, "Basic", true); // Default Packer
 	var self = this;
 	this.defaultSortBy = "HEIGHT_DESC";
 	this.version = "0.1.0";

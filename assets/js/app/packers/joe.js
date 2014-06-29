@@ -55,4 +55,5 @@ function JoePacker() {
 	};
 }
 
-(new JoePacker()).register();
+// TOO: Not implemented. Letting Basic packer take over for now.
+//(new JoePacker()).register();
