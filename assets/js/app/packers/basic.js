@@ -36,17 +36,17 @@ function BasicPacker() {
 			self.DoPack_FramesProcessed = 0;
 			self.ImageIndex = 0;
 			self.FrameIndex = 0;
-			self.CurrentX = 0;
-			self.CurrentY = 0;
+			self.CurrentX = self.paddingBorder;
+			self.CurrentY = self.paddingBorder;
 			self.MaxY = 0;
 		}
 		
 		// place sprite
 		var image = self.DoPack_Images[self.DoPack_ImageKeys[self.ImageIndex]];
-		var fitsWidth  = ((self.CurrentX + image.width)  <= self.width);
-		var fitsHeight = ((self.CurrentY + image.height) <= self.height);
+		var fitsWidth  = ((self.CurrentX + image.width)  <= self.width - self.paddingBorder);
+		var fitsHeight = ((self.CurrentY + image.height) <= self.height - self.paddingBorder);
 		var fitsOnNextRow = 
-			(self.MaxY + image.height <= self.height) &&
+			(self.MaxY + image.height + self.paddingShape<= self.height - self.paddingBorder) &&
 			(image.width <= self.width);
 		
 		if(fitsWidth && fitsHeight) {
@@ -54,10 +54,10 @@ function BasicPacker() {
 			// nothing to do, that's the default behavior
 		} else if(!fitsWidth && fitsOnNextRow) {
 			// place on next row
-			self.CurrentX = 0;
-			self.CurrentY = self.MaxY;
+			self.CurrentX = self.paddingBorder;
+			self.CurrentY = self.MaxY + self.paddingShape;
 		} else { // if(!fitsWidth && !fitsOnNextRow) {
-			if(self.Resize(self.CurrentX + image.width, self.MaxY + image.height)) {
+			if(self.Resize(self.CurrentX + image.width + self.paddingBorder, self.MaxY + image.height + self.paddingBorder)) {
 				// exit loop and start over
 				self.DoPack_MaxFramesProcessed = 0;
 				self.DoPack_FramesProcessed = 0;
@@ -79,7 +79,7 @@ function BasicPacker() {
 			r: false
 		};
 	
-		self.CurrentX += image.width;
+		self.CurrentX += image.width + self.paddingShape;
 		self.DoPack_FramesProcessed++;
 
 		self.FrameIndex++;
