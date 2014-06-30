@@ -96,6 +96,7 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 	this.populateFrameDataComplete = false;
 	this.filterAppliedAliasHash = false;
 	this.filterAppliedTrimRect = false;
+	this.filterAppliedPaddingInner = false;
 
 	this.populateFrameData = function(callbackCompleted) {
 		this.clearFrameData(); // also resets filter flags
@@ -162,17 +163,27 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 		// reset filter flags, we've just cleared the raw image data
 		this.filterAppliedAliasHash = false;
 		this.filterAppliedTrimRect = false;
+		this.filterAppliedPaddingInner = false;
 		
 		// reset frameCount / data state
 		this.frameCount = this.frames.length;
 		this.populateFrameDataComplete = false;
 	};
 	
-	this.postProcess = function(callback, trimThreshold) {
-		ImageItem.applyFilterAliasHash(self);
-		ImageItem.applyFilterTrim(self, trimThreshold || (new Options().read()).trimThreshold);
-		if(callback && typeof callback === "function") {
-			callback(self);
+	this.postProcess = function(callback, packer) {
+		if(packer) {
+			if(packer.doTrim) {
+				ImageItem.applyFilterTrim(self, packer);
+			}
+			if(packer.paddingInner) {
+				ImageItem.applyFilterPaddingInner(self, packer);
+			}
+			if(packer.doAliasSprites) {
+				ImageItem.applyFilterAliasHash(self, packer);
+			}
+			if(callback && typeof callback === "function") {
+				callback(self);
+			}
 		}
 	}
 }
@@ -180,7 +191,8 @@ function ImageItem(copy, filename, filetype, width, height, src, guid, frameCoun
 // Shhh! Don't tell anyone! =)
 ImageItem.SUPER_SECRET_HASH_KEY = CryptoJS.SHA256("@groundh0g").toString(CryptoJS.enc.Hex);
 
-ImageItem.applyFilterAliasHash = function(image) {
+ImageItem.applyFilterAliasHash = function(image, packer) {
+	image.filterAppliedAliasHash = false;
 	for(var i = 0; i < image.frames.length; i++) {
 		var data = base64.encode(image.frames[i].data);
 		image.frames[i].hash1 = CryptoJS.HmacSHA256(data, ImageItem.SUPER_SECRET_HASH_KEY).toString(CryptoJS.enc.Hex);
@@ -189,11 +201,58 @@ ImageItem.applyFilterAliasHash = function(image) {
 	image.filterAppliedAliasHash = true;
 };
 
-ImageItem.applyFilterTrim = function(image, trimThreshold) {
-	if(trimThreshold) {
-		trimThreshold = parseInt(trimThreshold) - 1;
-	} else {
+ImageItem.applyFilterPaddingInner = function(image, packer) {
+	image.filterAppliedPaddingInner = false;
+
+	var paddingInner = parseInt(packer["paddingInner"] || 0);
+	if(paddingInner > 0) {
+		var newFrames = [];
+		for(var i = 0; i < image.frames.length; i++) {
+			var frame = image.frames[i];
+			var canvas = document.createElement('canvas');
+			var width = frame.width;
+			var height = frame.height;
+			var widthPadded = width + 2 * paddingInner;
+			var heightPadded = height + 2 * paddingInner;
+			var imageData = canvas.getContext('2d').createImageData(widthPadded, heightPadded);
+			for(var y = 0; y < height; y++) {
+				for(var x = 0; x < width; x++) {
+					imageData.data[(y + paddingInner) * widthPadded * 4 + (x + paddingInner) * 4 + 0] = image.frames[i].data[y * width * 4 + x * 4 + 0];
+					imageData.data[(y + paddingInner) * widthPadded * 4 + (x + paddingInner) * 4 + 1] = image.frames[i].data[y * width * 4 + x * 4 + 1];
+					imageData.data[(y + paddingInner) * widthPadded * 4 + (x + paddingInner) * 4 + 2] = image.frames[i].data[y * width * 4 + x * 4 + 2];
+					imageData.data[(y + paddingInner) * widthPadded * 4 + (x + paddingInner) * 4 + 3] = image.frames[i].data[y * width * 4 + x * 4 + 3];
+				}
+			}
+			newFrames.push(imageData);
+		}
+		while(image.frames.length) { image.frames.pop(); }
+		for(var i = 0; i < newFrames.length; i++) {
+			image.frames.push(newFrames[i]);
+		}
+		while(newFrames.length) { newFrames.pop(); }
+	}
+	
+	image.filterAppliedPaddingInner = true;
+};
+
+ImageItem.applyFilterTrim = function(image, packer) {
+	image.filterAppliedTrimRect = false;
+
+	var trimThreshold = parseInt(packer["trimThreshold"] || 0) - 1;
+	if(trimThreshold < 0) {
 		// trimming all pixels makes no sense.
+		// TODO: Log warning?
+		trimThreshold = 0;
+	} else if(trimThreshold > 254) {
+		// trimming no pixels makes no sense.
+		// TODO: Log warning?
+		trimThreshold = 254;
+	}
+	
+	if(image.frames.length > 1) {
+		// trim and extract frames are not compatible
+		// leave everything as is
+		// TODO: log warning?
 		return;
 	}
 	
@@ -203,13 +262,13 @@ ImageItem.applyFilterTrim = function(image, trimThreshold) {
 		var w = image.frames[i].width;
 		var h = image.frames[i].height;
 		
-		var top = -1;
-		var bottom = 0;
+		var top    = -1;
+		var bottom = -1;
 		// scan vertical
 		for(var y = 0; y < h; y++) {
 			var hasOpaque = false;
-			for(var x = 3; x < w; x+= 4) {
-				if(data[y * w + x] > trimThreshold) {
+			for(var x = 0; x < w; x++) {
+				if(data[y * w * 4 + x * 4 + 3] > trimThreshold) {
 					hasOpaque = true;
 					break;
 				}
@@ -221,13 +280,13 @@ ImageItem.applyFilterTrim = function(image, trimThreshold) {
 		}
 		if(top < 0) { top = bottom; }
 		
-		var left = -1;
-		var right = 0;
+		var left  = -1;
+		var right = -1;
 		// scan horizontal
-		for(var x = 3; x < w; x+= 4) {
+		for(var x = 0; x < w; x++) {
 			var hasOpaque = false;
 			for(var y = 0; y < h; y++) {
-				if(data[y * w + x] > trimThreshold) {
+				if(data[y * w * 4 + x * 4 + 3] > trimThreshold) {
 					hasOpaque = true;
 					break;
 				}
@@ -239,18 +298,29 @@ ImageItem.applyFilterTrim = function(image, trimThreshold) {
 		}
 		if(left < 0) { left = right; }
 		
-		image.frames[i].rectSpriteTrim = {
-			x: left,
-			y: top,
-			w: right - left,
-			h: bottom - top,
-			r: false,
-			// -------------
-			leftTrim:   left, 
-			topTrim:    top, 
-			rightTrim:  right,
-			bottomTrim: bottom
-		};
+		// did the trim kill all the pixels?
+		if(bottom < 0 || right < 0) {
+			// trimming all pixels makes no sense
+			// TODO: Log warning?
+			// Keep existing image.frames[i] data
+		} else {
+			var canvas = document.createElement('canvas');
+			w = right - left + 1;
+			h = bottom - top + 1;
+			var width = image.frames[i].width;
+			var height = image.frames[i].height;
+			var imageData = canvas.getContext('2d').createImageData(w, h);
+			for(var y = 0; y < h; y++) {
+				for(var x = 0; x < w; x++) {
+					imageData.data[y * w * 4 + x * 4 + 0] = image.frames[i].data[(top + y) * width * 4 + (left + x) * 4 + 0];
+					imageData.data[y * w * 4 + x * 4 + 1] = image.frames[i].data[(top + y) * width * 4 + (left + x) * 4 + 1];
+					imageData.data[y * w * 4 + x * 4 + 2] = image.frames[i].data[(top + y) * width * 4 + (left + x) * 4 + 2];
+					imageData.data[y * w * 4 + x * 4 + 3] = image.frames[i].data[(top + y) * width * 4 + (left + x) * 4 + 3];
+				}
+			}
+			while(image.frames.length) { image.frames.pop(); }
+			image.frames.push(imageData);
+		}
 	}
 	image.filterAppliedTrimRect = true;
 };

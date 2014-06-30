@@ -117,9 +117,17 @@ function BasePacker(name, isDefault) {
 			if(self.DoPack && typeof self.DoPack === "function") {
 				// start packing!
 				var widthInit = 1;
-				var widthMax = parseInt(options.width);
+				var widthMax = parseInt(options.width || 1);
 				var heightInit = 1;
-				var heightMax = parseInt(options.height);
+				var heightMax = parseInt(options.height || 1);
+				
+				if(widthMax < widthInit) {
+					this.addWarning("Width [" + widthMax + "] cannot be less than 1. Setting value to [1024].");
+					widthMax = 1024;
+				} else if(heightMax < heightInit) {
+					this.addWarning("Height [" + heightMax + "] cannot be less than 1. Setting value to [1024].");
+					heightMax = 1024;
+				}
 				
 				if(options.doForcePowOf2()) {
 					var widthPo2 = roundUpToPowerOfTwo(widthMax);
@@ -151,26 +159,39 @@ function BasePacker(name, isDefault) {
 				self.MAX_WIDTH       = widthMax;
 				self.height          = heightInit;
 				self.MAX_HEIGHT      = heightMax;
-				self.forcePowerOfTwo = options.doForcePowOf2();
-				self.forceSquare     = options.doForceSquare();
+				self.forcePowerOfTwo = options.doForcePowOf2() || false;
+				self.forceSquare     = options.doForceSquare() || false;
 				self.paddingShape    = Math.max(0, parseInt(options.shapePadding  || 0));
 				self.paddingBorder   = Math.max(0, parseInt(options.borderPadding || 0));
 				self.paddingInner    = Math.max(0, parseInt(options.innerPadding  || 0));
-				self.trimThreshold   = Math.max(0, Math.min(255, parseInt(options.trimThreshold || 0)));
 
-				if(options.doTrim()) {
-					if(self.trimThreshold > 254) {
-						this.addWarning("Trimming was enabled, but the threshold is too high [" + self.trimThreshold + "]. All pixels would be trimmed. Ignoring.");
+				self.doTrim          = options.doTrim() || false;
+				self.trimThreshold   = parseInt(options.trimThreshold || 0);
+				if(self.doTrim) {
+					if(extractGifFrames) {
+						this.addWarning("Trim Mode of 'Trim' and Animated GIF of 'Extract Frames' are incompatible. Disabling Trim.");
+						self.doTrim = false;
+					} else if(self.trimThreshold > 254) {
+						this.addWarning("Trimming was enabled, but the threshold is too high [" + self.trimThreshold + "]. All pixels would be trimmed. Setting threshold to [254].");
+						self.trimThreshold = 254;
+					} else if(self.trimThreshold < 0) {
+						this.addWarning("Trimming was enabled, but the threshold is too low [" + self.trimThreshold + "]. No pixels would be trimmed. Setting threshold to [0].");
 						self.trimThreshold = 0;
 					}
-				} else {
-					self.trimThreshold = 0;
 				}
 				
-				self.DoPack_ImageKeys = BasePacker.SortBy[options["sortBy"]](images);
+				self.doAliasSprites = options.doAliasSprites() || false;
+				
 				self.DoPack_Images = images;
 				self.DoPack_Options = opts;
 				self.DoPack_AllOptions = options;
+				
+				// run postProcess BEFORE sorting; likely affects results
+				$(Object.keys(images)).each(function(index, key) {
+					images[key].postProcess(null, self);
+				});
+
+				self.DoPack_ImageKeys = BasePacker.SortBy[options["sortBy"]](images, self);
 				
 				setTimeout(doPackTask, 0);
 			} else {
@@ -264,12 +285,12 @@ function BasePacker(name, isDefault) {
 //									self.addWarning("Debug mode not yet implemented.");
 //								}
 //								break;
-							case "trimMode":
-								// was sprite trimming requested?
-								if(options.doTrim()) {
-									self.addWarning("Trim sprites not yet implemented.");
-								}
-								break;
+//							case "trimMode":
+//								// was sprite trimming requested?
+//								if(options.doTrim()) {
+//									self.addWarning("Trim sprites not yet implemented.");
+//								}
+//								break;
 						}
 						break;
 					
@@ -381,67 +402,98 @@ function BasePacker(name, isDefault) {
 BasePacker.SortBy = {};
 BasePacker.SortByDefault = "NAME";
 
-BasePacker.SortBy["NAME"] = function(images) {
+BasePacker.SortBy["NAME"] = function(images, packer) {
 	return Object.keys(images).sort(function(a,b) {
 		return (a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0;
 	});
 };
 
-BasePacker.SortBy["NAME_DESC"] = function(images) {
+BasePacker.SortBy["NAME_DESC"] = function(images, packer) {
 	return Object.keys(images).sort(function(a,b) {
 		return (a.toUpperCase() < b.toUpperCase()) ? 1 : (a.toUpperCase() > b.toUpperCase()) ? -1 : 0;
 	});
 };
 
-BasePacker.SortBy["WIDTH"] = function(images) {
+BasePacker.SortBy["WIDTH"] = function(images, packer) {
 	return Object.keys(images).sort(function(a,b) {
-		return (images[a].width < images[b].width) ? -1 : (images[a].width > images[b].width) ? 1 :
+		var width_a = images[a].width;
+		var width_b = images[b].width;
+		if(packer && packer["doTrim"]) {
+			width_a = images[a].frames[0].width;
+			width_b = images[b].frames[0].width;
+		}
+		return (width_a < width_b) ? -1 : (width_a > width_b) ? 1 :
 			// if width is same, use key to sort
 			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
 	});
 };
 
-BasePacker.SortBy["WIDTH_DESC"] = function(images) {
+BasePacker.SortBy["WIDTH_DESC"] = function(images, packer) {
 	return Object.keys(images).sort(function(a,b) {
-		return (images[a].width < images[b].width) ? 1 : (images[a].width > images[b].width) ? -1 :
+		var width_a = images[a].width;
+		var width_b = images[b].width;
+		if(packer && packer["doTrim"]) {
+			width_a = images[a].frames[0].width;
+			width_b = images[b].frames[0].width;
+		}
+		return (width_a < width_b) ? 1 : (width_a > width_b) ? -1 :
 			// if width is same, use key to sort
 			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
 	});
 };
 
-BasePacker.SortBy["HEIGHT"] = function(images) {
+BasePacker.SortBy["HEIGHT"] = function(images, packer) {
 	return Object.keys(images).sort(function(a,b) {
-		return (images[a].height < images[b].height) ? -1 : (images[a].height > images[b].height) ? 1 : 
+		var height_a = images[a].height;
+		var height_b = images[b].height;
+		if(packer && packer["doTrim"]) {
+			height_a = images[a].frames[0].height;
+			height_b = images[b].frames[0].height;
+		}
+		return (height_a < height_b) ? -1 : (height_a > height_b) ? 1 : 
 			// if height is same, use key to sort
 			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
 	});
 };
 
-BasePacker.SortBy["HEIGHT_DESC"] = function(images) {
+BasePacker.SortBy["HEIGHT_DESC"] = function(images, packer) {
 	return Object.keys(images).sort(function(a,b) {
-		return (images[a].height < images[b].height) ? 1 : (images[a].height > images[b].height) ? -1 :
+		var height_a = images[a].height;
+		var height_b = images[b].height;
+		if(packer && packer["doTrim"]) {
+			height_a = images[a].frames[0].height;
+			height_b = images[b].frames[0].height;
+		}
+		return (height_a < height_b) ? 1 : (height_a > height_b) ? -1 :
 			// if height is same, use key to sort
 			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
 	});
 };
 
-BasePacker.SortBy["AREA"] = function(images) {
+BasePacker.SortBy["AREA"] = function(images, packer) {
 	return Object.keys(images).sort(function(a,b) {
 		var area_a = images[a].width * images[a].height;
 		var area_b = images[b].width * images[b].height;
+		if(packer && packer["doTrim"]) {
+			area_a = images[a].frames[0].width * images[a].height;
+			area_b = images[b].frames[0].width * images[b].height;
+		}
 		return (area_a < area_b) ? -1 : (area_a > area_b) ? 1 :
 			// if area is same, use key to sort
 			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
 	});
 };
 
-BasePacker.SortBy["AREA_DESC"] = function(images) {
+BasePacker.SortBy["AREA_DESC"] = function(images, packer) {
 	return Object.keys(images).sort(function(a,b) {
 		var area_a = images[a].width * images[a].height;
 		var area_b = images[b].width * images[b].height;
+		if(packer && packer["doTrim"]) {
+			area_a = images[a].frames[0].width * images[a].height;
+			area_b = images[b].frames[0].width * images[b].height;
+		}
 		return (area_a < area_b) ? 1 : (area_a > area_b) ? -1 :
 			// if area is same, use key to sort
 			((a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0);
 	});
 };
-

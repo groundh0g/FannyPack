@@ -43,11 +43,12 @@ function BasicPacker() {
 		
 		// place sprite
 		var image = self.DoPack_Images[self.DoPack_ImageKeys[self.ImageIndex]];
-		var fitsWidth  = ((self.CurrentX + image.width)  <= self.width - self.paddingBorder);
-		var fitsHeight = ((self.CurrentY + image.height) <= self.height - self.paddingBorder);
+		var frame = image.frames[self.FrameIndex];
+		var fitsWidth  = ((self.CurrentX + frame.width)  <= self.width - self.paddingBorder);
+		var fitsHeight = ((self.CurrentY + frame.height) <= self.height - self.paddingBorder);
 		var fitsOnNextRow = 
-			(self.MaxY + image.height + self.paddingShape<= self.height - self.paddingBorder) &&
-			(image.width <= self.width);
+			(self.MaxY + frame.height + self.paddingShape <= self.height - self.paddingBorder) &&
+			(frame.width <= self.width);
 		
 		if(fitsWidth && fitsHeight) {
 			// place at current loc
@@ -57,7 +58,7 @@ function BasicPacker() {
 			self.CurrentX = self.paddingBorder;
 			self.CurrentY = self.MaxY + self.paddingShape;
 		} else { // if(!fitsWidth && !fitsOnNextRow) {
-			if(self.Resize(self.CurrentX + image.width + self.paddingBorder, self.MaxY + image.height + self.paddingBorder)) {
+			if(self.Resize(self.CurrentX + frame.width + self.paddingBorder, self.MaxY + frame.height + self.paddingBorder)) {
 				// exit loop and start over
 				self.DoPack_MaxFramesProcessed = 0;
 				self.DoPack_FramesProcessed = 0;
@@ -70,16 +71,16 @@ function BasicPacker() {
 			}
 		}
 		
-		self.MaxY = Math.max(self.MaxY, self.CurrentY + image.height);
-		image.frames[self.FrameIndex].rectSprite = {
+		self.MaxY = Math.max(self.MaxY, self.CurrentY + frame.height);
+		frame.rectSprite = {
 			x: self.CurrentX,
 			y: self.CurrentY,
-			w: image.width,
-			h: image.height,
+			w: frame.width,
+			h: frame.height,
 			r: false
 		};
 	
-		self.CurrentX += image.width + self.paddingShape;
+		self.CurrentX += frame.width + self.paddingShape;
 		self.DoPack_FramesProcessed++;
 
 		self.FrameIndex++;
