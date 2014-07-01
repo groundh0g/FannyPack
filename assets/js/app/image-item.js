@@ -331,7 +331,7 @@ ImageItem.compareImages = function(obj1, obj2) {
 		result = obj1.equals(obj2);
 	}
 	return result;
-}
+};
 
 ImageItem.compareImagePools = function(obj1, obj2) {
 	result = false;
@@ -349,7 +349,7 @@ ImageItem.compareImagePools = function(obj1, obj2) {
 		}
 	}
 	return result;
-}
+};
 
 ImageItem.copyImagePool = function(pool, deep) {
 	result = {};
@@ -370,4 +370,16 @@ ImageItem.copyImagePool = function(pool, deep) {
 		}
 	}
 	return result;
-}
+};
+
+
+ImageItem.reloadImagePoolFrames = function(pool, callback) {
+	var keys = Object.keys(pool);
+	var imageCount = keys.length;
+	var missingCallback = function() { };
+	$(keys).each(function(index, key) {
+		pool[key].populateFrameData(function() {
+			if(--imageCount === 0) { (callback || missingCallback)(); }
+		});
+	});
+};
