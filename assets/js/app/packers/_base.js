@@ -73,6 +73,12 @@ function BasePacker(name, isDefault) {
 		var fnComplete = completeCallback || self.DoPack_CompleteCallback || doNothing;
 		var fnStatus   = statusCallback   || self.DoPack_StatusCallback   || doNothing;
 		
+		ImageItem.reloadImagePoolFrames(images, function() {
+			packCallback(images, options, fnComplete, fnStatus);
+		});
+	};
+
+	var packCallback = function(images, options, completeCallback, statusCallback) { 
 		// hand self.DoPack() the subset of options that it cares about
 		var opts = trimOptions(options);
 		
@@ -82,7 +88,7 @@ function BasePacker(name, isDefault) {
 			options.doAnimatedGifExpand &&
 			options.doAnimatedGifExpand();
 
-		// count frames to process, order of ImageItem keys is irrelevant
+		// count frames to process; order of ImageItem keys is irrelevant
 		var imageKeys = Object.keys(imagePool);
 		for(var i = 0; i < imageKeys.length; i++) {
 			if(extractGifFrames) {
@@ -92,15 +98,6 @@ function BasePacker(name, isDefault) {
 			}
 		}
 
-		// clear previous packing results
-  		$(Object.keys(imagePool)).each(function(ndx1,key) {
-			$(imagePool[key].frames).each(function(ndx2,frame) {
-				if(frame.rectSprite) {
-					delete frame["rectSprite"];
-				}
-			});
-		});
-		
 		// sanity check total frame count
 		if(self.DoPack_FrameCount < 1) {
 			// if there aren't any frames, ignore call to pack()
@@ -109,7 +106,7 @@ function BasePacker(name, isDefault) {
 			return;
 		} else {
 			// report frame count, which may be greater than image count
-			this.addInfo("Discovered " + self.DoPack_FrameCount + " frame(s) in " + imageKeys.length + " image(s).");
+			self.addInfo("Discovered " + self.DoPack_FrameCount + " frame(s) in " + imageKeys.length + " image(s).");
 		}
 
 		// no errors were set in self.DoInit() or trimOptions(); start processing frames
@@ -122,22 +119,22 @@ function BasePacker(name, isDefault) {
 				var heightMax = parseInt(options.height || 1);
 				
 				if(widthMax < widthInit) {
-					this.addWarning("Width [" + widthMax + "] cannot be less than 1. Setting value to [1024].");
+					self.addWarning("Width [" + widthMax + "] cannot be less than 1. Setting value to [1024].");
 					widthMax = 1024;
 				} else if(heightMax < heightInit) {
-					this.addWarning("Height [" + heightMax + "] cannot be less than 1. Setting value to [1024].");
+					self.addWarning("Height [" + heightMax + "] cannot be less than 1. Setting value to [1024].");
 					heightMax = 1024;
 				}
 				
 				if(options.doForcePowOf2()) {
 					var widthPo2 = roundUpToPowerOfTwo(widthMax);
 					if(widthMax !== widthPo2) {
-						this.addWarning("Power of Two is specified, but width [" + widthMax + "] does not conform. Setting value to [" + widthPo2 + "].");
+						self.addWarning("Power of Two is specified, but width [" + widthMax + "] does not conform. Setting value to [" + widthPo2 + "].");
 						widthMax = widthPo2;
 					}
 					var heightPo2 = roundUpToPowerOfTwo(heightMax);
 					if(heightMax !== heightPo2) {
-						this.addWarning("Power of Two is specified, but height [" + heightMax + "] does not conform. Setting value to [" + heightPo2 + "].");
+						self.addWarning("Power of Two is specified, but height [" + heightMax + "] does not conform. Setting value to [" + heightPo2 + "].");
 						heightMax = heightPo2;
 					}
 				}
@@ -145,7 +142,7 @@ function BasePacker(name, isDefault) {
 				if(options.doForceSquare()) {
 					if(widthMax != heightMax) {
 						var maxSize = Math.max(widthMax, heightMax);
-						this.addWarning("Force Square is specified, but width [" + widthMax + "] and height [" + heightMax + "] are different. Setting both to largest value [" + maxSize + "].");
+						self.addWarning("Force Square is specified, but width [" + widthMax + "] and height [" + heightMax + "] are different. Setting both to largest value [" + maxSize + "].");
 						widthMax = heightMax = maxSize;
 					}
 				}
@@ -169,13 +166,13 @@ function BasePacker(name, isDefault) {
 				self.trimThreshold   = parseInt(options.trimThreshold || 0);
 				if(self.doTrim) {
 					if(extractGifFrames) {
-						this.addWarning("Trim Mode of 'Trim' and Animated GIF of 'Extract Frames' are incompatible. Disabling Trim.");
+						self.addWarning("Trim Mode of 'Trim' and Animated GIF of 'Extract Frames' are incompatible. Disabling Trim.");
 						self.doTrim = false;
 					} else if(self.trimThreshold > 254) {
-						this.addWarning("Trimming was enabled, but the threshold is too high [" + self.trimThreshold + "]. All pixels would be trimmed. Setting threshold to [254].");
+						self.addWarning("Trimming was enabled, but the threshold is too high [" + self.trimThreshold + "]. All pixels would be trimmed. Setting threshold to [254].");
 						self.trimThreshold = 254;
 					} else if(self.trimThreshold < 0) {
-						this.addWarning("Trimming was enabled, but the threshold is too low [" + self.trimThreshold + "]. No pixels would be trimmed. Setting threshold to [0].");
+						self.addWarning("Trimming was enabled, but the threshold is too low [" + self.trimThreshold + "]. No pixels would be trimmed. Setting threshold to [0].");
 						self.trimThreshold = 0;
 					}
 				}
