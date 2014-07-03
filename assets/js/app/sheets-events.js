@@ -59,7 +59,13 @@ $("#ddlAnimatedGifOptions li a").click(function() { return UpdateDropDownValue("
 $("#ddlCompressProjectOptions li a").click(function() { return UpdateDropDownValue("ddlCompressProject", $(this)); });
 
 // -- WORKSPACE TOOLBAR --
-$("#txtWorkspaceZoomOptions li a").click(function() { return UpdateDropDownValueInput("txtWorkspaceZoom", $(this)); });
+$("#cmdWorkspaceZoomOut"  ).click(function() { DoWorkspaceZoomOut();  return true; });
+$("#cmdWorkspaceZoomIn"   ).click(function() { DoWorkspaceZoomIn();  return true; });
+$("#txtWorkspaceZoom").keyup(function(event) { DoWorkspaceZoom($(this).val(), event); return true; });
+$("#txtWorkspaceZoomOptions li a").click(function() { DoWorkspaceZoom($(this).text()); return true; });
+$("#cmdWorkspaceFitWidth" ).click(function() { DoWorkspaceFitWidth();  return true; });
+$("#cmdWorkspaceFitHeight").click(function() { DoWorkspaceFitHeight(); return true; });
+$("#cmdWorkspaceFitBoth"  ).click(function() { DoWorkspaceFitBoth();   return true; });
 
 // -- RIGHT NAV --
 $("#radioRightNav button").click(function() {

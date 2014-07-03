@@ -372,7 +372,6 @@ ImageItem.copyImagePool = function(pool, deep) {
 	return result;
 };
 
-
 ImageItem.reloadImagePoolFrames = function(pool, callback) {
 	var keys = Object.keys(pool);
 	var imageCount = keys.length;

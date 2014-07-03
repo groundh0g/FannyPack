@@ -20,7 +20,7 @@ if (typeof String.prototype.contains !== 'function') {
     };
 }
 
-//http://stackoverflow.com/questions/202605/repeat-string-javascript#5450113
+// http://stackoverflow.com/questions/202605/repeat-string-javascript#5450113
 // (tweaked a bit, @groundh0g)
 if (typeof String.prototype.repeat !== 'function') {
     String.prototype.repeat = function(count) {
@@ -36,4 +36,11 @@ if (typeof String.prototype.repeat !== 'function') {
     };
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim
+// (tweaked a bit, @groundh0g)
+if (typeof String.prototype.trim !== 'function') {
+    String.prototype.trim = function () {
+        return this.replace(/^\s+|\s+$/g, '');
+    };
+}
 

@@ -110,6 +110,11 @@ var DoFileSave = function () {
 	persistedImagePool = ImageItem.copyImagePool(imagePool);
 };
 
+var DoPublish = function () { 
+	// TODO: Implement Publish
+	return false; 
+};
+
 var DoSpriteAdd = function () { 
 	$("#popupFileModalTitle").text("Add Sprite(s)");
 	$("#popupFileModalDropLabel").text("Drag and drop image files here, or ...");
@@ -134,8 +139,6 @@ var DoSpriteRemove = function () {
 	OnValueChanged(); 
 	return false; 
 };
-
-var DoPublish = function () { return false; };
 
 var isHelpVisible = true;
 // var DoToggleHelp = function () {
@@ -205,7 +208,86 @@ var UpdateSpinBox = function (txtName, event, key) {
 		}
 	}
 	return false;
-}
+};
+
+var NormalizePercentText = function(value) {
+	return parseFloat(parseInt(value * 100, 10) / 100.0) || 100.0;
+};
+
+var DoWorkspaceFitWidth  = function() { 
+    var result = 100.0;
+	var packer = CurrentPacker;
+	if(packer && !isPacking) {
+		var targetWidth = $("#divWorkspace").width() - parseInt($("#divWorkspace").css("padding")) * 2;
+		result = NormalizePercentText(100.0 * targetWidth / packer.width);
+	}
+	return DoWorkspaceZoom(result + "%");
+};
+
+var DoWorkspaceFitHeight = function() { 
+    var result = 100.0;
+	var packer = CurrentPacker;
+	if(packer && !isPacking) {
+		var targetHeight = $("#divWorkspace").height() - parseInt($("#divWorkspace").css("padding")) * 2;
+		result = NormalizePercentText(100.0 * targetHeight / packer.height);
+	}
+	return DoWorkspaceZoom(result + "%");
+};
+
+var DoWorkspaceFitBoth   = function() { 
+    var result = 100.0;
+	var packer = CurrentPacker;
+	if(packer && !isPacking) {
+		var packerWidth  = packer.width  || 0;
+		var packerHeight = packer.height || 0;
+		if(packerWidth * packerHeight > 0) {
+			var targetWidth = $("#divWorkspace").width() - parseInt($("#divWorkspace").css("padding")) * 2;
+			var targetHeight = $("#divWorkspace").height() - parseInt($("#divWorkspace").css("padding")) * 2;
+			result = NormalizePercentText(100.0 * targetWidth / packerWidth);
+			if(packer.height * result / 100.0 > targetHeight) {
+				result = NormalizePercentText(100.0 * targetHeight / packerHeight);
+			}
+		}
+	}
+	return DoWorkspaceZoom(result + "%");
+};
+
+var DoWorkspaceZoomIn = function() {
+	var text = (new String(parseFloat($("#txtWorkspaceZoom").val()) || "100.0")).trim();
+	return DoWorkspaceZoom((parseFloat(text) * 2.0) + "%");
+};
+
+var DoWorkspaceZoomOut = function() {
+	var text = (new String(parseFloat($("#txtWorkspaceZoom").val()) || "100.0")).trim();
+	return DoWorkspaceZoom((parseFloat(text) / 2.0) + "%");
+};
+
+var DoWorkspaceZoom = function(text, event) {
+	if(event && event.which && event.which !== 13) { return false; }
+	var packer = CurrentPacker;
+	if(packer && !isPacking) {
+		var width  = packer.width;
+		var height = packer.height;
+		text = (new String(text || "100.0%")).replace(" *","").trim();
+		$("#txtWorkspaceZoom").val(text);
+		text = text.replace("%", "");
+		var percent = parseFloat(text) / 100.0;
+		var w = parseFloat(width) * percent;
+		var h = parseFloat(height) * percent;
+		$("#divWorkspaceContainerCrop").css("width",w+"px").css("height", h+"px");
+		$("#imgWorkspace").css("width",w+"px").css("height", h+"px");
+		$("#imgWorkspace").show();
+	} else if(packer) {
+		LogConsoleMessage(ConsoleMessageTypes.WARNING, "It appears that the packer is currently running. Wait for it to complete, then click 'Refresh' and try again.");
+	} else {
+		LogConsoleMessage(ConsoleMessageTypes.WARNING, "No sprite data found. If you've loaded a project, or added sprites, click 'Refresh' and try again.");
+		$("#divWorkspaceContainerCrop").css("width","32px").css("height", "32px");
+		$("#imgWorkspace").css("width","32px").css("height", "32px");
+		$("#imgWorkspace").hide();
+	}
+
+	return true;
+};
 
 var isOpeningProject = false;
 var ProcessProjectOpen = function(files) {
@@ -240,6 +322,9 @@ var ProcessProjectOpen = function(files) {
 				persistedOptions.read(options);
 				imagePool = {};
 
+				// reset zoom
+				$("#txtWorkspaceZoom").val("100.0%");
+				
 				// read image data into a temp pool, populate real pool as if new load
 				var tempImagePool = ImageItem.copyImagePool(project.images, true);
 				$(Object.keys(tempImagePool)).each(function(index, item) {
@@ -530,10 +615,6 @@ var EnableToolbarButtons = function(enable) {
 };
 
 var EnableLeftNavButtons = function(enable) {
-	var txtControls = [
-		"txtName",
-	];
-	
 	if(enable) {
 		$("#divSidebarLeft input").removeAttr("disabled");
 		$("#divSidebarLeft a.dropdown-toggle").removeClass("disabled");
@@ -543,6 +624,30 @@ var EnableLeftNavButtons = function(enable) {
 	}
 };
 
+var EnableWorkspaceButtons = function(enable) {
+	var controls = [
+		"cmdWorkspaceZoomOut",
+		"cmdWorkspaceZoomIn",
+		"cmdWorkspaceZoomOut",
+		"cmdWorkspaceFitWidth",
+		"cmdWorkspaceFitHeight",
+		"cmdWorkspaceFitBoth",
+	];
+	
+	if(enable) {
+		$("#divWorkspaceToolbar input").removeAttr("disabled");
+		$("#divWorkspaceToolbar a.dropdown-toggle").removeClass("disabled");
+		$(controls).each(function(index, item) {
+			$("#" + item).removeClass("disabled");
+		});
+	} else {
+		$("#divWorkspaceToolbar input").attr("disabled", "disabled");
+		$("#divWorkspaceToolbar a.dropdown-toggle").addClass("disabled");
+		$(controls).each(function(index, item) {
+			$("#" + item).addClass("disabled");
+		});
+	}
+};
 
 var CurrentPacker = null;
 var isPacking = false;
@@ -555,6 +660,7 @@ var PackSprites = function(clearConsole) {
 	if(clearConsole === true) { ClearConsoleMessages(); }
 	EnableToolbarButtons(false);
 	EnableLeftNavButtons(false);
+	EnableWorkspaceButtons(false);
 	$("#divWorkspaceContainerCrop").empty();
 	$("#divWorkspaceContainerCrop").css("width","32px").css("height", "32px");
 	$("#divWorkspaceContainer").css("width","32px").css("height", "32px");
@@ -705,7 +811,12 @@ var OnPackComplete = function(result) {
 			}
 		}
 		
-		$("#divWorkspaceContainerCrop").append(buffer);
+		packer.bufferDataURL = buffer.toDataURL("image/png");
+		packer.bufferDataExt = "png";
+		if(packer.width * packer.height > 0) {
+			var $img = $("<img />").attr("src", packer.bufferDataURL).attr("id", "imgWorkspace");
+			$("#divWorkspaceContainerCrop").append($img);
+		}
 		// -------------------------------------------------
 
 		var isPackingEndTime = new Date();
@@ -733,10 +844,12 @@ var OnPackComplete = function(result) {
 	
 	EnableToolbarButtons(true);
 	EnableLeftNavButtons(true);
+	EnableWorkspaceButtons(true);
 	$("#progressBar").css("width", "0");
 
 	isPacking = false;
 	UpdateConsole();
+	DoWorkspaceZoom($("#txtWorkspaceZoom").val(), { which : 13 });
 };
 
 var OnPackStatusUpdate = function(count) {

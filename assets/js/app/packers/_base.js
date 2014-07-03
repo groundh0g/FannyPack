@@ -73,9 +73,15 @@ function BasePacker(name, isDefault) {
 		var fnComplete = completeCallback || self.DoPack_CompleteCallback || doNothing;
 		var fnStatus   = statusCallback   || self.DoPack_StatusCallback   || doNothing;
 		
-		ImageItem.reloadImagePoolFrames(images, function() {
+		if(images && images.length) {
+			ImageItem.reloadImagePoolFrames(images, function() {
+				packCallback(images, options, fnComplete, fnStatus);
+			});
+		} else {
 			packCallback(images, options, fnComplete, fnStatus);
-		});
+//			self.addInfo("No sprites have been loaded. Nothing to do.");
+//			fnComplete({success:true});
+		}
 	};
 
 	var packCallback = function(images, options, completeCallback, statusCallback) { 
@@ -102,7 +108,7 @@ function BasePacker(name, isDefault) {
 		if(self.DoPack_FrameCount < 1) {
 			// if there aren't any frames, ignore call to pack()
 			self.addInfo("No sprites have been loaded. Nothing to do.");
-			fnComplete( { success: true } );
+			completeCallback( { success: true } );
 			return;
 		} else {
 			// report frame count, which may be greater than image count
@@ -194,11 +200,11 @@ function BasePacker(name, isDefault) {
 			} else {
 				// oops. not sure what to do. packer isn't implemented.
 				self.addError("DoPack() not yet implemented in this packer.");
-				fnComplete( { success: false } );
+				completeCallback( { success: false } );
 			}
 		// errors were set in self.DoInit() or trimOptions(); don't process frames
 		} else {
-			fnComplete( { success: false } );
+			completeCallback( { success: false } );
 		}
 	};
 
