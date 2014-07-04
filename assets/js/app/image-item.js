@@ -223,10 +223,15 @@ ImageItem.applyFilterPaddingInner = function(image, packer) {
 					imageData.data[(y + paddingInner) * widthPadded * 4 + (x + paddingInner) * 4 + 3] = image.frames[i].data[y * width * 4 + x * 4 + 3];
 				}
 			}
+			
+			if(frame.padding) { imageData.padding = frame.padding; }
+			if(frame.trim)    { imageData.trim = frame.trim; }
+
 			newFrames.push(imageData);
 		}
 		while(image.frames.length) { image.frames.pop(); }
 		for(var i = 0; i < newFrames.length; i++) {
+			newFrames[i].padding = paddingInner;
 			image.frames.push(newFrames[i]);
 		}
 		while(newFrames.length) { newFrames.pop(); }
@@ -261,6 +266,7 @@ ImageItem.applyFilterTrim = function(image, packer) {
 		var len = data.length;
 		var w = image.frames[i].width;
 		var h = image.frames[i].height;
+		var p = image.frames[i].padding;
 		
 		var top    = -1;
 		var bottom = -1;
@@ -318,6 +324,13 @@ ImageItem.applyFilterTrim = function(image, packer) {
 					imageData.data[y * w * 4 + x * 4 + 3] = image.frames[i].data[(top + y) * width * 4 + (left + x) * 4 + 3];
 				}
 			}
+			if(p) { imageData.padding = p; }
+			imageData.trim = { 
+				left:       left,
+				top:        top,
+				origWidth:  width,
+				origHeight: height
+			};
 			while(image.frames.length) { image.frames.pop(); }
 			image.frames.push(imageData);
 		}
