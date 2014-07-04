@@ -84,9 +84,9 @@ var DoFileSave = function () {
 	});
 	
 	var data = {
-		application: "FannyPack",
+		application: FannyPack_SpriteSheet_AppName,
 		version: FannyPack_SpriteSheet_Version,
-		url: "https://github.com/groundh0g/FannyPack",
+		url: FannyPack_SpriteSheet_URL,
 		options: options,
 		images: imgData
 	};
@@ -110,9 +110,52 @@ var DoFileSave = function () {
 	persistedImagePool = ImageItem.copyImagePool(imagePool);
 };
 
+var isPublishing = false;
+var CurrentExporter = null;
 var DoPublish = function () { 
-	// TODO: Implement Publish
-	return false; 
+	if(isPublishing === true) { return; }
+	
+	isPublishing = true;
+	ClearConsoleMessages();
+	EnableToolbarButtons(false);
+	EnableLeftNavButtons(false);
+	EnableWorkspaceButtons(false);
+
+	var options = new Options();
+	options.read();
+	CurrentExporter = exporters[options["dataFormat"]];
+	CurrentExporter.export(imagePool, options, OnPublishComplete);
+};
+
+var OnPublishComplete = function(result) {
+	var exporter = CurrentExporter;
+	
+	var msgs = exporter.msgErrors;
+	for(var i = 0; i < msgs.length; i++) {
+		LogConsoleMessage(ConsoleMessageTypes.ERROR, msgs[i]);
+	}
+
+	msgs = exporter.msgWarnings;
+	for(var i = 0; i < msgs.length; i++) {
+		LogConsoleMessage(ConsoleMessageTypes.WARNING, msgs[i]);
+	}
+
+	msgs = exporter.msgInfos;
+	for(var i = 0; i < msgs.length; i++) {
+		LogConsoleMessage(ConsoleMessageTypes.INFO, msgs[i]);
+	}
+
+	if(result && result.success === true) {
+		LogConsoleMessage(ConsoleMessageTypes.SUCCESS, "Publish completed without errors.");
+		$("#txtStatusMessage").text("Ready.");
+	} else {
+		$("#txtStatusMessage").text("Completed with errors.");
+	}
+
+	EnableToolbarButtons(true);
+	EnableLeftNavButtons(true);
+	EnableWorkspaceButtons(true);
+	isPublishing = false;
 };
 
 var DoSpriteAdd = function () { 
@@ -822,7 +865,9 @@ var OnPackComplete = function(result) {
 		var isPackingEndTime = new Date();
 		var elapsedSeconds = parseInt(isPackingEndTime - isPackingStartTime) / 1000.0;
 
-		LogConsoleMessage(ConsoleMessageTypes.SUCCESS, "Processed " + packer.DoPack_FrameCount + " frames in " + elapsedSeconds + " seconds.");
+		var msgStats = "Processed " + packer.DoPack_FrameCount + " frames in " + elapsedSeconds + " seconds.";
+		LogConsoleMessage(ConsoleMessageTypes.SUCCESS, msgStats);
+		packer.StatsMessage = msgStats;
 		
 //		if(isOpeningProject) {
 //			persistedImagePool = ImageItem.copyImagePool(imagePool);
@@ -906,12 +951,29 @@ $(document).ready(function () {
 	}
 	$("#ddlSortBy").text(defaultSortBy);
 	
+	// add Data format options
+	keys = BasePacker.SortBy["NAME"](exporters);
+	for(i = 0; i < keys.length; i++) {
+		var $li = $("<li/>");
+		var $a = $("<a/>").attr("href","#null");
+		var item = exporters[keys[i]];
+		if(item.isDefault) {
+			$a.text(item.name + " *");
+			$("#ddlDataFormat").text(item.name);
+		} else {
+			$a.text(item.name);
+		}
+		$li.append($a);
+		$("#ddlDataFormatOptions").append($li);
+	}
+
 	$("#ddlSpritePackerOptions li a").click(function() { 
 		var result = UpdateDropDownValue("ddlSpritePacker", $(this));
 		$("#ddlSortBy").text(packers[$("#ddlSpritePacker").text()].defaultSortBy);
 		return result;
 	});
 	$("#ddlSortByOptions li a").click(function() { return UpdateDropDownValue("ddlSortBy", $(this)); });
+	$("#ddlDataFormatOptions li a").click(function() { return UpdateDropDownValue("ddlDataFormat", $(this)); });
 	
 	// reset IsDirty() flag
 	persistedOptions = new Options();

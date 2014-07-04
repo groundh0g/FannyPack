@@ -148,10 +148,12 @@ THE SOFTWARE.
 					<tr><td class="optionLabel" title="What format should the atlas use?">Data&nbsp;</td>
 						<td><div class="btn-toolbar" style="margin:0;">
 							<div class="btn-group">
-							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlDataFormat">JSON</span> <span class="caret"></span></a>
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlDataFormat">UNKNOWN</span> <span class="caret"></span></a>
 							  <ul id="ddlDataFormatOptions" class="dropdown-menu">
+<!--
 								<li><a href="#null">JSON *</a></li>
 								<li><a href="#null">XML</a></li>
+-->
 							  </ul>
 							</div>
 							</div>
@@ -649,6 +651,11 @@ THE SOFTWARE.
 		<script type="text/javascript" src="assets/js/app/packers/_base.js"></script>
 		<script type="text/javascript" src="assets/js/app/packers/basic.js"></script>
 		<script type="text/javascript" src="assets/js/app/packers/joe.js"></script>
+		
+		<!-- exporters -->
+		<script type="text/javascript" src="assets/js/app/exporters/_base.js"></script>
+		<script type="text/javascript" src="assets/js/app/exporters/exportJson.js"></script>
+		<script type="text/javascript" src="assets/js/app/exporters/exportXml.js"></script>
 		
 		<!-- page -->
 		<script type="text/javascript" src="assets/js/app/sheets.js"></script>

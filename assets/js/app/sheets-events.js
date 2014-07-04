@@ -27,16 +27,15 @@ $("#cmdFileSave").click(function() { return DoFileSave(); });
 $("#cmdSpriteAdd").click(function() { return DoSpriteAdd(); });
 $("#cmdSpriteRemove").click(function() { return DoSpriteRemove(); });
 $("#cmdRefresh").click(function() { OnValueChanged(); return true; });
-$("#cmdPublish").click(function() { return DoPublish(); });
+$("#cmdPublish").click(function() { DoPublish(); return true; });
 $("#cmdToggleHelp").click(function() { return DoToggleHelp(); });
 $("#cmdToggleSettings").click(function() { return DoToggleSettings(); } )
 
 // -- LEFT SIDEBAR --
 $("#txtName").keyup(function(event) { return UpdateSpinBox("txtName", event, 13); });
 $("#ddlImageFormatOptions li a").click(function() { return UpdateDropDownValue("ddlImageFormat", $(this)); });
-$("#ddlDataFormatOptions li a").click(function() { return UpdateDropDownValue("ddlDataFormat", $(this)); });
 $("#ddlNameInSheetOptions li a").click(function() { return UpdateDropDownValue("ddlNameInSheet", $(this)); });
-// NOTE: ddlSpritePacker and ddlSortBy are handled in $(document).ready(); [in sheets.js]
+// NOTE: ddlDataFormatOptions, ddlSpritePacker, and ddlSortBy are handled in $(document).ready(); [in sheets.js]
 $("#ddlAllowRotateOptions li a").click(function() { return UpdateDropDownValue("ddlAllowRotate", $(this)); });
 $("#txtWidthOptions li a").click(function() { return UpdateDropDownValueInput("txtWidth", $(this)); });
 $("#txtWidth").keyup(function(event) { return UpdateSpinBox("txtWidth", event); });
