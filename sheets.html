@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<!-- 
+Copyright (c) 2014 Joseph B. Hall [@groundh0g]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+
+<html>
+	<head>
+    <meta charset="utf-8">
+    <title>FannyPack - Sprite Sheets</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A simple spritesheet editor.">
+    <meta name="author" content="@groundh0g">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <!--<link href="assets/css/bootstrap-responsive.css" rel="stylesheet">-->
+    
+    <link href="assets/css/sheets/app.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <link rel="shortcut icon" href="assets/ico/favicon.png">
+
+    <script type="text/javascript">
+//       var _gaq = _gaq || [];
+//       _gaq.push(['_setAccount', 'UA-146052-10']);
+//       _gaq.push(['_trackPageview']);
+//       (function() {
+//         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+//         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+//         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+//       })();
+    </script>
+	</head>
+	<body>
+		<div style="min-height:100%; height:100%; min-width:100%; width:100%; background-color:#fee;">
+			
+			<!-- NAVBAR -->
+			<div class="navbar navbar-inverse">
+			  <div class="navbar-inner">
+				<div style="margin-left:20px; margin-right:20px;">
+				  <a class="brand" href="./index.html">FannyPack</a>
+					<ul class="nav">
+					  <li class="active">
+						<a href="./sheets.html">Sprite Sheets</a>
+					  </li>
+					  <li class="">
+						<a href="./fonts.html">Sprite Fonts</a>
+					  </li>
+					  <li class="">
+						<a href="./fonts.html">Tile Editor</a>
+					  </li>
+					</ul>
+					<ul class="nav pull-right">
+					  <li class="">
+						<a href="./documentation.html" target="_blank">Documentation</a>
+					  </li>
+					  <li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">About<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="#popupAboutApp" role="button" data-toggle="modal">The App</a></li>
+							<li class="divider"></li>
+							<li><a href="#popupAboutAuthor" role="button" data-toggle="modal">The Author</a></li>
+							<li><a href="#popupAboutModules" role="button" data-toggle="modal">The OSS Modules</a></li>
+							<li><a href="#popupAboutLicense" role="button" data-toggle="modal">The License [MIT]</a></li>
+						</ul>
+					  </li>
+					</ul>
+				</div>
+			  </div>
+			</div>
+
+			<div class="" style="background-color:#eee; padding:5px 0px; margin:0;">
+				<div style="margin-left:20px; margin-right:20px;">
+					<div class="btn-toolbar" style="margin:0;">
+					  <div class="btn-group">
+						<a id="cmdFileNew"  href="#null" class="btn"><i class="icon icon-file"></i> New</a>
+						<a id="cmdFileOpen" href="#null" class="btn"><i class="icon icon-folder-open"></i> Open</a>
+						<a id="cmdFileSave" href="#null" class="btn"><i class="icon icon-download-alt"></i> Save</a>
+					  </div>
+					  <div class="btn-group">
+						<a id="cmdSpriteAdd"    href="#null" class="btn"><i class="icon icon-picture"></i> Add</a>
+						<a id="cmdSpriteRemove" href="#null" class="btn"><i class="icon icon-remove"></i> Remove</a>
+					  </div>
+					  <div class="btn-group">
+					  	<a id="cmdRefresh" href="#null" class="btn"><i class="icon icon-refresh"></i> Refresh</a>
+						<a id="cmdPublish" href="#null" class="btn"><i class="icon icon-share"></i> Publish</a>
+					  </div>
+					  <div class="btn-group">
+						<a id="cmdToggleSettings" href="#null" class="btn"><i class="icon icon-wrench"></i> Settings</a>
+						<!--<a id="cmdToggleHelp" href="#null" class="btn"><i class="icon icon-question-sign"></i> Tooltips</a>-->
+					  </div>
+<!--
+					  <div class="btn-group">
+					  	<a id="cmdRefresh" href="#null" class="btn"><i class="icon icon-refresh"></i> Refresh</a>
+					  </div>
+-->
+					  <div class="btn-group pull-right" style="">
+					  	<a id="cmdStatus" href="#null" class="btn btn-link" style="color:#000;">STATUS: <span id="txtStatusMessage">Ready.</span></a>
+					  </div>
+					</div>
+				</div>
+			</div>
+
+			
+			<div id="divSidebarLeft" class="divSidebarLeft">
+				<table style="width:100%;">
+				
+					<tr><td colspan="3"><div class="optionHeading">Output</div></td></tr>
+				
+					<tr><td class="optionLabel" title="">Name&nbsp;</td>
+						<td><input id="txtName" type="text" value="Untitled" style="margin:0; width:140px;" />
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+					<tr><td class="optionLabel" title="What format should the published image be?">Image&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlImageFormat">PNG</span> <span class="caret"></span></a>
+							  <ul id="ddlImageFormatOptions" class="dropdown-menu">
+								<li><a href="#null">GIF</a></li>
+								<li><a href="#null">JPG</a></li>
+								<li><a href="#null">PNG *</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+					<tr><td class="optionLabel" title="What format should the atlas use?">Data&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlDataFormat">UNKNOWN</span> <span class="caret"></span></a>
+							  <ul id="ddlDataFormatOptions" class="dropdown-menu">
+<!--
+								<li><a href="#null">JSON *</a></li>
+								<li><a href="#null">XML</a></li>
+-->
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+					<tr><td class="optionLabel" title="Strip filename extensions in sprite names?">Name&nbsp;in&nbsp;Sheet</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlNameInSheet">Strip Extension</span> <span class="caret"></span></a>
+							  <ul id="ddlNameInSheetOptions" class="dropdown-menu">
+								<li><a href="#null">Strip Extension *</a></li>
+								<li><a href="#null">Keep Extension</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+				
+					<tr><td colspan="3"><div class="optionHeading">Algorithm</div></td></tr>
+					
+					<tr><td class="optionLabel" title="What method should be used to pack the sprites?">Sprite&nbsp;Packer&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlSpritePacker">UNKNOWN</span> <span class="caret"></span></a>
+							  <ul id="ddlSpritePackerOptions" class="dropdown-menu">
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+					
+					<tr><td class="optionLabel" title="Order images by ...?">Sort&nbsp;By&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlSortBy">UNKNOWN</span> <span class="caret"></span></a>
+							  <ul id="ddlSortByOptions" class="dropdown-menu">
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+					<tr><td class="optionLabel" title="May sprites be rotated in published image?">Allow&nbsp;Rotate&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlAllowRotate">No</span> <span class="caret"></span></a>
+							  <ul id="ddlAllowRotateOptions" class="dropdown-menu">
+								<li><a href="#null">Yes</a></li>
+								<li><a href="#null">No *</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+					
+					<tr><td colspan="3"><div class="optionHeading">Dimensions</div></td></tr>
+
+					<tr><td class="optionLabel" title="The width of the published image.">Width&nbsp;</td>
+						<td>
+							<div class="input-append btn-group" style="margin:0;"><input id="txtWidth" type="text" value=" 1024" style="width:110px;" /><a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+							  <ul id="txtWidthOptions" class="dropdown-menu">
+								<li><a href="#null">&nbsp;&nbsp;&nbsp;16</a></li>
+								<li><a href="#null">&nbsp;&nbsp;&nbsp;32</a></li>
+								<li><a href="#null">&nbsp;&nbsp;&nbsp;64</a></li>
+								<li><a href="#null">&nbsp;&nbsp;128</a></li>
+								<li><a href="#null">&nbsp;&nbsp;256</a></li>
+								<li><a href="#null">&nbsp;&nbsp;512</a></li>
+								<li><a href="#null">&nbsp;1024 *</a></li>
+								<li><a href="#null">&nbsp;2048</a></li>
+								<li><a href="#null">&nbsp;4096</a></li>
+								<li><a href="#null">&nbsp;8192</a></li>
+								<li><a href="#null">16384</a></li>
+							  </ul>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+					<tr><td class="optionLabel" title="The height of the published image.">Height&nbsp;</td>
+						<td>
+							<div class="input-append btn-group" style="margin:0;"><input id="txtHeight" type="text" value=" 1024" style="width:110px;" /><a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+							  <ul id="txtHeightOptions" class="dropdown-menu">
+								<li><a href="#null">&nbsp;&nbsp;&nbsp;16</a></li>
+								<li><a href="#null">&nbsp;&nbsp;&nbsp;32</a></li>
+								<li><a href="#null">&nbsp;&nbsp;&nbsp;64</a></li>
+								<li><a href="#null">&nbsp;&nbsp;128</a></li>
+								<li><a href="#null">&nbsp;&nbsp;256</a></li>
+								<li><a href="#null">&nbsp;&nbsp;512</a></li>
+								<li><a href="#null">&nbsp;1024 *</a></li>
+								<li><a href="#null">&nbsp;2048</a></li>
+								<li><a href="#null">&nbsp;4096</a></li>
+								<li><a href="#null">&nbsp;8192</a></li>
+								<li><a href="#null">16384</a></li>
+							  </ul>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+					<tr><td class="optionLabel" title="Are Width and Height maximum size or actual size?">Size&nbsp;Mode&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlSizeMode">Max Size</span> <span class="caret"></span></a>
+							  <ul id="ddlSizeModeOptions" class="dropdown-menu">
+								<li><a href="#null">Fixed Size</a></li>
+								<li><a href="#null">Max Size *</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+					<tr><td class="optionLabel" title="Published image must have power of two size?">Constraint&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlConstraint">Power of Two</span> <span class="caret"></span></a>
+							  <ul id="ddlConstraintOptions" class="dropdown-menu">
+								<li><a href="#null">Any Size</a></li>
+								<li><a href="#null">Power of Two *</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+					<tr><td class="optionLabel" title="Published image must be square?">Force&nbsp;Square&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlForceSquare">No</span> <span class="caret"></span></a>
+							  <ul id="ddlForceSquareOptions" class="dropdown-menu">
+								<li><a href="#null">Yes</a></li>
+								<li><a href="#null">No *</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+					<tr><td class="optionLabel" title="Publish full size as '*@2x'. Include 1/2 size copy.">Include&nbsp;@2x</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlIncludeAt2x">No</span> <span class="caret"></span></a>
+							  <ul id="ddlIncludeAt2xOptions" class="dropdown-menu">
+								<li><a href="#null">Yes</a></li>
+								<li><a href="#null">No *</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+		
+					<tr><td colspan="3"><div class="optionHeading">Padding</div></td></tr>
+
+					<tr><td class="optionLabel" title="Minimum transparent space from edge of image.">Border&nbsp;Padding&nbsp;</td>
+						<td><div class="input-append" style="margin:0;"><input id="txtBorderPadding" type="text" value="2" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+					<tr><td class="optionLabel" title="Minimum transparent space between sprites.">Shape&nbsp;Padding&nbsp;</td>
+						<td><div class="input-append" style="margin:0;"><input id="txtShapePadding" type="text" value="2" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+					<tr><td class="optionLabel" title="Add transparent pixels around each sprite.">Inner&nbsp;Padding&nbsp;</td>
+						<td><div class="input-append" style="margin:0;"><input id="txtInnerPadding" type="text" value="0" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+
+					<tr><td colspan="3"><div class="optionHeading">Filters</div></td></tr>
+		
+					<tr><td class="optionLabel" title="Make transparent pixels RGBA(0,0,0,0)? Compresses better.">Clean&nbsp;Alpha&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlCleanAlpha">No</span> <span class="caret"></span></a>
+							  <ul id="ddlCleanAlphaOptions" class="dropdown-menu">
+								<li><a href="#null">Yes</a></li>
+								<li><a href="#null">No *</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+					<tr><td class="optionLabel" title="Use top-left pixel color as transparency mask?">Color&nbsp;Mask&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlColorMask">No</span> <span class="caret"></span></a>
+							  <ul id="ddlColorMaskOptions" class="dropdown-menu">
+								<li><a href="#null">Yes</a></li>
+								<li><a href="#null">No *</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+					<tr><td class="optionLabel" title="Merge identical sprites into one instance?">Alias&nbsp;Sprites&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlAliasSprites">No</span> <span class="caret"></span></a>
+							  <ul id="ddlAliasSpritesOptions" class="dropdown-menu">
+								<li><a href="#null">Yes</a></li>
+								<li><a href="#null">No *</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+					<tr><td class="optionLabel" title="Draw shape borders?">Debug&nbsp;Mode&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlDebugMode">No</span> <span class="caret"></span></a>
+							  <ul id="ddlDebugModeOptions" class="dropdown-menu">
+								<li><a href="#null">Yes</a></li>
+								<li><a href="#null">No *</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+					<tr><td class="optionLabel" title="Trim transparent border pixels?">Trim&nbsp;Mode&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlTrimMode">None</span> <span class="caret"></span></a>
+							  <ul id="ddlTrimModeOptions" class="dropdown-menu">
+								<li><a href="#null">None *</a></li>
+								<li><a href="#null">Trim</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+					<tr><td class="optionLabel" title="Alpha values below this value are considered transparent.">Trim&nbsp;Threshold&nbsp;</td>
+						<td><div class="input-append" style="margin:0;"><input id="txtTrimThreshold" type="text" value="1" style="margin:0; width:115px;" /><span class="add-on"><i class="icon icon-resize-vertical"></i></span></td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+
+					<tr><td colspan="3"><div class="optionHeading">Advanced</div></td></tr>
+
+					<tr><td class="optionLabel" title="Extract animation frames?">Animated&nbsp;GIF&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlAnimatedGif">Use First Frame</span> <span class="caret"></span></a>
+							  <ul id="ddlAnimatedGifOptions" class="dropdown-menu">
+								<li><a href="#null">Use First Frame *</a></li>
+								<li><a href="#null">Extract Frames</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+					<tr><td class="optionLabel" title="Compress project file? Not human-readable.">ZIP&nbsp;Project&nbsp;</td>
+						<td><div class="btn-toolbar" style="margin:0;">
+							<div class="btn-group">
+							  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlCompressProject">No</span> <span class="caret"></span></a>
+							  <ul id="ddlCompressProjectOptions" class="dropdown-menu">
+								<li><a href="#null">Yes</a></li>
+								<li><a href="#null">No *</a></li>
+							  </ul>
+							</div>
+							</div>
+						</td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+
+<!--
+					<tr><td>&nbsp;</td>
+						<td><a class="btn btn-primary"><i class="icon icon-white icon-refresh"></i> Apply Changes</a></td>
+						<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+					</tr>
+-->
+					<tr><td colspan="3"><div><br/><br/><br/><br/></div></td></tr>
+
+				</table>
+			</div>
+			
+			<div id="divWorkspaceToolbar" class="divWorkspaceToolbar">
+				<div class="btn-toolbar" style="margin:0; ">
+				  <div class="btn-group">
+					<a id="cmdWorkspaceZoomOut" title="Zoom Out" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-zoom-out"></i></a>
+					<a id="cmdWorkspaceZoomIn"  title="Zoom In" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-zoom-in"></i></a>
+				  </div>
+				  <div class="btn-group">
+					<div class="input-append" style="margin:0;"><input id="txtWorkspaceZoom" type="text" value="100%" size="5" style="width:66px;" /><a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+					  <ul id="txtWorkspaceZoomOptions" class="dropdown-menu">
+						<li><a href="#null">1600.0%</a></li>
+						<li><a href="#null">&nbsp;800.0%</a></li>
+						<li><a href="#null">&nbsp;400.0%</a></li>
+						<li><a href="#null">&nbsp;200.0%</a></li>
+						<li><a href="#null">&nbsp;100.0% *</a></li>
+						<li><a href="#null">&nbsp;&nbsp;50.0%</a></li>
+						<li><a href="#null">&nbsp;&nbsp;25.0%</a></li>
+						<li><a href="#null">&nbsp;&nbsp;12.5%</a></li>
+					  </ul>
+					</div>
+				  </div>
+				  <div class="btn-group">
+					<a id="cmdWorkspaceFitWidth"  title="Fit Workspace Width"  href="#null" class="btn btn-inverse"><i class="icon icon-white icon-resize-horizontal"></i></a>
+					<a id="cmdWorkspaceFitHeight" title="Fit Workspace Height" href="#null" class="btn btn-inverse"><i class="icon icon-white icon-resize-vertical"></i></a>
+					<a id="cmdWorkspaceFitBoth"   title="Fit to Workspace"     href="#null" class="btn btn-inverse"><i class="icon icon-white icon-resize-full"></i></a>
+				  </div>
+				  <div class="btn-group pull-right" style="width:200px;">
+					<div class="progress progress-info" style="height:30px; background-color:#889; background-image:none;">
+					  <div id="progressBar" class="bar" style="width:0;"></div>
+					</div>
+				  </div>
+				</div>
+			</div>
+			
+			<div id="divWorkspace" class="divWorkspace">
+				<div class="divWorkspaceContainer">
+					<div id="divWorkspaceContainerCrop" class="divWorkspaceContainerCrop" style="width:32px; height:32px;">
+					</div>
+				</div>
+			</div>
+			
+			<div class="divSidebarRightToolbar">
+				<div id="radioRightNav" class="btn-group">
+				  <button id="tabSprites" type="button" class="btn active">Sprites
+					<span id="lblSpriteCount" class="badge">0</span>
+				  </button>
+				  <button id="tabConsole" type="button" class="btn">Console 
+				  	<span id="lblLogCountNothing" class="badge">0</span>
+				  	<span id="lblLogCountSUCCESS" class="badge badge-success" style="display:none;">0</span>
+				  	<span id="lblLogCountWARNING" class="badge badge-warning" style="display:none;">0</span>
+				  	<span id="lblLogCountERROR" class="badge badge-important" style="display:none;">0</span>
+				  	<span id="lblLogCountINFO" class="badge badge-info" style="display:none;">0</span>
+				  </button>
+				</div>
+			</div>
+			
+			<div class="divSidebarRight">
+				<div id="divSpritesList">
+					[No sprites selected.]
+				</div>
+				<div id="divConsole" style="display:none;">
+					[No messages.]
+				</div>
+			</div>
+		</div>
+
+		<div id="popupAboutApp" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAboutLabel" aria-hidden="true">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="popupAboutLabel">About FannyPack <span class="versionPlaceholder">&nbsp;</span></h3>
+		  </div>
+		  <div class="modal-body">
+			<p><a href="https://github.com/groundh0g/FannyPack" target="_blank">FannyPack</a> is a spritesheet and sprite font tool written in HTML &amp; JavaScript by <a href="https://github.com/groundh0g" target="_blank">@groundh0g</a>. The original concept and inspiration came from <a href="https://github.com/SebastianNette/PixiTexturePacker" target="_blank">PixiTexturePacker</a> by <a href="https://github.com/SebastianNette" target="_blank">@SebastianNette</a>, although none of his code was used on this project.</p>
+			<p>Sebastian, in turn, was inspired by the <em>excellent</em> <a href="http://www.codeandweb.com/texturepacker" target="_blank">TexturePacker</a> software, by <a href="https://github.com/CodeAndWeb" target="_blank">Andreas Löw</a>. I personally own a <a href="http://www.codeandweb.com/texturepacker" target="_blank">TexturePacker license</a>, and I highly recommend it to professional and hobbyist game developers alike.</p>
+			<p>I teach a game programming class for teens and tweens a couple of times each year. I didn't want to force the kids to buy a license for a tool that they might never use again. I came across Sebastian's app, and I was inspired to run a little further with the idea.</p>
+		  </div>
+		  <div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Dismiss</button>
+		  </div>
+		</div>		
+
+		<div id="popupAboutAuthor" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAboutLabel" aria-hidden="true">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="popupAboutLabel">About FannyPack <span class="headerSubtext"> ... the Author</span></h3>
+		  </div>
+		  <div class="modal-body">
+			<p>Joe Hall has been a professional software developer for nearly 25 years.</p>
+			<p>He worked as a programmer for Microsoft and IBM and he was the software architect for a Fortune 500 bank. He was the CTO of a ticket sales and servicing company and he started his own consulting company in 2006.</p>
+			<p>Joe makes his living writing desktop, web, and mobile device applications for businesses and governmental agencies, but game programming is his passion, and it was gaming that got him into programming in the first place.</p>
+			<p>He was a member of the original Xbox team and he joined the Visual Studio .NET team just after the Xbox was released in 2001. Joe is the author of <a href="http://www.amazon.com/XNA-Game-Studio-Express-Developing/dp/1598633686/ref=as_sl_pc_tf_mfw?&linkCode=wey&tag=coll06-20" target="_blank"><em>XNA Game Studio Express: Developing Games for Windows and the Xbox 360</em></a>, which was published in 2007.</p>
+			<p>Joe also <a href="http://groundh0g.deviantart.com/" target="_blank">dabbles</a> in sketching, cartooning, and creating 3D models. When you see his artistic creations, you'll understand why he makes his living as a programmer.</p>
+			<p>
+				<a href="https://github.com/groundh0g" target="_blank"><img src="./assets/img/social/Github.png" /></a> 
+				<a href="https://twitter.com/groundh0g" target="_blank"><img src="./assets/img/social/Twitter.png" /></a>  
+				<a href="https://www.facebook.com/groundh0g" target="_blank"><img src="./assets/img/social/Facebook.png" /></a> 
+				<a href="https://plus.google.com/+JosephHall_groundh0g/posts" target="_blank"><img src="./assets/img/social/GooglePlus.png" /></a>
+			</p>
+		  </div>
+		  <div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Dismiss</button>
+		  </div>
+		</div>		
+
+		<div id="popupAboutModules" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAboutLabel" aria-hidden="true">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="popupAboutLabel">About FannyPack <span class="headerSubtext"> ... the OSS Modules</span></h3>
+		  </div>
+		  <div class="modal-body">
+			<p>FannyPack uses the following opensource and public domain projects:</p>
+				<ul>
+					<li><a href="https://github.com/mathiasbynens/base64" target="_blank">base64</a> - a base64 encoder / decoder, compatible with atob() and btoa()</li>
+					<li><a href="https://github.com/eligrey/Blob.js" target="_blank">Blob</a> - W3C Blob interface for browsers that do not support it</li>
+					<li><a href="http://getbootstrap.com/2.3.2/index.html" target="_blank">Bootstrap</a> - a framework for faster and easier web development</li>
+					<li><a href="https://code.google.com/p/crypto-js/#HMAC" target="_blank">crypto-js</a> - an implementation of SHA256 and MD5 hashing</li>
+					<li><a href="https://github.com/eligrey/FileSaver.js" target="_blank">FileSaver</a> - W3C FileSaver interface for browsers that do not support it</li>
+					<li><a href="http://code.jquery.com/jquery-1.8.3.js" target="_blank">jQuery</a> - a fast, small, and feature-rich JavaScript library</li>
+				<!--<li><a href="https://github.com/louisremi/jquery.transform.js" target="_blank">jquery.transform2d</a> - a cross browser transform property via css() for jQuery</li>-->
+					<li><a href="https://github.com/douglascrockford/JSON-js" target="_blank">json2</a> - JSON feature for browsers that do not support it</li>
+					<li><a href="https://github.com/Stuk/jszip" target="_blank">jszip</a> - create, read, and edit .zip files with Javascript</li>
+					<li><a href="https://github.com/groundh0g/FannyPack/blob/master/assets/js/app/util/libgif.js" target="_blank">libgif.js</a> - a modified version of <a href="https://github.com/buzzfeed/libgif-js" target="_blank">@buzzfeed's &amp; @shachaf's GIF parser</a></li>
+					<li><a href="https://github.com/groundh0g/FannyPack/blob/master/assets/js/app/util/libgifparser.js" target="_blank">libgifparser.js</a> - my lib, based on <a href="https://github.com/buzzfeed/libgif-js" target="_blank">@buzzfeed's SuperGIF</a></li>
+					<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys" target="_blank">object-keys.js</a> - Object.keys for browsers that do not support it</li>
+					<li><a href="https://github.com/groundh0g/FannyPack/blob/master/assets/js/app/util/string-helpers.js" target="_blank">string-helpers.js</a> - contains, endsWith, ... for browsers without support</li>
+					<li><a href="http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/21963136#21963136" target="_blank">UUID</a> - a JavaScript module to create GUIDs</li>
+				</ul>
+			</p>
+		  </div>
+		  <div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Dismiss</button>
+		  </div>
+		</div>		
+
+		<div id="popupAboutLicense" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAboutLabel" aria-hidden="true">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="popupAboutLabel">About FannyPack <span class="headerSubtext"> ... the License [<a href="http://choosealicense.com/licenses/mit/" target="_blank">MIT</a>]</span></h3>
+		  </div>
+		  <div class="modal-body">
+			<p>Copyright (c) 2014 Joseph Hall (<a href="https://github.com/groundh0g" target="_blank">@groundh0g</a>)</p>
+
+			<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+			of this software and associated documentation files (the "Software"), to deal
+			in the Software without restriction, including without limitation the rights
+			to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+			copies of the Software, and to permit persons to whom the Software is
+			furnished to do so, subject to the following conditions:</p>
+
+			<p>The above copyright notice and this permission notice shall be included in all
+			copies or substantial portions of the Software.</p>
+
+			<p><strong>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+			IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+			FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+			AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+			LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+			OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+			SOFTWARE.</strong></p>
+		  </div>
+		  <div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Dismiss</button>
+		  </div>
+		</div>		
+
+		<INPUT id="uploadSprites" type="file" name="submitfile" multiple="multiple" style="display:none;" onchange="return ProcessSpriteAdd(this.files);" />
+		<INPUT id="uploadProject" type="file" name="submitfile" style="display:none;" onchange="return ProcessProjectOpen(this.files);" />
+
+		<div id="popupFileModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAddSpritesLabel" aria-hidden="true">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="popupFileModalTitle">Add Sprite(s)</h3>
+		  </div>
+		  <div class="modal-body">
+		    <div class="dropzone">
+		    	<span id="popupFileModalDropLabel" style="text-decoration:line-through;">Drag and drop image files here, or ...</span>
+		    	<br/><br/><br/>
+		    	<a id="cmdUploadProject" class="btn btn-primary" href="#null">Click to Upload</a>
+		    	<a id="cmdUploadSprites" class="btn btn-primary" href="#null">Click to Upload</a>
+		    	<br/><br/><br/>
+		    	<span id="popupFileModalDropInfo">No file(s) selected.</span>
+		    </div>
+		  </div>
+		  <div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			<button class="btn btn-primary" aria-hidden="true">OK</button>
+		  </div>
+		</div>		
+
+		<!-- libs -->
+		<script type="text/javascript" src="assets/js/jquery-1.8.3.js"></script>
+		<script type="text/javascript" src="assets/js/bootstrap.js"></script>
+		
+		<!-- utils -->
+		<script type="text/javascript" src="assets/js/app/util/base64.js"></script>
+		<script type="text/javascript" src="assets/js/app/util/hmac-md5.js"></script>
+		<script type="text/javascript" src="assets/js/app/util/hmac-sha256.js"></script>
+		<script type="text/javascript" src="assets/js/app/util/object-keys.js"></script>
+		<script type="text/javascript" src="assets/js/app/util/param-helpers.js"></script>
+		<script type="text/javascript" src="assets/js/app/util/string-helpers.js"></script>
+		<script type="text/javascript" src="assets/js/app/util/guid.js"></script>
+		<script type="text/javascript" src="assets/js/app/util/json2.js"></script>
+		<script type="text/javascript" src="assets/js/app/util/jszip.js"></script>
+		<script type="text/javascript" src="assets/js/app/util/Blob.js"></script>
+		<script type="text/javascript" src="assets/js/app/util/FileSaver.js"></script>
+		<script type="text/javascript" src="assets/js/app/util/libgif.js"></script>
+		<script type="text/javascript" src="assets/js/app/util/libgifparser.js"></script>
+		
+		<!-- objs -->
+		<script type="text/javascript" src="assets/js/app/sheets/image-item.js"></script>
+		<script type="text/javascript" src="assets/js/app/sheets/options.js"></script>
+		<script type="text/javascript" src="assets/js/app/version.js"></script>
+	
+		<!-- packers -->
+		<script type="text/javascript" src="assets/js/app/sheets/packers/_base.js"></script>
+		<script type="text/javascript" src="assets/js/app/sheets/packers/basic.js"></script>
+		<script type="text/javascript" src="assets/js/app/sheets/packers/joe.js"></script>
+		
+		<!-- exporters -->
+		<script type="text/javascript" src="assets/js/app/sheets/exporters/_base.js"></script>
+		<script type="text/javascript" src="assets/js/app/sheets/exporters/exportJson.js"></script>
+		<script type="text/javascript" src="assets/js/app/sheets/exporters/exportXml.js"></script>
+		
+		<!-- page -->
+		<script type="text/javascript" src="assets/js/app/sheets/sheets.js"></script>
+		<script type="text/javascript" src="assets/js/app/sheets/sheets-events.js"></script>
+		
+	</body>
+</html>
