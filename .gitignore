@@ -1,0 +1,11 @@
+## Ignore Jekyll-generated files
+_site/
+
+## Ignore posts that aren't ready for primetime
+_drafts/
+
+## Ignore Gemfile lock?
+[Gg]emfile.lock
+
+## Mac file? Why is that even showing up?
+.DS_Store
