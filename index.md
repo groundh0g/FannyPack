@@ -1,7 +1,7 @@
 ---
 layout: page
 title: FannyPack
-tagline: a suite of #gamedev tools
+tagline: a suite of gamedev tools
 ---
 {% include JB/setup %}
 
