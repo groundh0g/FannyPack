@@ -77,7 +77,7 @@ file system. Project files are loaded from and saved to your computer. Published
 generated on and saved to your computer.</p>
 
 <p>Your data is never transmitted to the server. I don't need to see it, and I don't need to pay
-for dedicated servers that churn through data or bandwidth for that data to come and leave 
+for dedicated servers that churn through data or bandwidth for that data to travel to and from 
 those servers.</p>
 
 <p>In fact, if you really want to be cautious (*cough* *cough* tinfoil hat *cough*), you
