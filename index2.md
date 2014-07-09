@@ -14,7 +14,31 @@ better products out there, but I wanted my students to have access to free tools
 access to the source code for those tools. I also didn't want the tools to look like poop that was 
 designed in the 80's.
 
-Images go here ... 
+<table border="0" cellpadding="0" cellspacing="0" style="width:100%">
+	<tr>
+		<td style="width:33%; text-align:center; white-space:nowrap;">
+![TileEditor]({{BASE_PATH}}assets/img/index/iconTileEditor.png "Tile Editor is Coming Soon.")
+A tool that manages the placement of a fixed <br/>
+set of tiled images. By painting these tiles <br/>
+into place, entire game worlds can be made. <br/>
+<a id="cmdShowFeaturesTileEditor" href="#null" class="btn btn-default disabled">Show Features</a>
+		</td>
+		<td style="width:33%; text-align:center; white-space:nowrap;">
+![TileEditor]({{BASE_PATH}}assets/img/index/iconTileEditor.png "Tile Editor is Coming Soon.")
+A tool that manages the placement of a fixed <br/>
+set of tiled images. By painting these tiles <br/>
+into place, entire game worlds can be made. <br/>
+<a id="cmdShowFeaturesTileEditor" href="#null" class="btn btn-default disabled">Show Features</a>
+		</td>
+		<td style="width:33%; text-align:center; white-space:nowrap;">
+![TileEditor]({{BASE_PATH}}assets/img/index/iconTileEditor.png "Tile Editor is Coming Soon.")
+A tool that manages the placement of a fixed <br/>
+set of tiled images. By painting these tiles <br/>
+into place, entire game worlds can be made. <br/>
+<a id="cmdShowFeaturesTileEditor" href="#null" class="btn btn-default disabled">Show Features</a>
+		</td>
+	</tr>
+</table>
 
 ## What Makes Fanny Pack So Special?
 
