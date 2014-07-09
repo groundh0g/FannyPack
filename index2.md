@@ -17,25 +17,25 @@ designed in the 80's.
 <table border="0" cellpadding="0" cellspacing="0" style="width:100%">
 	<tr>
 		<td style="width:33%; text-align:center; white-space:nowrap;">
-![TileEditor]({{BASE_PATH}}assets/img/index/iconTileEditor.png "Tile Editor is Coming Soon.")
-A tool that manages the placement of a fixed <br/>
-set of tiled images. By painting these tiles <br/>
-into place, entire game worlds can be made. <br/>
-<a id="cmdShowFeaturesTileEditor" href="#null" class="btn btn-default disabled">Show Features</a>
+			<img src="assets/img/index/iconSpriteSheets.png" alt="Sprite Sheets"/>
+			A tool that manages the placement of a fixed <br/>
+			set of tiled images. By painting these tiles <br/>
+			into place, entire game worlds can be made. <br/>
+			<a id="cmdShowFeaturesTileEditor" href="#null" class="btn btn-default disabled">Show Features</a>
 		</td>
 		<td style="width:33%; text-align:center; white-space:nowrap;">
-![TileEditor]({{BASE_PATH}}assets/img/index/iconTileEditor.png "Tile Editor is Coming Soon.")
-A tool that manages the placement of a fixed <br/>
-set of tiled images. By painting these tiles <br/>
-into place, entire game worlds can be made. <br/>
-<a id="cmdShowFeaturesTileEditor" href="#null" class="btn btn-default disabled">Show Features</a>
+			<img src="assets/img/index/iconSpriteSheets.png" alt="Sprite Sheets"/>
+			A tool that manages the placement of a fixed <br/>
+			set of tiled images. By painting these tiles <br/>
+			into place, entire game worlds can be made. <br/>
+			<a id="cmdShowFeaturesTileEditor" href="#null" class="btn btn-default disabled">Show Features</a>
 		</td>
 		<td style="width:33%; text-align:center; white-space:nowrap;">
-![TileEditor]({{BASE_PATH}}assets/img/index/iconTileEditor.png "Tile Editor is Coming Soon.")
-A tool that manages the placement of a fixed <br/>
-set of tiled images. By painting these tiles <br/>
-into place, entire game worlds can be made. <br/>
-<a id="cmdShowFeaturesTileEditor" href="#null" class="btn btn-default disabled">Show Features</a>
+			<img src="assets/img/index/iconSpriteSheets.png" alt="Sprite Sheets"/>
+			A tool that manages the placement of a fixed <br/>
+			set of tiled images. By painting these tiles <br/>
+			into place, entire game worlds can be made. <br/>
+			<a id="cmdShowFeaturesTileEditor" href="#null" class="btn btn-default disabled">Show Features</a>
 		</td>
 	</tr>
 </table>
