@@ -76,6 +76,12 @@ THE SOFTWARE.
 			  </li>
 			</ul>
 			<ul class="nav pull-right">
+			  {% if page.pagename == 'blog' %}<li class="active">{% else %}<li class="">{% endif %}
+				<a href="./help.html">Blog</a>
+			  </li>
+			  <li class="">
+				<a href="https://github.com/groundh0g/FannyPack/issues" target="_blank">Report Bugs</a>
+			  </li>
 			  {% if page.pagename == 'help' %}<li class="active">{% else %}<li class="">{% endif %}
 				<a href="./help.html">Help</a>
 			  </li>
@@ -101,9 +107,10 @@ THE SOFTWARE.
       <hr>
       
       <footer>
-        <p>&copy; {{ site.time | date: '%Y' }} {{ site.author.name }}
-          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
-          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+        <p> <a href="#popupAboutLicense" role="button" data-toggle="modal">&copy; {{ site.time | date: '%Y' }}</a>
+        	<a href="#popupAboutAuthor" role="button" data-toggle="modal">{{ site.author.name }}</a>
+          	with help from 
+          	<a href="#popupAboutLicense" role="button" data-toggle="modal">Lots of Folks</a>.
         </p>
       </footer>
 
@@ -145,6 +152,8 @@ THE SOFTWARE.
 				<li><a href="http://getbootstrap.com/2.3.2/index.html" target="_blank">Bootstrap</a> - a framework for faster and easier web development</li>
 				<li><a href="https://code.google.com/p/crypto-js/#HMAC" target="_blank">crypto-js</a> - an implementation of SHA256 and MD5 hashing</li>
 				<li><a href="https://github.com/eligrey/FileSaver.js" target="_blank">FileSaver</a> - W3C FileSaver interface for browsers that do not support it</li>
+				<li><a href="https://pages.github.com/" target="_blank">GitHub Pages</a> - websites for you and your projects</li>
+				<li><a href="http://jekyllbootstrap.com" target="_blank">Jekyll Bootstrap</a> - The definitive Jekyll blogging framework</li>
 				<li><a href="http://code.jquery.com/jquery-1.8.3.js" target="_blank">jQuery</a> - a fast, small, and feature-rich JavaScript library</li>
 			<!--<li><a href="https://github.com/louisremi/jquery.transform.js" target="_blank">jquery.transform2d</a> - a cross browser transform property via css() for jQuery</li>-->
 				<li><a href="https://github.com/douglascrockford/JSON-js" target="_blank">json2</a> - JSON feature for browsers that do not support it</li>

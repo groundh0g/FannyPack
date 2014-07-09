@@ -14,7 +14,7 @@ better products out there, but I wanted my students to have access to free tools
 access to the source code for those tools. I also didn't want the tools to look like poop that was 
 designed in the 80's.
 
-<table border="0" cellpadding="0" cellspacing="0" style="width:600px; margin-left:20px;">
+<table border="0" cellpadding="0" cellspacing="0" style="width:600px; margin-left:30px;">
 	<tr>
 		<td style="width:300px;">
 			<img src="assets/img/index/iconSpriteSheets.png" alt="Sprite Sheets"/>
@@ -57,16 +57,40 @@ It's certainly not its features. The commercial offerings provide options and fu
 aren't (yet) supported in this suite of tools. The biggest benefits of Fanny Pack are that it's 
 open source, and that it doesn't require you to install anything. Everything runs in your browser.
 
-## Say What?
+### Everything Runs in Your Browser
 
-You read that right. Everything runs in your browser. The technology that drives Fanny Pack is 
+>You read that right. Everything runs in your browser. The technology that drives Fanny Pack is 
 vanilla HTML5 and JavaScript. That means that you can use the app from any operating system, 
 using any modern web browser. 
 
-You don't have to be an administrator on your computer. You don't have to worry about updates. 
+>You don't have to be an administrator on your computer. You don't have to worry about updates. 
 
-At least, that's the idea. I've been developing on my MacBook Pro, using Google's Chrome web 
+>At least, that's the idea. I've been developing on my MacBook Pro, using Google's Chrome web 
 browser. I'll be doing more extensive testing in the near future.
+
+### Your Assets, on Your Computer
+
+>There is no server component to FannyPack. Assets are loaded into your browser from your local
+file system. Project files are loaded from and saved to your computer. Published resources are
+generated on and saved to your computer.
+
+>Your data is never transmitted to the server. I don't need to see it, and I don't need to pay
+for dedicated servers that churn through data or bandwidth for that data to come and leave 
+those servers.
+
+>In fact, if you really want to be cautious \(\*cough\* \*cough\* tinfoil hat \*cough\*\), you
+can download the static HTML and Javascript and run them on your computer - even without an
+internet connection.
+
+### Stop, Collaborate, and Listen! \(Share Your Work\)
+
+>Project files and published resources are generated as self-contained plaintext or compressed 
+\(ZIP DEFLATE\) files. Just share the file via email, DropBox, or however your normally 
+share files with teammates. 
+
+>Resources are embedded in the project file, not linked. FannyPack embeds the source image 
+data and configured options. Once assets have been added to the project, they're never 
+referenced from your filesystem again. Share away.
 
 ## What's Up with the Name?
 
