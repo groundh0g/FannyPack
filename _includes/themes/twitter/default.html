@@ -62,7 +62,7 @@ THE SOFTWARE.
   <body>
     <div class="navbar">
       <div class="navbar-inner">
-        <div class="container-narrow22">
+        <div class="container-narrow22" style="margin-left:20px; margin-right:20px;>
 			<a class="brand" href="{{ HOME_PATH }}">{{ site.title }}</a>
 			<ul class="nav">
 			  {% if page.pagename == 'sprites' %}<li class="active">{% else %}<li class="">{% endif %}
@@ -75,13 +75,6 @@ THE SOFTWARE.
 				<a href="./tiles.html">Tile Editor</a>
 			  </li>
 			</ul>
-<!--
-          <ul class="nav">
-            {% assign pages_list = site.pages %}
-            {% assign group = 'navigation' %}
-            {% include JB/pages_list %}
-          </ul>
--->
 			<ul class="nav pull-right">
 			  {% if page.pagename == 'help' %}<li class="active">{% else %}<li class="">{% endif %}
 				<a href="./help.html">Help</a>
