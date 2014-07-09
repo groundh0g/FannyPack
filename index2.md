@@ -57,42 +57,42 @@ It's certainly not its features. The commercial offerings provide options and fu
 aren't (yet) supported in this suite of tools. The biggest benefits of Fanny Pack are that it's 
 open source, and that it doesn't require you to install anything. Everything runs in your browser.
 
-<div class="noBullets">
+<div style="margin-left:30px;">
 
-> ### Everything Runs in Your Browser
+<h3>Everything Runs in Your Browser</h3>
 
->You read that right. Everything runs in your browser. The technology that drives Fanny Pack is 
+<p>You read that right. Everything runs in your browser. The technology that drives Fanny Pack is 
 vanilla HTML5 and JavaScript. That means that you can use the app from any operating system, 
-using any modern web browser. 
+using any modern web browser.</p>
 
->You don't have to be an administrator on your computer. You don't have to worry about updates. 
+<p>You don't have to be an administrator on your computer. You don't have to worry about updates.</p>
 
->At least, that's the idea. I've been developing on my MacBook Pro, using Google's Chrome web 
-browser. I'll be doing more extensive testing in the near future.
+<p>At least, that's the idea. I've been developing on my MacBook Pro, using Google's Chrome web 
+browser. I'll be doing more extensive testing in the near future.</p>
 
-> ### Your Assets, on Your Computer
+<h3>Your Assets, on Your Computer</h3>
 
->There is no server component to FannyPack. Assets are loaded into your browser from your local
+<p>There is no server component to FannyPack. Assets are loaded into your browser from your local
 file system. Project files are loaded from and saved to your computer. Published resources are
-generated on and saved to your computer.
+generated on and saved to your computer.</p>
 
->Your data is never transmitted to the server. I don't need to see it, and I don't need to pay
+<p>Your data is never transmitted to the server. I don't need to see it, and I don't need to pay
 for dedicated servers that churn through data or bandwidth for that data to come and leave 
-those servers.
+those servers.</p>
 
->In fact, if you really want to be cautious \(\*cough\* \*cough\* tinfoil hat \*cough\*\), you
+<p>In fact, if you really want to be cautious \(\*cough\* \*cough\* tinfoil hat \*cough\*\), you
 can download the static HTML and Javascript and run them on your computer - even without an
-internet connection.
+internet connection.</p>
 
-> ### Stop, Collaborate, and Listen! \(Share Your Work\)
+<h3>Stop, Collaborate, and Listen! \(Share Your Work\)</h3>
 
->Project files and published resources are generated as self-contained plaintext or compressed 
+<p>Project files and published resources are generated as self-contained plaintext or compressed 
 \(ZIP DEFLATE\) files. Just share the file via email, DropBox, or however your normally 
-share files with teammates. 
+share files with teammates.</p>
 
->Resources are embedded in the project file, not linked. FannyPack embeds the source image 
+<p>Resources are embedded in the project file, not linked. FannyPack embeds the source image 
 data and configured options. Once assets have been added to the project, they're never 
-referenced from your filesystem again. Share away.
+referenced from your filesystem again. Share away.</p>
 
 </div>
 
