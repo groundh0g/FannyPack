@@ -14,7 +14,7 @@ better products out there, but I wanted my students to have access to free tools
 access to the source code for those tools. I also didn't want the tools to look like poop that was 
 designed in the 80's.
 
-<table border="0" cellpadding="0" cellspacing="0" style="width:100%;">
+<table border="0" cellpadding="0" cellspacing="0" style="width:600px; margin-left:20px;">
 	<tr>
 		<td style="width:300px;">
 			<img src="assets/img/index/iconSpriteSheets.png" alt="Sprite Sheets"/>
