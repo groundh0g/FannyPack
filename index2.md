@@ -80,14 +80,14 @@ generated on and saved to your computer.</p>
 for dedicated servers that churn through data or bandwidth for that data to come and leave 
 those servers.</p>
 
-<p>In fact, if you really want to be cautious \(\*cough\* \*cough\* tinfoil hat \*cough\*\), you
+<p>In fact, if you really want to be cautious (*cough* *cough* tinfoil hat *cough*), you
 can download the static HTML and Javascript and run them on your computer - even without an
 internet connection.</p>
 
-<h3>Stop, Collaborate, and Listen! \(Share Your Work\)</h3>
+<h3>Stop, Collaborate, and Listen! (Share Your Work)</h3>
 
 <p>Project files and published resources are generated as self-contained plaintext or compressed 
-\(ZIP DEFLATE\) files. Just share the file via email, DropBox, or however your normally 
+(ZIP DEFLATE) files. Just share the file via email, DropBox, or however your normally 
 share files with teammates.</p>
 
 <p>Resources are embedded in the project file, not linked. FannyPack embeds the source image 
