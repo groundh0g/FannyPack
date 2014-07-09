@@ -100,7 +100,8 @@ referenced from your filesystem again. Share away.</p>
 
 Fanny Pack was initially intended to simply be a sprite sheet packer. Texture Packer (by @CodeAndWeb) 
 was the inspiration, so I chose a name that included "pack", but was less likely to get me sued. 
-
 Since its inception, though, the project has grown to become a suite of tools. I decided to keep the 
-name. It's a geeky representation of a utility belt. (Think Schneider or Batman.) Besides, I like it.
+name. It's a geeky representation of a utility belt. (Think Schneider or Batman.) 
+
+Besides, I like it.
 
