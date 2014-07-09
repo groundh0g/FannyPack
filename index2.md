@@ -1,46 +1,43 @@
 ---
 layout: page
-title: Hello World!
-tagline: Supporting tagline
+title: FannyPack
+tagline: a suite of &#35;gamedev tools
+description: FannyPack is a suite of &#35;gamedev tools.
+pagename: index
 ---
 {% include JB/setup %}
 
-Read [Jekyll Quick Start](http://jekyllbootstrap.com/usage/jekyll-quick-start.html)
+## What is Fanny Pack?
 
-Complete usage and documentation available at: [Jekyll Bootstrap](http://jekyllbootstrap.com)
+Fanny Pack is a suite of tools that I developed for my game programming students. There are certainly 
+better products out there, but I wanted my students to have access to free tools and, more importantly, 
+access to the source code for those tools. I also didn't want the tools to look like poop that was 
+designed in the 80's.
 
-## Update Author Attributes
+Images go here ... 
 
-In `_config.yml` remember to specify your own data:
-    
-    title : My Blog =)
-    
-    author :
-      name : Name Lastname
-      email : blah@email.test
-      github : username
-      twitter : username
+## What Makes Fanny Pack So Special?
 
-The theme should reference these variables whenever needed.
-    
-## Sample Posts
+It's certainly not its features. The commercial offerings provide options and functionality that 
+aren't (yet) supported in this suite of tools. The biggest benefits of Fanny Pack are that it's 
+open source, and that it doesn't require you to install anything. Everything runs in your browser.
 
-This blog contains sample posts which help stage pages and blog data.
-When you don't need the samples anymore just delete the `_posts/core-samples` folder.
+## What? What?
 
-    $ rm -rf _posts/core-samples
+You read that right. Everything runs in your browser. The technology that drives Fanny Pack is 
+vanilla HTML5 and JavaScript. That means that you can use the app from any operating system, 
+using any modern web browser. 
 
-Here's a sample "posts list".
+You don't have to be an administrator on your computer. You don't have to worry about updates. 
 
-<ul class="posts">
-  {% for post in site.posts %}
-    <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ BASE_PATH }}{{ post.url }}">{{ post.title }}</a></li>
-  {% endfor %}
-</ul>
+At least, that's the idea. I've been developing on my MacBook Pro, using Google's Chrome web 
+browser. I'll be doing more extensive testing in the near future.
 
-## To-Do
+## What's Up with the Name?
 
-This theme is still unfinished. If you'd like to be added as a contributor, [please fork](http://github.com/plusjade/jekyll-bootstrap)!
-We need to clean up the themes, make theme usage guides with theme-specific markup examples.
+Fanny Pack was initially intended to simply be a sprite sheet packer. Texture Packer (by @CodeAndWeb) 
+was the inspiration, so I chose a name that included "pack", but was less likely to get me sued. 
 
+Since its inception, though, the project has grown to become a suite of tools. I decided to keep the 
+name. It's a geeky representation of a utility belt. (Think Schneider or Batman.) Besides, I like it.
 

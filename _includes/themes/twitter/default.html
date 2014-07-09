@@ -1,4 +1,25 @@
 <!DOCTYPE html>
+<!-- 
+Copyright (c) 2014 Joseph B. Hall [@groundh0g]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -17,8 +38,13 @@
     <!-- Le styles -->
     <link href="{{ ASSET_PATH }}/bootstrap/css/bootstrap.2.2.2.min.css" rel="stylesheet">
     <link href="{{ ASSET_PATH }}/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    
+    <!-- Page-Specific Styles -->
+    {% if page.pagename %}<link href="assets/css/{{ page.pagename}}.css" rel="stylesheet">{% endif %}
+
 
     <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.png">
   <!-- Update these with your own images
     <link rel="shortcut icon" href="images/favicon.ico">
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
@@ -36,12 +62,38 @@
     <div class="navbar">
       <div class="navbar-inner">
         <div class="container-narrow">
-          <a class="brand" href="{{ HOME_PATH }}">{{ site.title }}</a>
+			<a class="brand" href="{{ HOME_PATH }}">{{ site.title }}</a>
+			<ul class="nav">
+			  {% if page.pagename == 'sprites' %}<li class="active">{% else %}<li class="">{% endif %}
+				<a href="./sheets.html">Sprite Sheets</a>
+			  </li>
+			  {% if page.pagename == 'fonts' %}<li class="active">{% else %}<li class="">{% endif %}
+				<a href="./fonts.html">Sprite Fonts</a>
+			  </li>
+			  {% if page.pagename == 'tiles' %}<li class="active">{% else %}<li class="">{% endif %}
+				<a href="./tiles.html">Tile Editor</a>
+			  </li>
+			</ul>
+			<ul class="nav pull-right">
+			  {% if page.pagename == 'documentation' %}<li class="active">{% else %}<li class="">{% endif %}
+				<a href="./documentation.html">Documentation</a>
+			  </li>
+			  <li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">About<b class="caret"></b></a>
+				<ul class="dropdown-menu">
+					<li><a href="#popupAboutAuthor" role="button" data-toggle="modal">The Author</a></li>
+					<li><a href="#popupAboutModules" role="button" data-toggle="modal">The OSS Modules</a></li>
+					<li><a href="#popupAboutLicense" role="button" data-toggle="modal">The License [MIT]</a></li>
+				</ul>
+			  </li>
+			</ul>
+<!--
           <ul class="nav">
             {% assign pages_list = site.pages %}
             {% assign group = 'navigation' %}
             {% include JB/pages_list %}
           </ul>
+-->
         </div>
       </div>
     </div>
