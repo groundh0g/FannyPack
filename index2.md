@@ -19,7 +19,7 @@ designed in the 80's.
 		<td style="width:250px;">
 			<img src="assets/img/index/iconSpriteSheets.png" alt="Sprite Sheets"/>
 		</td>
-		<td style="width:100%; text-align:center; white-space:nowrap;">
+		<td style="text-align:center; white-space:nowrap;">
 			A tool that manages the placement of a fixed <br/>
 			set of tiled images. By painting these tiles <br/>
 			into place, entire game worlds can be made. <br/><br/>
@@ -29,7 +29,7 @@ designed in the 80's.
 		<td style="width:250px;">
 			<img src="assets/img/index/iconSpriteSheets.png" alt="Sprite Sheets"/>
 		</td>
-		<td style="width:100%; text-align:center; white-space:nowrap;">
+		<td style="text-align:center; white-space:nowrap;">
 			A tool that manages the placement of a fixed <br/>
 			set of tiled images. By painting these tiles <br/>
 			into place, entire game worlds can be made. <br/><br/>
@@ -39,7 +39,7 @@ designed in the 80's.
 		<td style="width:250px;">
 			<img src="assets/img/index/iconSpriteSheets.png" alt="Sprite Sheets"/>
 		</td>
-		<td style="width:100%; text-align:center; white-space:nowrap;">
+		<td style="text-align:center; white-space:nowrap;">
 			A tool that manages the placement of a fixed <br/>
 			set of tiled images. By painting these tiles <br/>
 			into place, entire game worlds can be made. <br/><br/>
