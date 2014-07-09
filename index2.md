@@ -58,6 +58,7 @@ aren't (yet) supported in this suite of tools. The biggest benefits of Fanny Pac
 open source, and that it doesn't require you to install anything. Everything runs in your browser.
 
 <div class="noBullets">
+
 > ### Everything Runs in Your Browser
 
 >You read that right. Everything runs in your browser. The technology that drives Fanny Pack is 
@@ -92,7 +93,9 @@ share files with teammates.
 >Resources are embedded in the project file, not linked. FannyPack embeds the source image 
 data and configured options. Once assets have been added to the project, they're never 
 referenced from your filesystem again. Share away.
+
 </div>
+
 ## What's Up with the Name?
 
 Fanny Pack was initially intended to simply be a sprite sheet packer. Texture Packer (by @CodeAndWeb) 
