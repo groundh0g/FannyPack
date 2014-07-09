@@ -22,7 +22,7 @@ It's certainly not its features. The commercial offerings provide options and fu
 aren't (yet) supported in this suite of tools. The biggest benefits of Fanny Pack are that it's 
 open source, and that it doesn't require you to install anything. Everything runs in your browser.
 
-## What? What?
+## Say What?
 
 You read that right. Everything runs in your browser. The technology that drives Fanny Pack is 
 vanilla HTML5 and JavaScript. That means that you can use the app from any operating system, 
