@@ -9,7 +9,7 @@ pygments: true
 # so be sure to set them if your theme uses them.
 #
 title : FannyPack
-tagline: a suite of #gamedev tools
+tagline: a suite of &#35;gamedev tools
 author :
   name : Joseph Hall
   email : moreoncode@codetopia.com
