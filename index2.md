@@ -16,34 +16,37 @@ designed in the 80's.
 
 <table border="0" cellpadding="0" cellspacing="0" style="width:100%;">
 	<tr>
-		<td style="width:250px;">
+		<td style="width:300px;">
 			<img src="assets/img/index/iconSpriteSheets.png" alt="Sprite Sheets"/>
 		</td>
 		<td style="text-align:center; white-space:nowrap;">
-			A tool that manages the placement of a fixed <br/>
-			set of tiled images. By painting these tiles <br/>
-			into place, entire game worlds can be made. <br/><br/>
-			<a id="cmdShowFeaturesTileEditor" href="#null" class="btn btn-default disabled">Show Features</a>
+			<p>A tool to merge several art assets (objects <br/>
+			   within the game) into a single image, saving <br/>
+			   memory and reducing CPU-to-GPU chatter.
+			</p>
+			<p><a id="cmdShowFeaturesSheets" href="#null" class="btn btn-primary">Show Features</a></p>
 		</td>
 	</tr><tr>
-		<td style="width:250px;">
-			<img src="assets/img/index/iconSpriteSheets.png" alt="Sprite Sheets"/>
+		<td style="width:300px;">
+			<img src="assets/img/index/iconSpriteFonts.png" alt="Sprite Sheets"/>
 		</td>
 		<td style="text-align:center; white-space:nowrap;">
-			A tool that manages the placement of a fixed <br/>
-			set of tiled images. By painting these tiles <br/>
-			into place, entire game worlds can be made. <br/><br/>
-			<a id="cmdShowFeaturesTileEditor" href="#null" class="btn btn-default disabled">Show Features</a>
+			<p>A tool to convert public domain TTF fonts <br/>
+			   into bitmap fonts - a format that is more <br/>
+			   easily consumed by game engines.
+			</p>
+			<p><a id="cmdShowFeaturesFonts" href="#null" class="btn btn-default disabled">Show Features</a></p>
 		</td>
 	</tr><tr>
-		<td style="width:250px;">
-			<img src="assets/img/index/iconSpriteSheets.png" alt="Sprite Sheets"/>
+		<td style="width:300px;">
+			<img src="assets/img/index/iconTileEditor.png" alt="Sprite Sheets"/>
 		</td>
 		<td style="text-align:center; white-space:nowrap;">
-			A tool that manages the placement of a fixed <br/>
-			set of tiled images. By painting these tiles <br/>
-			into place, entire game worlds can be made. <br/><br/>
-			<a id="cmdShowFeaturesTileEditor" href="#null" class="btn btn-default disabled">Show Features</a>
+			<p>A tool that manages the placement of a fixed <br/>
+			   set of tiled images. By painting these tiles <br/>
+			   into place, entire game worlds can be made.
+			</p>
+			<p><a id="cmdShowFeaturesTileEditor" href="#null" class="btn btn-default disabled">Show Features</a></p>
 		</td>
 	</tr>
 </table>
