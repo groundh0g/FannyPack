@@ -73,7 +73,7 @@ function BasePacker(name, isDefault) {
 		var fnComplete = completeCallback || self.DoPack_CompleteCallback || doNothing;
 		var fnStatus   = statusCallback   || self.DoPack_StatusCallback   || doNothing;
 		
-		if(images && images.length) {
+		if(images && Object.keys(images).length) {
 			ImageItem.reloadImagePoolFrames(images, function() {
 				packCallback(images, options, fnComplete, fnStatus);
 			});
@@ -95,15 +95,22 @@ function BasePacker(name, isDefault) {
 			options.doAnimatedGifExpand();
 
 		// count frames to process; order of ImageItem keys is irrelevant
-		var imageKeys = Object.keys(imagePool);
+		var imageKeys = Object.keys(images);
 		for(var i = 0; i < imageKeys.length; i++) {
 			if(extractGifFrames) {
 				self.DoPack_FrameCount += images[imageKeys[i]].frameCount;
 			} else {
 				self.DoPack_FrameCount++;
 			}
+			$(images[imageKeys[i]].frames).each(function(ndx2,frame) {
+				if(frame.rectSprite) delete frame["rectSprite"];
+				if(frame.hash1)      delete frame["hash1"];
+				if(frame.hash2)      delete frame["hash2"];
+				if(frame.trim)       delete frame["trim"];
+				if(frame.padding)    delete frame["padding"];
+			});
 		}
-
+		
 		// sanity check total frame count
 		if(self.DoPack_FrameCount < 1) {
 			// if there aren't any frames, ignore call to pack()
