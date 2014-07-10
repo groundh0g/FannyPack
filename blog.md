@@ -7,4 +7,4 @@ pagename: blog
 ---
 {% include JB/setup %}
 
-![Documentation]({{BASE_PATH}}assets/img/index/iconDocumentation@2x.png "Documentation is Coming Soon.")
+![Documentation]({{BASE_PATH}}assets/img/index/iconBlog@2x.png "Documentation is Coming Soon.")
