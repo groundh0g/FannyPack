@@ -67,24 +67,31 @@ THE SOFTWARE.
 			<a class="brand" href="{{ HOME_PATH }}">{{ site.title }}</a>
 			<ul class="nav">
 			  {% if page.pagename == 'sheets' %}<li class="active">{% else %}<li class="">{% endif %}
-				<a href="./sheets.html">Sprite Sheets</a>
+				<a href="{{ HOME_PATH }}sheets.html">Sprite Sheets</a>
 			  </li>
 			  {% if page.pagename == 'fonts' %}<li class="active">{% else %}<li class="">{% endif %}
-				<a href="./fonts.html">Sprite Fonts</a>
+				<a href="{{ HOME_PATH }}fonts.html">Sprite Fonts</a>
 			  </li>
 			  {% if page.pagename == 'tiles' %}<li class="active">{% else %}<li class="">{% endif %}
-				<a href="./tiles.html">Tile Editor</a>
+				<a href="{{ HOME_PATH }}tiles.html">Tile Editor</a>
 			  </li>
 			</ul>
 			<ul class="nav pull-right">
-			  {% if page.pagename == 'blog' %}<li class="active">{% else %}<li class="">{% endif %}
-				<a href="./blog.html">Blog</a>
+			  {% if page.pagename == 'blog' %}<li class="dropdown active">{% else %}<li class="dropdown">{% endif %}
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Blog<b class="caret"></b></a>
+				<ul class="dropdown-menu">
+					<li><a href="{{ HOME_PATH }}blog" role="button" data-toggle="modal">Latest Posts</a></li>
+					<li class="divider"></li>
+					<li><a href="{{ HOME_PATH }}archive.html" role="button" data-toggle="modal">Archives</a></li>
+					<li><a href="{{ HOME_PATH }}categories.html" role="button" data-toggle="modal">Categories</a></li>
+					<li><a href="{{ HOME_PATH }}tags.html" role="button" data-toggle="modal">Tags</a></li>
+				</ul>
 			  </li>
 			  <li class="">
 				<a href="https://github.com/groundh0g/FannyPack/issues" target="_blank">Report Bugs</a>
 			  </li>
 			  {% if page.pagename == 'help' %}<li class="active">{% else %}<li class="">{% endif %}
-				<a href="./help.html">Help</a>
+				<a href="{{ HOME_PATH }}help.html">Help</a>
 			  </li>
 			  <li class="dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">About<b class="caret"></b></a>
@@ -140,10 +147,10 @@ THE SOFTWARE.
 		<p>He was a member of the original Xbox team and he joined the Visual Studio .NET team just after the Xbox was released in 2001. Joe is the author of <a href="http://www.amazon.com/XNA-Game-Studio-Express-Developing/dp/1598633686/ref=as_sl_pc_tf_mfw?&linkCode=wey&tag=coll06-20" target="_blank"><em>XNA Game Studio Express: Developing Games for Windows and the Xbox 360</em></a>, which was published in 2007.</p>
 		<p>Joe also <a href="http://groundh0g.deviantart.com/" target="_blank">dabbles</a> in sketching, cartooning, and creating 3D models. When you see his artistic creations, you'll understand why he makes his living as a programmer.</p>
 		<p>
-			<a href="https://github.com/groundh0g" target="_blank"><img src="./assets/img/social/Github.png" /></a> 
-			<a href="https://twitter.com/groundh0g" target="_blank"><img src="./assets/img/social/Twitter.png" /></a>  
-			<a href="https://www.facebook.com/groundh0g" target="_blank"><img src="./assets/img/social/Facebook.png" /></a> 
-			<a href="https://plus.google.com/+JosephHall_groundh0g/posts" target="_blank"><img src="./assets/img/social/GooglePlus.png" /></a>
+			<a href="https://github.com/groundh0g" target="_blank"><img src="{{ HOME_PATH }}assets/img/social/Github.png" /></a> 
+			<a href="https://twitter.com/groundh0g" target="_blank"><img src="{{ HOME_PATH }}assets/img/social/Twitter.png" /></a>  
+			<a href="https://www.facebook.com/groundh0g" target="_blank"><img src="{{ HOME_PATH }}assets/img/social/Facebook.png" /></a> 
+			<a href="https://plus.google.com/+JosephHall_groundh0g/posts" target="_blank"><img src="{{ HOME_PATH }}assets/img/social/GooglePlus.png" /></a>
 		</p>
 	  </div>
 	  <div class="modal-footer">
@@ -215,28 +222,28 @@ THE SOFTWARE.
 	</div>		
 
 		<!-- common libs -->
-		<script type="text/javascript" src="assets/js/jquery-1.8.3.js"></script>
-		<script type="text/javascript" src="assets/js/bootstrap.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/jquery-1.8.3.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/bootstrap.js"></script>
 	
 {% if page.isApp %}
 
 		<!-- app version -->
-		<script type="text/javascript" src="assets/js/app/version.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/version.js"></script>
 
 		<!-- utils -->
-		<script type="text/javascript" src="assets/js/app/util/base64.js"></script>
-		<script type="text/javascript" src="assets/js/app/util/hmac-md5.js"></script>
-		<script type="text/javascript" src="assets/js/app/util/hmac-sha256.js"></script>
-		<script type="text/javascript" src="assets/js/app/util/object-keys.js"></script>
-		<script type="text/javascript" src="assets/js/app/util/param-helpers.js"></script>
-		<script type="text/javascript" src="assets/js/app/util/string-helpers.js"></script>
-		<script type="text/javascript" src="assets/js/app/util/guid.js"></script>
-		<script type="text/javascript" src="assets/js/app/util/json2.js"></script>
-		<script type="text/javascript" src="assets/js/app/util/jszip.js"></script>
-		<script type="text/javascript" src="assets/js/app/util/Blob.js"></script>
-		<script type="text/javascript" src="assets/js/app/util/FileSaver.js"></script>
-		<script type="text/javascript" src="assets/js/app/util/libgif.js"></script>
-		<script type="text/javascript" src="assets/js/app/util/libgifparser.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/base64.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/hmac-md5.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/hmac-sha256.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/object-keys.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/param-helpers.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/string-helpers.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/guid.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/json2.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/jszip.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/Blob.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/FileSaver.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/libgif.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/libgifparser.js"></script>
 
 {% endif %}
 
@@ -244,7 +251,7 @@ THE SOFTWARE.
 		{% if page.scripts.size > 0 %}
 		<!-- app libs -->
 		{% for item in page.scripts %}
-		<script type="text/javascript" src="assets/js/app/{{ page.pagename }}/{{ item }}.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/{{ page.pagename }}/{{ item }}.js"></script>
 		{% endfor %}
 		
 		{% endif %}
