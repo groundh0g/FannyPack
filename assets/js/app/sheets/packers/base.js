@@ -61,7 +61,7 @@ function BasePacker(name, isDefault) {
 	};
 	
 	// Accepts an array of image pool entities (a collection of zero or more ImageItem 
-	// objects), as well as a trimmed and full ser of options from the left sidebar. 
+	// objects) and the set of options from the left sidebar. 
 	// Marks each image pool entity with their location & rotation within the sheet. 
 	// Return value to callbackComplete includes a "success" boolean property. 
 	// This is an asynchronous call.
@@ -79,8 +79,6 @@ function BasePacker(name, isDefault) {
 			});
 		} else {
 			packCallback(images, options, fnComplete, fnStatus);
-//			self.addInfo("No sprites have been loaded. Nothing to do.");
-//			fnComplete({success:true});
 		}
 	};
 
@@ -277,30 +275,6 @@ function BasePacker(name, isDefault) {
 									self.addWarning("Include @2x not yet implemented.");
 								}
 								break;
-//							case "cleanAlpha":
-//								// was clean alpha requested?
-//								if(options.doCleanAlpha()) {
-//									self.addWarning("Clean alpha not yet implemented.");
-//								}
-//								break;
-//							case "colorMask":
-//								// was color masking requested?
-//								if(options.doColorMask()) {
-//									self.addWarning("Color mask not yet implemented.");
-//								}
-//								break;
-//							case "debugMode":
-//								// was debug mode requested?
-//								if(options.doDebug()) {
-//									self.addWarning("Debug mode not yet implemented.");
-//								}
-//								break;
-//							case "trimMode":
-//								// was sprite trimming requested?
-//								if(options.doTrim()) {
-//									self.addWarning("Trim sprites not yet implemented.");
-//								}
-//								break;
 						}
 						break;
 					
@@ -338,21 +312,6 @@ function BasePacker(name, isDefault) {
 									self.addWarning("Allow Rotate not yet implemented.");
 								}
 								break;
-// 							case "borderPadding":
-// 								if(options[key] > 0) {
-// 									self.addWarning("Sprite border padding not yet implemented.");
-// 								}
-// 								break;
-// 							case "shapePadding":
-// 								if(options[key] > 0) {
-// 									self.addWarning("Sprite shape padding not yet implemented.");
-// 								}
-// 								break;
-// 							case "innerPadding":
-// 								if(options[key] > 0) {
-// 									self.addWarning("Sprite inner padding not yet implemented.");
-// 								}
-// 								break;
 						}
 						opts[key] = options[key];
 						break;
