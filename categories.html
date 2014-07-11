@@ -7,6 +7,15 @@ pagename: blog
 ---
 {% include JB/setup %}
 
+<!-- Navigation links -->
+<div class="btn-toolbar">
+  <div class="btn-group">
+    <a class="btn" href="/archive.html"><i class="icon icon-time"></i> Archive</a>
+    <a class="btn active" href="/categories.html"><i class="icon icon-folder-open"></i> Categories</a>
+    <a class="btn" href="/tags.html"><i class="icon icon-tags"></i> Tags</a>
+  </div>
+</div>
+
 <ul class="tag_box inline">
   {% assign categories_list = site.categories %}
   {% include JB/categories_list %}
