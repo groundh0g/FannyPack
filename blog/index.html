@@ -7,29 +7,63 @@ pagename: blog
 ---
 {% include JB/setup %}
 
+<!-- Pagination links -->
+<div class="btn-toolbar">
+  <div class="btn-group">
+    <a class="btn" href="/archive.html"><i class="icon icon-time"></i> Archive</a>
+    <a class="btn" href="/categories.html"><i class="icon icon-folder-open"></i> Categories</a>
+    <a class="btn" href="/tags.html"><i class="icon icon-tags"></i> Tags</a>
+  </div>
+  <div class="btn-group">
+  {% if paginator.previous_page %}
+    <a class="btn" href="/page{{ paginator.previous_page }}"><i class="icon icon-chevron-left"></i> PREV</a>
+  {% else %}
+    <a class="btn disabled" href="#null"><i class="icon icon-chevron-left"></i> PREV</a>
+  {% endif %}
+    <a class="btn disabled" href="#null">Page {{ paginator.page }} of {{ paginator.total_pages }}</a>
+  {% if paginator.next_page %}
+    <a class="btn" href="/page{{ paginator.next_page }}">NEXT <i class="icon icon-chevron-right"></i></a>
+  {% else %}
+    <a class="btn disabled" href="#null">NEXT <i class="icon icon-chevron-right"></i></a>
+  {% endif %}
+  </div>
+</div>
+
 
 <!-- This loops through the paginated posts -->
 {% for post in paginator.posts %}
   <h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
   <p class="author">
-    <span class="date">{{ post.date }}</span>
+    <span style="font-size:0.8em; font-weight:bold;">{{ post.date | date: "%A, %F" }} at {{ post.date | date: "%r %Z" }} by <a href="https://github.com/groundh0g" target="_blank">@groundh0g</a></span>
   </p>
   <div class="content">
     {{ post.content }}
   </div>
+  
+  {% if forloop.last != true %}
+	<hr/>
+  {% endif %}
+  
 {% endfor %}
 
 <!-- Pagination links -->
-<div class="pagination">
+<div class="btn-toolbar">
+  <div class="btn-group">
+    <a class="btn" href="/archive.html"><i class="icon icon-time"></i> Archive</a>
+    <a class="btn" href="/categories.html"><i class="icon icon-folder-open"></i> Categories</a>
+    <a class="btn" href="/tags.html"><i class="icon icon-tags"></i> Tags</a>
+  </div>
+  <div class="btn-group">
   {% if paginator.previous_page %}
-    <a href="/page{{ paginator.previous_page }}" class="previous">Previous</a>
+    <a class="btn" href="/page{{ paginator.previous_page }}"><i class="icon icon-chevron-left"></i> PREV</a>
   {% else %}
-    <span class="previous">Previous</span>
+    <a class="btn disabled" href="#null"><i class="icon icon-chevron-left"></i> PREV</a>
   {% endif %}
-  | <span class="page_number ">Page: {{ paginator.page }} of {{ paginator.total_pages }}</span> | 
+    <a class="btn disabled" href="#null">Page {{ paginator.page }} of {{ paginator.total_pages }}</a>
   {% if paginator.next_page %}
-    <a href="/page{{ paginator.next_page }}" class="next">Next</a>
+    <a class="btn" href="/page{{ paginator.next_page }}">NEXT <i class="icon icon-chevron-right"></i></a>
   {% else %}
-    <span class="next ">Next</span>
+    <a class="btn disabled" href="#null">NEXT <i class="icon icon-chevron-right"></i></a>
   {% endif %}
+  </div>
 </div>
