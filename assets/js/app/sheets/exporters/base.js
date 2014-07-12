@@ -158,7 +158,7 @@ function BaseExporter(name, isDefault) {
 					
 					var imageFormat = (options["imageFormat"] || DetectImageType(packer)).toLowerCase();
 					var imagePreamble = URI_PREAMBLE[imageFormat];
-					var image_data = packer.bufferDataURL.split(",")[1]; // base64.decode(packer.bufferDataURL.substring(imagePreamble.length));
+					var image_data = (packer.exportImageDataURL || packer.bufferDataURL).split(",")[1]; // base64.decode(packer.bufferDataURL.substring(imagePreamble.length));
 					data.packer.filename = filename + "." + imageFormat;
 					
 					var atlas_data = self.DoExport(data);

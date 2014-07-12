@@ -128,11 +128,11 @@ Besides, I like it.
 	<div style="padding-left:10px;"><p>
 		<i class="icon icon-wrench"></i> Import non-web image formats<br/>
 		<i class="icon icon-wrench"></i> Export optimized images<br/>
+		<i class="icon icon-wrench"></i> Allow sprite rotate within sheet<br/>
 		<i class="icon icon-wrench"></i> Export data as CSS<br/>
 		<i class="icon icon-wrench"></i> Alias duplicate sprites<br/>
 		<i class="icon icon-wrench"></i> MaxRects texture packing<br/>
-		<i class="icon icon-wrench"></i> DropBox support<br/>
-		<i class="icon icon-wrench"></i> Persist user preferences
+		<i class="icon icon-wrench"></i> DropBox support
 	</p></div>
 	
   </div>

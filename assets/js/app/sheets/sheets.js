@@ -856,6 +856,17 @@ var OnPackComplete = function(result) {
 		
 		packer.bufferDataURL = buffer.toDataURL("image/png");
 		packer.bufferDataExt = "png";
+		
+		packer.exportImageDataExt = packer.DoPack_Options["imageFormat"].toLowerCase();
+		if(packer.exportImageDataExt !== "png") {
+			packer.exportImageDataURL = 
+				packer.exportImageDataExt == "jpg" ?
+				buffer.toDataURL("image/jpeg") :
+				buffer.toDataURL("image/" + packer.exportImageDataExt);
+		} else {
+			packer.exportImageDataURL = null;
+		}
+		
 		if(packer.width * packer.height > 0) {
 			var $img = $("<img />").attr("src", packer.bufferDataURL).attr("id", "imgWorkspace");
 			$("#divWorkspaceContainerCrop").append($img);

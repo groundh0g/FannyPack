@@ -250,7 +250,6 @@ function BasePacker(name, isDefault) {
 				switch(key) {
 					// ignore these, they're handled by main app
 					case "name":
-					case "imageFormat":
 					case "dataFormat":
 					case "nameInSheet":
 					case "includeAt2x":
@@ -293,6 +292,7 @@ function BasePacker(name, isDefault) {
 					case "spritePacker":
 					case "sortBy":
 					case "allowRotate":
+					case "imageFormat":
 						switch(key) {
 							case "spritePacker":
 								// are we using the right packer?
