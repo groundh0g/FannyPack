@@ -9,7 +9,7 @@ tools. I also didn’t want the tools to look like poop that was designed in the
 If you would like to read more about the project or my motivations for building it, 
 I invite you to visit the [project's homepage](http://fpack.moreoncode.com).
 
-![The sprite packer tool](https://github.com/groundh0g/FannyPack/tree/master/_media/fpack_screenshot1.png "Sprite Sheets Tool")
+![The sprite packer tool](https://raw.githubusercontent.com/groundh0g/FannyPack/master/_media/fpack_screenshot1.jpg "Sprite Sheets Tool")
 
 What’s Up with the Name?
 ========================
