@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<!-- 
+Copyright (c) {{ site.time | date: '%Y' }} Joseph B. Hall [@groundh0g]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{ page.title }}</title>
+    {% if page.description %}<meta name="description" content="{{ page.description }}">{% endif %}
+    <meta name="author" content="{{ site.author.name }}">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="{{ ASSET_PATH }}/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ ASSET_PATH }}/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="{{ ASSET_PATH }}/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Page-Specific Styles -->
+    {% if page.pagename %}<link href="{{ BASE_PATH }}/assets/css/{{ page.pagename }}.css" rel="stylesheet">{% endif %}
+
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="{{ BASE_PATH }}/assets/ico/favicon.png">
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+
+    <!-- atom & rss feed -->
+    <link href="{{ BASE_PATH }}{{ site.JB.atom_path }}" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="{{ BASE_PATH }}{{ site.JB.rss_path }}" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+
+  </head>
+
+  <body>
+	<div style="min-height:100%; height:100%; min-width:100%; width:100%;">
+    {% if page.isApp %}<div class="navbar navbar-inverse">{% else %}<div class="navbar">{% endif %}
+      <div class="navbar-inner">
+        <div class="container-narrow-NOPE" style="margin-left:20px; margin-right:20px;">
+			<a class="brand" href="{{ HOME_PATH }}">{{ site.title }}</a>
+			<ul class="nav">
+			  {% if page.pagename == 'sheets' %}<li class="active">{% else %}<li class="">{% endif %}
+				<a href="{{ HOME_PATH }}sheets.html">Sprite Sheets</a>
+			  </li>
+			  {% if page.pagename == 'fonts' %}<li class="active">{% else %}<li class="">{% endif %}
+				<a href="{{ HOME_PATH }}fonts.html">Sprite Fonts</a>
+			  </li>
+			  {% if page.pagename == 'tiles' %}<li class="active">{% else %}<li class="">{% endif %}
+				<a href="{{ HOME_PATH }}tiles.html">Tile Editor</a>
+			  </li>
+			</ul>
+			<ul class="nav pull-right">
+			  <!--
+			  {% if page.pagename == 'blog' %}<li class="dropdown active">{% else %}<li class="dropdown">{% endif %}
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Blog<b class="caret"></b></a>
+				<ul class="dropdown-menu">
+					<li><a href="{{ HOME_PATH }}blog" role="button" data-toggle="modal">Latest Posts</a></li>
+					<li class="divider"></li>
+					<li><a href="{{ HOME_PATH }}archive.html" role="button" data-toggle="modal">Archives</a></li>
+					<li><a href="{{ HOME_PATH }}categories.html" role="button" data-toggle="modal">Categories</a></li>
+					<li><a href="{{ HOME_PATH }}tags.html" role="button" data-toggle="modal">Tags</a></li>
+				</ul>
+			  </li>
+			  -->
+			  {% if page.pagename == 'blog' %}<li class="active">{% else %}<li class="">{% endif %}
+				<a href="{{ HOME_PATH }}blog">Blog</a>
+			  </li>
+			  <li class="">
+				<a href="https://github.com/groundh0g/FannyPack/issues" target="_blank">Report Bugs</a>
+			  </li>
+			  {% if page.pagename == 'help' %}<li class="active">{% else %}<li class="">{% endif %}
+				<a href="{{ HOME_PATH }}help.html">Help</a>
+			  </li>
+			  <li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">About<b class="caret"></b></a>
+				<ul class="dropdown-menu">
+					<li><a href="#popupAboutAuthor" role="button" data-toggle="modal">The Author</a></li>
+					<li><a href="#popupAboutModules" role="button" data-toggle="modal">The OSS Modules</a></li>
+					<li><a href="#popupAboutLicense" role="button" data-toggle="modal">The License [MIT]</a></li>
+				</ul>
+			  </li>
+			</ul>
+        </div>
+      </div>
+    </div>
+
+
+{% if page.isApp %}
+
+        {{ content }}
+
+{% else %}
+
+    <div class="container-narrow">
+
+      <div class="content">
+        {{ content }}
+      </div>
+      
+      <hr>
+      
+      <footer>
+        <p> <a href="#popupAboutLicense" role="button" data-toggle="modal">&copy; {{ site.time | date: '%Y' }}</a>
+        	by 
+        	<a href="#popupAboutAuthor" role="button" data-toggle="modal">{{ site.author.name }}</a>
+          	with help from 
+          	<a href="#popupAboutModules" role="button" data-toggle="modal">Lots of Folks</a>.
+        </p>
+      </footer>
+
+    </div>
+
+{% endif %}
+
+	</div>
+	<div id="popupAboutAuthor" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAboutLabel" aria-hidden="true">
+	  <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="popupAboutLabel">About FannyPack <span class="headerSubtext"> ... the Author</span></h3>
+	  </div>
+	  <div class="modal-body">
+		<p>Joe Hall has been a professional software developer for nearly 25 years.</p>
+		<p>He worked as a programmer for Microsoft and IBM and he was the software architect for a Fortune 500 bank. He was the CTO of a ticket sales and servicing company and he started his own consulting company in 2006.</p>
+		<p>Joe makes his living writing desktop, web, and mobile device applications for businesses and governmental agencies, but game programming is his passion, and it was gaming that got him into programming in the first place.</p>
+		<p>He was a member of the original Xbox team and he joined the Visual Studio .NET team just after the Xbox was released in 2001. Joe is the author of <a href="http://www.amazon.com/XNA-Game-Studio-Express-Developing/dp/1598633686/ref=as_sl_pc_tf_mfw?&linkCode=wey&tag=coll06-20" target="_blank"><em>XNA Game Studio Express: Developing Games for Windows and the Xbox 360</em></a>, which was published in 2007.</p>
+		<p>Joe also <a href="http://groundh0g.deviantart.com/" target="_blank">dabbles</a> in sketching, cartooning, and creating 3D models. When you see his artistic creations, you'll understand why he makes his living as a programmer.</p>
+		<p>
+			<a href="https://github.com/groundh0g" target="_blank"><img src="{{ HOME_PATH }}assets/img/social/Github.png" /></a> 
+			<a href="https://twitter.com/groundh0g" target="_blank"><img src="{{ HOME_PATH }}assets/img/social/Twitter.png" /></a>  
+			<a href="https://www.facebook.com/groundh0g" target="_blank"><img src="{{ HOME_PATH }}assets/img/social/Facebook.png" /></a> 
+			<a href="https://plus.google.com/+JosephHall_groundh0g/posts" target="_blank"><img src="{{ HOME_PATH }}assets/img/social/GooglePlus.png" /></a>
+		</p>
+	  </div>
+	  <div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Dismiss</button>
+	  </div>
+	</div>		
+
+	<div id="popupAboutModules" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAboutLabel" aria-hidden="true">
+	  <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="popupAboutLabel">About FannyPack <span class="headerSubtext"> ... the OSS Modules</span></h3>
+	  </div>
+	  <div class="modal-body">
+		<p>FannyPack uses the following opensource and public domain projects:</p>
+			<ul>
+				<li><a href="https://github.com/mathiasbynens/base64" target="_blank">base64</a> - a base64 encoder / decoder, compatible with atob() and btoa()</li>
+				<li><a href="https://github.com/eligrey/Blob.js" target="_blank">Blob</a> - W3C Blob interface for browsers that do not support it</li>
+				<li><a href="http://getbootstrap.com/2.3.2/index.html" target="_blank">Bootstrap</a> - a framework for faster and easier web development</li>
+				<li><a href="https://code.google.com/p/crypto-js/#HMAC" target="_blank">crypto-js</a> - an implementation of SHA256 and MD5 hashing</li>
+				<li><a href="https://github.com/eligrey/FileSaver.js" target="_blank">FileSaver</a> - W3C FileSaver interface for browsers that do not support it</li>
+				<li><a href="https://pages.github.com/" target="_blank">GitHub Pages</a> - websites for you and your projects</li>
+				<li><a href="http://jekyllbootstrap.com" target="_blank">Jekyll Bootstrap</a> - The definitive Jekyll blogging framework</li>
+				<li><a href="http://code.jquery.com/jquery-1.8.3.js" target="_blank">jQuery</a> - a fast, small, and feature-rich JavaScript library</li>
+			<!--<li><a href="https://github.com/louisremi/jquery.transform.js" target="_blank">jquery.transform2d</a> - a cross browser transform property via css() for jQuery</li>-->
+				<li><a href="https://github.com/douglascrockford/JSON-js" target="_blank">json2</a> - JSON feature for browsers that do not support it</li>
+				<li><a href="https://github.com/Stuk/jszip" target="_blank">jszip</a> - create, read, and edit .zip files with Javascript</li>
+				<li><a href="https://github.com/groundh0g/FannyPack/blob/master/assets/js/app/util/libgif.js" target="_blank">libgif.js</a> - a modified version of <a href="https://github.com/buzzfeed/libgif-js" target="_blank">@buzzfeed's &amp; @shachaf's GIF parser</a></li>
+				<li><a href="https://github.com/groundh0g/FannyPack/blob/master/assets/js/app/util/libgifparser.js" target="_blank">libgifparser.js</a> - my lib, based on <a href="https://github.com/buzzfeed/libgif-js" target="_blank">@buzzfeed's SuperGIF</a></li>
+				<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys" target="_blank">object-keys.js</a> - Object.keys for browsers that do not support it</li>
+				<li><a href="https://github.com/groundh0g/FannyPack/blob/master/assets/js/app/util/string-helpers.js" target="_blank">string-helpers.js</a> - contains, endsWith, ... for browsers without support</li>
+				<li><a href="http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/21963136#21963136" target="_blank">UUID</a> - a JavaScript module to create GUIDs</li>
+			</ul>
+		</p>
+	  </div>
+	  <div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Dismiss</button>
+	  </div>
+	</div>		
+
+	<div id="popupAboutLicense" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAboutLabel" aria-hidden="true">
+	  <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="popupAboutLabel">About FannyPack <span class="headerSubtext"> ... the License [<a href="http://choosealicense.com/licenses/mit/" target="_blank">MIT</a>]</span></h3>
+	  </div>
+	  <div class="modal-body">
+		<p>Copyright (c) 2014 Joseph Hall (<a href="https://github.com/groundh0g" target="_blank">@groundh0g</a>)</p>
+
+		<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+		of this software and associated documentation files (the "Software"), to deal
+		in the Software without restriction, including without limitation the rights
+		to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+		copies of the Software, and to permit persons to whom the Software is
+		furnished to do so, subject to the following conditions:</p>
+
+		<p>The above copyright notice and this permission notice shall be included in all
+		copies or substantial portions of the Software.</p>
+
+		<p><strong>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+		IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+		FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+		AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+		LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+		OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+		SOFTWARE.</strong></p>
+	  </div>
+	  <div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Dismiss</button>
+	  </div>
+	</div>		
+
+		<!-- common libs -->
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/jquery-1.8.3.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/bootstrap.js"></script>
+	
+{% if page.isApp %}
+
+		<!-- app version -->
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/version.js"></script>
+
+		<!-- utils -->
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/base64.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/hmac-md5.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/hmac-sha256.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/object-keys.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/param-helpers.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/string-helpers.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/guid.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/json2.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/jszip.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/Blob.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/FileSaver.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/libgif.js"></script>
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/libgifparser.js"></script>
+
+{% endif %}
+
+	{% if page.scripts %}
+		{% if page.scripts.size > 0 %}
+		<!-- app libs -->
+		{% for item in page.scripts %}
+		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/{{ page.pagename }}/{{ item }}.js"></script>
+		{% endfor %}
+		
+		{% endif %}
+	{% endif %}
+	
+    {% include JB/analytics %}
+
+  </body>
+</html>

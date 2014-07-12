@@ -1,0 +1,20 @@
+---
+layout: page
+title : Archive
+header : Post Archive
+group: navigation
+pagename: blog
+---
+{% include JB/setup %}
+
+<!-- Navigation links -->
+<div class="btn-toolbar">
+  <div class="btn-group">
+    <a class="btn active" href="/archive.html"><i class="icon icon-time"></i> Archive</a>
+    <a class="btn" href="/categories.html"><i class="icon icon-folder-open"></i> Categories</a>
+    <a class="btn" href="/tags.html"><i class="icon icon-tags"></i> Tags</a>
+  </div>
+</div>
+
+{% assign posts_collate = site.posts %}
+{% include JB/posts_collate %}
