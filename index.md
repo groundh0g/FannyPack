@@ -24,7 +24,7 @@ designed in the 80's.
 			   within the game) into a single image, saving <br/>
 			   memory and reducing CPU-to-GPU chatter.
 			</p>
-			<p><a id="cmdShowFeaturesSheets" href="#null" class="btn btn-primary">Show Features</a></p>
+			<p><a href="#popupFeatureSheets" role="button" data-toggle="modal" class="btn btn-primary">Show Features</a></p>
 		</td>
 	</tr><tr>
 		<td style="width:300px;">
@@ -87,7 +87,7 @@ internet connection.</p>
 <h3>Stop, Collaborate, and Listen! (Share Your Work)</h3>
 
 <p>Project files and published resources are generated as self-contained plaintext or compressed 
-(ZIP DEFLATE) files. Just share the file via email, DropBox, or however your normally 
+(ZIP DEFLATE) files. Just share the file via email, DropBox, or however you normally 
 share files with teammates.</p>
 
 <p>Resources are embedded in the project file, not linked. FannyPack embeds the source image 
@@ -105,3 +105,38 @@ name. It's a geeky representation of a utility belt. (Think Schneider or Batman.
 
 Besides, I like it.
 
+<div id="popupFeatureSheets" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAboutLabel" aria-hidden="true">
+  <div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	<h3 id="popupAboutLabel">Sprite Sheet Features</h3>
+  </div>
+  <div class="modal-body">
+  	
+	<p>Current Features:</p>
+	<div style="padding-left:10px;"><p>
+		<i class="icon icon-ok"></i> Import web-friendly image formats<br/>
+		<i class="icon icon-ok"></i> <em>Extract animated GIF frames!</em><br/>
+		<i class="icon icon-ok"></i> Export images as PNG, GIF, or JPG<br/>
+		<i class="icon icon-ok"></i> Export data as XML or JSON<br/>
+		<i class="icon icon-ok"></i> Trim &amp; crop unused pixels<br/>
+		<i class="icon icon-ok"></i> Heuristic mapping (chroma key)<br/>
+		<i class="icon icon-ok"></i> Basic rects (shelf) texture packing<br/>
+		<i class="icon icon-ok"></i> Alpha (transparent) cleaning (aids compression)<br/>
+		<i class="icon icon-ok"></i> Debug mode (show sprite outlines)
+	</p></div>
+	<p>Planned Features:</p>
+	<div style="padding-left:10px;"><p>
+		<i class="icon icon-wrench"></i> Import non-web image formats<br/>
+		<i class="icon icon-wrench"></i> Export optimized images<br/>
+		<i class="icon icon-wrench"></i> Export data as CSS<br/>
+		<i class="icon icon-wrench"></i> Alias duplicate sprites<br/>
+		<i class="icon icon-wrench"></i> MaxRects texture packing<br/>
+		<i class="icon icon-wrench"></i> DropBox support<br/>
+		<i class="icon icon-wrench"></i> Persist user preferences
+	</p></div>
+	
+  </div>
+  <div class="modal-footer">
+	<button class="btn" data-dismiss="modal" aria-hidden="true">Dismiss</button>
+  </div>
+</div>		
