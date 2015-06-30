@@ -48,12 +48,63 @@ function JoePacker() {
 	this.DoPack = function () {
 		if(self.DoPack_MaxFramesProcessed === 0) {
 			// TODO: first call
+			self.DoPack_FramesProcessed = 0;
+			self.ImageIndex = 0;
+			self.FrameIndex = 0;
+			self.CurrentX = self.paddingBorder;
+			self.CurrentY = self.paddingBorder;
+			self.MaxY = 0;
 		}
 		
-		// TODO: real work
+		// place sprite
+		var image = self.DoPack_Images[self.DoPack_ImageKeys[self.ImageIndex]];
+		var frame = image.frames[self.FrameIndex];
+		var fitsWidth  = ((self.CurrentX + frame.width)  <= self.width - self.paddingBorder);
+		var fitsHeight = ((self.CurrentY + frame.height) <= self.height - self.paddingBorder);
+		var fitsOnNextRow = 
+			(self.MaxY + frame.height + self.paddingShape <= self.height - self.paddingBorder) &&
+			(frame.width <= self.width);
+		
+		if(fitsWidth && fitsHeight) {
+			// place at current loc
+			// nothing to do, that's the default behavior
+		} else if(!fitsWidth && fitsOnNextRow) {
+			// place on next row
+			self.CurrentX = self.paddingBorder;
+			self.CurrentY = self.MaxY + self.paddingShape;
+		} else { // if(!fitsWidth && !fitsOnNextRow) {
+			if(self.Resize(self.CurrentX + frame.width + self.paddingBorder, self.MaxY + frame.height + self.paddingBorder)) {
+				// exit loop and start over
+				self.DoPack_MaxFramesProcessed = 0;
+				self.DoPack_FramesProcessed = 0;
+				return; 
+			} else {
+				// we have a problem; won't fit; stop trying
+				self.addError("Image '" + image.filename + "' with index [" + self.ImageIndex + "][" + self.FrameIndex + "] won't fit specified constraints. [" + self.MAX_WIDTH + ", " + self.MAX_HEIGHT + "]");
+				self.DoPack_FramesProcessed = self.DoPack_FrameCount;
+				return;
+			}
+		}
+		
+		self.MaxY = Math.max(self.MaxY, self.CurrentY + frame.height);
+		frame.rectSprite = {
+			x: self.CurrentX,
+			y: self.CurrentY,
+			w: frame.width,
+			h: frame.height,
+			r: false
+		};
+	
+		self.CurrentX += frame.width + self.paddingShape;
 		self.DoPack_FramesProcessed++;
+
+		self.FrameIndex++;
+		if(self.FrameIndex >= (self.DoPack_AllOptions.doAnimatedGifExpand() ? image.frameCount : 1)) {
+			self.ImageIndex++;
+			self.FrameIndex = 0;
+		}
 	};
 }
 
 // TOO: Not implemented. Letting Basic packer take over for now.
-//(new JoePacker()).register();
+(new JoePacker()).register();

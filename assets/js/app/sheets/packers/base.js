@@ -85,6 +85,8 @@ function BasePacker(name, isDefault) {
 	var packCallback = function(images, options, completeCallback, statusCallback) { 
 		// hand self.DoPack() the subset of options that it cares about
 		var opts = trimOptions(options);
+		self.DoPack_Options = opts;
+		self.DoPack_AllOptions = options;
 		
 		// count frames of animated GIFs, or just use first frame?
 		var extractGifFrames = 
@@ -191,8 +193,6 @@ function BasePacker(name, isDefault) {
 				self.doAliasSprites = options.doAliasSprites() || false;
 				
 				self.DoPack_Images = images;
-				self.DoPack_Options = opts;
-				self.DoPack_AllOptions = options;
 				
 				// run postProcess BEFORE sorting; likely affects results
 				$(Object.keys(images)).each(function(index, key) {
