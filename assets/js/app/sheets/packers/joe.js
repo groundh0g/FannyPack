@@ -82,17 +82,21 @@ function JoePacker() {
 	this.$freeRects = [];
 
 	this.$init = function() {
+		var borderPadding = Math.max(self.paddingBorder, self.paddingBorder);
 		self.$freeRects = [ self.normalizeRect({ 
-			x:self.paddingBorder,
-			y:self.paddingBorder,
-			w:self.width  - self.paddingBorder * 2,
-			h:self.height - self.paddingBorder * 2,
+			x: borderPadding,
+			y: borderPadding,
+			w: self.width  - borderPadding * 2,
+			h: self.height - borderPadding * 2,
 			r:false
 		}) ];
 	}
 	
 	var $placeRect = function(rect) {
-		var result = self.makeRect(rect.width, rect.height);
+		var padding = self.paddingShape + self.paddingInner;
+		var paddedWidth  = rect.width  + padding * 2;
+		var paddedHeight = rect.height + padding * 2;
+		var result = self.makeRect(paddedWidth, paddedHeight);
 		var scores = { score1: REALLY_BIG, score2: REALLY_BIG };
 
 		switch(self.DoPack_Options["heuristic"]) {
@@ -127,7 +131,11 @@ function JoePacker() {
 			$pruneFreeRects();
 		}
  
-		return result;
+		result.x += padding;
+		result.y += padding;
+		result.width  -= padding * 2;
+		result.height -= padding * 2;
+		return self.normalizeRect(result);
 	};
 	
 	var $pruneFreeRects = function() {
