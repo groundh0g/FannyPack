@@ -174,7 +174,7 @@ function BasePacker(name, isDefault) {
 				self.paddingShape    = Math.max(0, parseInt(options.shapePadding  || 0));
 				self.paddingBorder   = Math.max(0, parseInt(options.borderPadding || 0));
 				self.paddingInner    = Math.max(0, parseInt(options.innerPadding  || 0));
-
+				self.allowRotate     = options.doAllowRotate() || false;
 				self.doTrim          = options.doTrim() || false;
 				self.trimThreshold   = parseInt(options.trimThreshold || 0);
 				if(self.doTrim) {
@@ -319,7 +319,7 @@ function BasePacker(name, isDefault) {
 					// include future options that we can't know about today
 					default:
 						// if unused in packer, throw warning message? Maybe? Maybe not?
-						self.addInfo("Unknown option, '" + options[key] + "'. Passing to packer, but it may not be used.");
+						self.addInfo("Unknown option, '" + key + "'. Passing to packer, but it may not be used.");
 						opts[key] = options[key];
 						break;
 				}
@@ -334,7 +334,7 @@ function BasePacker(name, isDefault) {
 		var hOrig = self.height;
 		minWidth  = parseInt(minWidth  || (self.width  + 16));
 		minHeight = parseInt(minHeight || (self.height + 16));
-		if(self.width >= self.height) {
+		if(self.width >= self.height && hOrig < self.MAX_HEIGHT) {
 			// increase height
 			self.height = minHeight;
 			if(self.forcePowerOfTwo) { 
@@ -356,9 +356,71 @@ function BasePacker(name, isDefault) {
 			}
 		}
 		
-		return wOrig != self.width || hOrig != self.height;
+		return (wOrig != self.width || hOrig != self.height);
+	};
+	
+	this.normalizeRect = function(r) {
+		r.w = r.width  = (r.width  || r.w || 0);
+		r.h = r.height = (r.height || r.h || 0);
+		r.right  = r.x + r.width;
+		r.bottom = r.y + r.height;
+		r.r = r.rotate = (r.r || r.rotate || false);
+		return r;
+	};
+	
+	this.intersectsRect = function(r1, r2) {
+		self.normalizeRect(r1);
+		self.normalizeRect(r2);
+		
+		return !(
+			r2.x > r1.right  ||
+			r2.right < r1.x  ||
+			r2.y > r1.bottom ||
+			r2.bottom < r1.y
+		);
+	};
+	
+	this.containedInRect = function(r2, r1) {
+		return self.containsRect(r1, r2);
+	};
+	
+	this.containsRect = function(r1, r2) {
+		self.normalizeRect(r1);
+		self.normalizeRect(r2);
+		
+		return (
+			r2.x >= r1.x &&
+			r2.y >= r1.y &&
+			r2.right  <= r1.right &&
+			r2.bottom <= r1.bottom
+		);
+	};
+	
+	this.isEmptyRect = function(r) {
+		self.normalizeRect(r);
+		return (r.w <= 0 || r.h <= 0);
+	};
+	
+	this.makeRect = function(width, height, rotate) {
+		return self.normalizeRect({ 
+			x:0,
+			y:0,
+			width:width   || 0,
+			height:height || 0,
+			r:rotate || false 
+		});
 	};
 
+	this.copyRect = function(r) {
+		return self.normalizeRect({ 
+			x:r.x || 0,
+			y:r.y || 0,
+			w:r.w || r.width  || 0,
+			h:r.h || r.height || 0,
+			r:r.r || r.rotate || false 
+		});
+	};
+	
 	// manage the various types of messages
 	this.addWarning = function(msg) { self.msgWarnings.push(msg); };
 	this.addError   = function(msg) { self.msgErrors.push(msg); };
