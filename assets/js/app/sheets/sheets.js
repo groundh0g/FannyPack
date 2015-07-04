@@ -764,7 +764,7 @@ var OnPackComplete = function(result) {
 		var doColorMask = packer && packer.DoPack_AllOptions && packer.DoPack_AllOptions.doColorMask && packer.DoPack_AllOptions.doColorMask();
 		var doDebug = packer && packer.DoPack_AllOptions && packer.DoPack_AllOptions.doDebug && packer.DoPack_AllOptions.doDebug();
 		var doCleanAlpha = packer && packer.DoPack_AllOptions && packer.DoPack_AllOptions.doCleanAlpha && packer.DoPack_AllOptions.doCleanAlpha();
-		if(doColorMask || doDebug || doCleanAlpha) {
+		if(packer.width > 0 && packer.height > 0 && (doColorMask || doDebug || doCleanAlpha)) {
 			var imgData = ctx.getImageData(0, 0, packer.width, packer.height);
 			var data = imgData.data;
 			$(Object.keys(imagePool)).each(function(ndx1,key) {
