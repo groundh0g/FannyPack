@@ -4,7 +4,7 @@ title: FannyPack
 tagline: a suite of &#35;gamedev tools
 description: FannyPack is a suite of &#35;gamedev tools.
 pagename: sheets
-scripts: [image-item, options, packers/base, packers/basic, packers/joe, exporters/base, exporters/exportJson, exporters/exportXml, sheets, sheets-events]
+scripts: [image-item, options, packers/base, packers/basic, packers/joe, exporters/base, exporters/exportJson, exporters/exportXml, exporters/exportCss, sheets, sheets-events]
 isApp: true
 ---
 {% include JB/setup %}
