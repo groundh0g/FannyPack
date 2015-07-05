@@ -118,9 +118,11 @@ Besides, I like it.
 		<i class="icon icon-ok"></i> <em>Extract animated GIF frames!</em><br/>
 		<i class="icon icon-ok"></i> Export images as PNG, GIF, or JPG<br/>
 		<i class="icon icon-ok"></i> Export data as XML or JSON<br/>
+		<i class="icon icon-ok"></i> Export data as CSS<br/>
 		<i class="icon icon-ok"></i> Trim &amp; crop unused pixels<br/>
 		<i class="icon icon-ok"></i> Heuristic mapping (chroma key)<br/>
 		<i class="icon icon-ok"></i> Basic rects (shelf) texture packing<br/>
+		<i class="icon icon-ok"></i> MaxRects texture packing<br/>
 		<i class="icon icon-ok"></i> Alpha (transparent) cleaning (aids compression)<br/>
 		<i class="icon icon-ok"></i> Debug mode (show sprite outlines)
 	</p></div>
@@ -129,9 +131,7 @@ Besides, I like it.
 		<i class="icon icon-wrench"></i> Import non-web image formats<br/>
 		<i class="icon icon-wrench"></i> Export optimized images<br/>
 		<i class="icon icon-wrench"></i> Allow sprite rotate within sheet<br/>
-		<i class="icon icon-wrench"></i> Export data as CSS<br/>
 		<i class="icon icon-wrench"></i> Alias duplicate sprites<br/>
-		<i class="icon icon-wrench"></i> MaxRects texture packing<br/>
 		<i class="icon icon-wrench"></i> DropBox support
 	</p></div>
 	
