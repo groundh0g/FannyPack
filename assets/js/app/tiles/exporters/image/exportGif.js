@@ -20,23 +20,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-var dataExporters = dataExporters || {};
+var imageExporters = imageExporters || {};
 
-function JsonExporter(name, isDefault) {
-	BaseDataExporter.call(this, "JSON");
+function GifExporter(name, isDefault) {
+	BaseImageExporter.call(this, "GIF");
 	var self = this;
 	this.version = "0.1.0";
 
-	// a valid, do-nothing placeholder method
-	var doNothing = function () { };
+	this.URI_PREAMBLE = "data:image/gif;base64,";
+	this.imageFormat = "gif";
+	this.getImageData = function(packer) {
+		 return packer.exportImageDataURL || packer.bufferDataURL;
+	};
 	
 	this.DoInit = function() {
 		// TODO: init exporter
 	};
-	
-	this.DoExport = function(data) {
-		return JSON.stringify(data, null, 2);
-	};
 }
 
-(new JsonExporter()).register();
+(new GifExporter()).register();

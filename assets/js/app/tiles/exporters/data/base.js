@@ -48,11 +48,11 @@ function BaseDataExporter(name, isDefault) {
 		if(self.DoInit && typeof self.DoInit === "function") { self.DoInit(); }
 	};
 	
-	var URI_PREAMBLE = {
-		"gif" : "data:image/gif;base64,",
-		"jpg" : "data:image/jpeg;base64,",
-		"png" : "data:image/png;base64,",
-	};
+// 	var URI_PREAMBLE = {
+// 		"gif" : "data:image/gif;base64,",
+// 		"jpg" : "data:image/jpeg;base64,",
+// 		"png" : "data:image/png;base64,",
+// 	};
 	
 	var DetectImageType = function(packer) {
 		// TODO: detect type ...
@@ -80,12 +80,15 @@ function BaseDataExporter(name, isDefault) {
 	};
 
 	var packer = null;
+	var imageExporter = null;
 	
 	// Accepts a packer and a full set of options from the left sidebar. 
 	// Return value to callbackComplete includes a "success" boolean property. 
 	// This is a synchronous call. (for now)
 	this.export = function(images, options, completeCallback, statusCallback) { 
-		packer = CurrentPacker;
+		packer = CurrentPacker || {};
+		imageExporter = CurrentImageExporter || {};
+		
 		
 		init(completeCallback, statusCallback);
 
@@ -113,9 +116,14 @@ function BaseDataExporter(name, isDefault) {
 							height:   packer.height,
 							filename: ""
 						},
-						exporter: {
+						dataExporter: {
 							name:       self.name || "Unknown",
 							version:    self.version || "Unknown",
+							exportedOn: new Date().toString()
+						},
+						imageExporter: {
+							name:       imageExporter.name || "Unknown",
+							version:    imageExporter.version || "Unknown",
 							exportedOn: new Date().toString()
 						},
 						sprites: []
@@ -156,9 +164,19 @@ function BaseDataExporter(name, isDefault) {
 					
 					var filename = options["name"] || "untitled";
 					
-					var imageFormat = (options["imageFormat"] || DetectImageType(packer)).toLowerCase();
-					var imagePreamble = URI_PREAMBLE[imageFormat];
-					var image_data = (packer.exportImageDataURL || packer.bufferDataURL).split(",")[1]; // base64.decode(packer.bufferDataURL.substring(imagePreamble.length));
+// 					var imageFormat = (options["imageFormat"] || DetectImageType(packer)).toLowerCase();
+// 					var imagePreamble = URI_PREAMBLE[imageFormat];
+// 					var image_data = (packer.exportImageDataURL || packer.bufferDataURL).split(",")[1]; // base64.decode(packer.bufferDataURL.substring(imagePreamble.length));
+// 					data.packer.filename = filename + "." + imageFormat;
+
+					var imageFormat = (imageExporter.imageFormat || options["imageFormat"] || "png").toLowerCase();
+					var imagePreamble = imageExporter.URI_PREAMBLE || "data:image/png;base64,";
+					var image_data = null;
+					if(imageExporter && imageExporter.getImageData && typeof imageExporter.getImageData === "function") {
+						image_data = imageExporter.getImageData(packer);
+
+					}
+					image_data = (image_data || packer.exportImageDataURL || packer.bufferDataURL).split(",")[1]; // base64.decode(packer.bufferDataURL.substring(imagePreamble.length));
 					data.packer.filename = filename + "." + imageFormat;
 					
 					var atlas_data = self.DoExport(data);

@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-var exporters = exporters || {};
+var dataExporters = dataExporters || {};
 
 function XmlExporter(name, isDefault) {
 	BaseDataExporter.call(this, "XML", true); // Default Exporter
@@ -43,8 +43,9 @@ function XmlExporter(name, isDefault) {
 		"<!-- Packer: " + data.packer.name + ", v" + data.packer.version + " -->\n" +
 		"<!-- " + data.packer.stats + " -->\n" +
 		"\n" +
-		"<!-- Exporter: " + data.exporter.name + ", v" + data.exporter.version + " -->\n" +
-		"<!-- " + data.exporter.exportedOn + " -->\n" +
+		"<!-- Exporter (Data): " + data.dataExporter.name + ", v" + data.dataExporter.version + " -->\n" +
+		"<!-- Exporter (Image): " + data.imageExporter.name + ", v" + data.imageExporter.version + " -->\n" +
+		"<!-- " + data.dataExporter.exportedOn + " -->\n" +
 		"\n" +
 		"<!--\n" +
 		"  Format:\n" +
