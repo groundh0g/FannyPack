@@ -23,7 +23,7 @@ THE SOFTWARE.
 var exporters = exporters || {};
 
 function XmlExporter(name, isDefault) {
-	BaseExporter.call(this, "XML", true); // Default Exporter
+	BaseDataExporter.call(this, "XML", true); // Default Exporter
 	var self = this;
 	this.version = "0.1.0";
 

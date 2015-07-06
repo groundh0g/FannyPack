@@ -23,7 +23,7 @@ THE SOFTWARE.
 var exporters = exporters || {};
 
 function CssExporter(name, isDefault) {
-	BaseExporter.call(this, "CSS");
+	BaseDataExporter.call(this, "CSS");
 	var self = this;
 	this.version = "0.1.0";
 

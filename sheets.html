@@ -4,7 +4,7 @@ title: FannyPack
 tagline: a suite of &#35;gamedev tools
 description: FannyPack is a suite of &#35;gamedev tools.
 pagename: sheets
-scripts: [image-item, options, packers/base, packers/basic, packers/joe, exporters/base, exporters/exportJson, exporters/exportXml, exporters/exportCss, sheets, sheets-events]
+scripts: [image-item, options, packers/base, packers/basic, packers/joe, exporters/data/base, exporters/data/exportJson, exporters/data/exportXml, exporters/data/exportCss, exporters/image/base, exporters/image/exportGif, exporters/image/exportJpg, exporters/image/exportPng, sheets, sheets-events]
 isApp: true
 ---
 {% include JB/setup %}
@@ -26,7 +26,7 @@ isApp: true
 			<a id="cmdPublish" href="#null" class="btn"><i class="icon icon-share"></i> Publish</a>
 		  </div>
 		  <div class="btn-group">
-			<a id="cmdToggleSettings" href="#null" class="btn"><i class="icon icon-wrench"></i> Settings</a>
+			<a id="cmdToggleSettings" href="#null" class="btn active"><i class="icon icon-wrench"></i> Settings</a>
 		  </div>
 		  <div class="btn-group pull-right" style="">
 			<a id="cmdStatus" href="#null" class="btn btn-link" style="color:#000;">STATUS: <span id="txtStatusMessage">Ready.</span></a>
@@ -44,6 +44,7 @@ isApp: true
 			</td>
 			<td class="tipcol"><i class="icon icon-question-signx"></i></td>
 		</tr>
+<!-- 
 		<tr><td class="optionLabel" title="What format should the published image be?">Image&nbsp;</td>
 			<td><div class="btn-toolbar" style="margin:0;">
 				<div class="btn-group">
@@ -52,6 +53,18 @@ isApp: true
 					<li><a href="#null">GIF</a></li>
 					<li><a href="#null">JPG</a></li>
 					<li><a href="#null">PNG *</a></li>
+				  </ul>
+				</div>
+				</div>
+			</td>
+			<td class="tipcol"><i class="icon icon-question-signx"></i></td>
+		</tr>
+ -->
+		<tr><td class="optionLabel" title="What format should the published image be?">Image&nbsp;</td>
+			<td><div class="btn-toolbar" style="margin:0;">
+				<div class="btn-group">
+				  <a class="btn dropdown-toggle" data-toggle="dropdown"><span id="ddlImageFormat">UNKNOWN</span> <span class="caret"></span></a>
+				  <ul id="ddlImageFormatOptions" class="dropdown-menu">
 				  </ul>
 				</div>
 				</div>

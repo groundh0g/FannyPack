@@ -20,9 +20,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-var exporters = exporters || {};
+var dataExporters = dataExporters || {};
 
-function BaseExporter(name, isDefault) {
+function BaseDataExporter(name, isDefault) {
 	var self = this;
 	this.name = name || "Null";
 	this.isDefault = isDefault || false;
@@ -48,11 +48,11 @@ function BaseExporter(name, isDefault) {
 		if(self.DoInit && typeof self.DoInit === "function") { self.DoInit(); }
 	};
 	
-	var URI_PREAMBLE = {
-		"gif" : "data:image/gif;base64,",
-		"jpg" : "data:image/jpeg;base64,",
-		"png" : "data:image/png;base64,",
-	};
+// 	var URI_PREAMBLE = {
+// 		"gif" : "data:image/gif;base64,",
+// 		"jpg" : "data:image/jpeg;base64,",
+// 		"png" : "data:image/png;base64,",
+// 	};
 	
 	var DetectImageType = function(packer) {
 		// TODO: detect type ...
@@ -80,12 +80,15 @@ function BaseExporter(name, isDefault) {
 	};
 
 	var packer = null;
+	var imageExporter = null;
 	
 	// Accepts a packer and a full set of options from the left sidebar. 
 	// Return value to callbackComplete includes a "success" boolean property. 
 	// This is a synchronous call. (for now)
 	this.export = function(images, options, completeCallback, statusCallback) { 
-		packer = CurrentPacker;
+		packer = CurrentPacker || {};
+		imageExporter = CurrentImageExporter || {};
+		
 		
 		init(completeCallback, statusCallback);
 
@@ -113,9 +116,14 @@ function BaseExporter(name, isDefault) {
 							height:   packer.height,
 							filename: ""
 						},
-						exporter: {
+						dataExporter: {
 							name:       self.name || "Unknown",
 							version:    self.version || "Unknown",
+							exportedOn: new Date().toString()
+						},
+						imageExporter: {
+							name:       imageExporter.name || "Unknown",
+							version:    imageExporter.version || "Unknown",
 							exportedOn: new Date().toString()
 						},
 						sprites: []
@@ -156,9 +164,19 @@ function BaseExporter(name, isDefault) {
 					
 					var filename = options["name"] || "untitled";
 					
-					var imageFormat = (options["imageFormat"] || DetectImageType(packer)).toLowerCase();
-					var imagePreamble = URI_PREAMBLE[imageFormat];
-					var image_data = (packer.exportImageDataURL || packer.bufferDataURL).split(",")[1]; // base64.decode(packer.bufferDataURL.substring(imagePreamble.length));
+// 					var imageFormat = (options["imageFormat"] || DetectImageType(packer)).toLowerCase();
+// 					var imagePreamble = URI_PREAMBLE[imageFormat];
+// 					var image_data = (packer.exportImageDataURL || packer.bufferDataURL).split(",")[1]; // base64.decode(packer.bufferDataURL.substring(imagePreamble.length));
+// 					data.packer.filename = filename + "." + imageFormat;
+
+					var imageFormat = (imageExporter.imageFormat || options["imageFormat"] || "png").toLowerCase();
+					var imagePreamble = imageExporter.URI_PREAMBLE || "data:image/png;base64,";
+					var image_data = null;
+					if(imageExporter && imageExporter.getImageData && typeof imageExporter.getImageData === "function") {
+						image_data = imageExporter.getImageData(packer);
+
+					}
+					image_data = (image_data || packer.exportImageDataURL || packer.bufferDataURL).split(",")[1]; // base64.decode(packer.bufferDataURL.substring(imagePreamble.length));
 					data.packer.filename = filename + "." + imageFormat;
 					
 					var atlas_data = self.DoExport(data);
@@ -197,5 +215,5 @@ function BaseExporter(name, isDefault) {
 	this.addInfo    = function(msg) { self.msgInfos.push(msg); };
 
 	// add this packer instance to the list of available packers
-	this.register = function() { exporters[this.name] = this; };
+	this.register = function() { dataExporters[this.name] = this; };
 }

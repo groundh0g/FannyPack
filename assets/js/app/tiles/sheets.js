@@ -112,8 +112,6 @@ var DoFileSave = function () {
 
 var isPublishing = false;
 var CurrentDataExporter = null;
-var CurrentImageExporter = null;
-
 var DoPublish = function () { 
 	if(isPublishing === true) { return; }
 	
@@ -125,7 +123,6 @@ var DoPublish = function () {
 
 	var options = new Options();
 	options.read();
-	CurrentImageExporter = dataExporters[options["imageFormat"]];
 	CurrentDataExporter = dataExporters[options["dataFormat"]];
 	CurrentDataExporter.export(imagePool, options, OnPublishComplete);
 };
@@ -983,22 +980,6 @@ $(document).ready(function () {
 		$("#ddlDataFormatOptions").append($li);
 	}
 
-	// add image format options
-	keys = BasePacker.SortBy["NAME"](imageExporters);
-	for(i = 0; i < keys.length; i++) {
-		var $li = $("<li/>");
-		var $a = $("<a/>").attr("href","#null");
-		var item = imageExporters[keys[i]];
-		if(item.isDefault) {
-			$a.text(item.name + " *");
-			$("#ddlImageFormat").text(item.name);
-		} else {
-			$a.text(item.name);
-		}
-		$li.append($a);
-		$("#ddlImageFormatOptions").append($li);
-	}
-
 	$("#ddlSpritePackerOptions li a").click(function() { 
 		var result = UpdateDropDownValue("ddlSpritePacker", $(this));
 		$("#ddlSortBy").text(packers[$("#ddlSpritePacker").text()].defaultSortBy);
@@ -1006,7 +987,6 @@ $(document).ready(function () {
 	});
 	$("#ddlSortByOptions li a").click(function() { return UpdateDropDownValue("ddlSortBy", $(this)); });
 	$("#ddlDataFormatOptions li a").click(function() { return UpdateDropDownValue("ddlDataFormat", $(this)); });
-	$("#ddlImageFormatOptions li a").click(function() { return UpdateDropDownValue("ddlImageFormat", $(this)); });
 	
 	// reset IsDirty() flag
 	persistedOptions = new Options();

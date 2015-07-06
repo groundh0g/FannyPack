@@ -20,23 +20,39 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-var exporters = exporters || {};
+var imageExporters = imageExporters || {};
 
-function JsonExporter(name, isDefault) {
-	BaseExporter.call(this, "JSON");
+function BaseImageExporter(name, isDefault) {
 	var self = this;
+	this.name = name || "Null";
+	this.isDefault = isDefault || false;
 	this.version = "0.1.0";
+
+	// collections of messages, cleared again in init()
+ 	this.msgErrors = [];
+ 	this.msgWarnings = [];
+ 	this.msgInfos = [];
 
 	// a valid, do-nothing placeholder method
 	var doNothing = function () { };
 	
-	this.DoInit = function() {
-		// TODO: init exporter
+	// likely unused, but called for all exporters at start of export()
+	// sets warnings and error messages, if any. inits params
+	// this might be useful for checking browser compatibility?
+	var init = function() { 
+		// clear messages
+		self.msgErrors = [];
+		self.msgWarnings = [];
+		self.msgInfos = [];
+		
+		if(self.DoInit && typeof self.DoInit === "function") { self.DoInit(); }
 	};
 	
-	this.DoExport = function(data) {
-		return JSON.stringify(data, null, 2);
-	};
-}
+	// manage the various types of messages
+	this.addWarning = function(msg) { self.msgWarnings.push(msg); };
+	this.addError   = function(msg) { self.msgErrors.push(msg); };
+	this.addInfo    = function(msg) { self.msgInfos.push(msg); };
 
-(new JsonExporter()).register();
+	// add this packer instance to the list of available packers
+	this.register = function() { imageExporters[this.name] = this; };
+}

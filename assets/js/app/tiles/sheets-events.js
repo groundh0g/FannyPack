@@ -33,9 +33,9 @@ $("#cmdToggleSettings").click(function() { return DoToggleSettings(); } )
 
 // -- LEFT SIDEBAR --
 $("#txtName").keyup(function(event) { return UpdateSpinBox("txtName", event, 13); });
-//$("#ddlImageFormatOptions li a").click(function() { return UpdateDropDownValue("ddlImageFormat", $(this)); });
+$("#ddlImageFormatOptions li a").click(function() { return UpdateDropDownValue("ddlImageFormat", $(this)); });
 $("#ddlNameInSheetOptions li a").click(function() { return UpdateDropDownValue("ddlNameInSheet", $(this)); });
-// NOTE: ddlImageFormatOptions, ddlDataFormatOptions, ddlSpritePacker, and ddlSortBy are handled in $(document).ready(); [in sheets.js]
+// NOTE: ddlDataFormatOptions, ddlSpritePacker, and ddlSortBy are handled in $(document).ready(); [in sheets.js]
 $("#ddlAllowRotateOptions li a").click(function() { return UpdateDropDownValue("ddlAllowRotate", $(this)); });
 $("#txtWidthOptions li a").click(function() { return UpdateDropDownValueInput("txtWidth", $(this)); });
 $("#txtWidth").keyup(function(event) { return UpdateSpinBox("txtWidth", event); });
