@@ -423,7 +423,7 @@ function BasePacker(name, isDefault) {
 	this.addInfo    = function(msg) { self.msgInfos.push(msg); };
 
 	// add this packer instance to the list of available packers
-	this.register = function() { packers[this.name] = this; };
+	this.register = function() { packers[self.name] = self; };
 }
 
 BasePacker.SortBy = {};

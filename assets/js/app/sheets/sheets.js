@@ -125,7 +125,7 @@ var DoPublish = function () {
 
 	var options = new Options();
 	options.read();
-	CurrentImageExporter = dataExporters[options["imageFormat"]];
+	CurrentImageExporter = imageExporters[options["imageFormat"]];
 	CurrentDataExporter = dataExporters[options["dataFormat"]];
 	CurrentDataExporter.export(imagePool, options, OnPublishComplete);
 };
