@@ -105,38 +105,40 @@ name. It's a geeky representation of a utility belt. (Think Schneider or Batman.
 
 Besides, I like it.
 
-<div id="popupFeatureSheets" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="popupAboutLabel" aria-hidden="true">
-  <div class="modal-header">
-	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-	<h3 id="popupAboutLabel">Sprite Sheet Features</h3>
+<div id="popupFeatureSheets" class="modal fade">
+  <div class="modal-dialog">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title">Sprite Sheet Features</h4>
+	  </div>
+	  <div class="modal-body">
+		<p>Current Features:</p>
+		<div style="padding-left:10px;"><p>
+			<i class="icon icon-ok"></i> Import web-friendly image formats<br/>
+			<i class="icon icon-ok"></i> <em>Extract animated GIF frames!</em><br/>
+			<i class="icon icon-ok"></i> Export images as PNG, GIF, or JPG<br/>
+			<i class="icon icon-ok"></i> Export data as XML or JSON<br/>
+			<i class="icon icon-ok"></i> Export data as CSS<br/>
+			<i class="icon icon-ok"></i> Trim &amp; crop unused pixels<br/>
+			<i class="icon icon-ok"></i> Heuristic mapping (chroma key)<br/>
+			<i class="icon icon-ok"></i> Basic rects (shelf) texture packing<br/>
+			<i class="icon icon-ok"></i> MaxRects texture packing<br/>
+			<i class="icon icon-ok"></i> Alpha (transparent) cleaning (aids compression)<br/>
+			<i class="icon icon-ok"></i> Debug mode (show sprite outlines)
+		</p></div>
+		<p>Planned Features:</p>
+		<div style="padding-left:10px;"><p>
+			<i class="icon icon-wrench"></i> Import non-web image formats<br/>
+			<i class="icon icon-wrench"></i> Export optimized images<br/>
+			<i class="icon icon-wrench"></i> Allow sprite rotate within sheet<br/>
+			<i class="icon icon-wrench"></i> Alias duplicate sprites<br/>
+			<i class="icon icon-wrench"></i> DropBox support
+		</p></div>
+	  </div>
+	  <div class="modal-footer">
+		<button type="button" class="btn btn-primary" data-dismiss="modal">Dismiss</button>
+	  </div>
+	</div>
   </div>
-  <div class="modal-body">
-  	
-	<p>Current Features:</p>
-	<div style="padding-left:10px;"><p>
-		<i class="icon icon-ok"></i> Import web-friendly image formats<br/>
-		<i class="icon icon-ok"></i> <em>Extract animated GIF frames!</em><br/>
-		<i class="icon icon-ok"></i> Export images as PNG, GIF, or JPG<br/>
-		<i class="icon icon-ok"></i> Export data as XML or JSON<br/>
-		<i class="icon icon-ok"></i> Export data as CSS<br/>
-		<i class="icon icon-ok"></i> Trim &amp; crop unused pixels<br/>
-		<i class="icon icon-ok"></i> Heuristic mapping (chroma key)<br/>
-		<i class="icon icon-ok"></i> Basic rects (shelf) texture packing<br/>
-		<i class="icon icon-ok"></i> MaxRects texture packing<br/>
-		<i class="icon icon-ok"></i> Alpha (transparent) cleaning (aids compression)<br/>
-		<i class="icon icon-ok"></i> Debug mode (show sprite outlines)
-	</p></div>
-	<p>Planned Features:</p>
-	<div style="padding-left:10px;"><p>
-		<i class="icon icon-wrench"></i> Import non-web image formats<br/>
-		<i class="icon icon-wrench"></i> Export optimized images<br/>
-		<i class="icon icon-wrench"></i> Allow sprite rotate within sheet<br/>
-		<i class="icon icon-wrench"></i> Alias duplicate sprites<br/>
-		<i class="icon icon-wrench"></i> DropBox support
-	</p></div>
-	
-  </div>
-  <div class="modal-footer">
-	<button class="btn" data-dismiss="modal" aria-hidden="true">Dismiss</button>
-  </div>
-</div>		
+</div>

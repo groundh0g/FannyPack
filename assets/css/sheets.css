@@ -39,10 +39,10 @@ body {
 .divSidebarLeft {
 	border:1px solid #000;
 	position:absolute; 
-	top:81px; 
+	top:95px; 
 	bottom:0; 
 	left:0; 
-	width:290px; 
+	width:300px; 
 	background-color:#eee; 
 	color:333;
 	overflow:auto;
@@ -69,9 +69,9 @@ body {
 .divSidebarRightToolbar {
 	border:1px solid #000;
 	position:absolute; 
-	top:81px; 
-	height:30px; 
-	width:290px; 
+	top:95px; 
+	height:46px; 
+	width:300px; 
 	right:0; 
 	background-color:#eee; 
 	color:333;
@@ -81,10 +81,10 @@ body {
 .divSidebarRight {
 	border:1px solid #000;
 	position:absolute; 
-	top:122px; 
+	top:140px; 
 	bottom:0; 
 	right:0; 
-	width:290px; 
+	width:300px; 
 	background-color:#eee; 
 	color:333;
 	overflow:auto;
@@ -94,10 +94,10 @@ body {
 .divWorkspaceToolbar {
 	border:1px solid #000;
 	position:absolute; 
-	right:301px; 
-	left:301px; 
-	top:81px; 
-	height:30px; 
+	right:300px; 
+	left:300px; 
+	top:95px; 
+	height:46px; 
 	background-color:#667; 
 	color:fff;
 	padding:5px;
@@ -106,10 +106,10 @@ body {
 .divWorkspace {
 	border:1px solid #000;
 	position:absolute; 
-	top:122px; 
+	top:140px; /* 136px; */ 
 	bottom:0; 
-	right:301px; 
-	left:301px; 
+	right:300px; 
+	left:300px; 
 	background-color:#888; 
 	color:333;
 	overflow:auto;
