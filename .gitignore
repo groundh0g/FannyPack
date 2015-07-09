@@ -9,3 +9,6 @@ _drafts/
 
 ## Mac file? Why is that even showing up?
 .DS_Store
+
+## IntelliJ / WebStorm project settings
+\.idea
