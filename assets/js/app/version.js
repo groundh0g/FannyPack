@@ -21,7 +21,7 @@ THE SOFTWARE.
 */
 
 var FannyPack_SpriteSheet_AppName = "FannyPack Sprite Sheets";
-var FannyPack_SpriteSheet_Version = "0.1.0";
+var FannyPack_SpriteSheet_Version = "0.2.0";
 var FannyPack_SpriteSheet_URL = "https://github.com/groundh0g/FannyPack";
 $(document).ready(function () {
 	$(".versionPlaceholder").text("version " + FannyPack_SpriteSheet_Version);
