@@ -54,5 +54,5 @@ function BaseImageExporter(name, isDefault) {
 	this.addInfo    = function(msg) { self.msgInfos.push(msg); };
 
 	// add this packer instance to the list of available packers
-	this.register = function() { imageExporters[this.name] = this; };
+	this.register = function() { imageExporters[self.name] = self; };
 }

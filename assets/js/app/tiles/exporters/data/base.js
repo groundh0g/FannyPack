@@ -80,14 +80,13 @@ function BaseDataExporter(name, isDefault) {
 	};
 
 	var packer = null;
-	var imageExporter = null;
-	
+
 	// Accepts a packer and a full set of options from the left sidebar. 
 	// Return value to callbackComplete includes a "success" boolean property. 
 	// This is a synchronous call. (for now)
 	this.export = function(images, options, completeCallback, statusCallback) { 
 		packer = CurrentPacker || {};
-		imageExporter = CurrentImageExporter || {};
+		var imageExporter = CurrentImageExporter || {};
 		
 		
 		init(completeCallback, statusCallback);
@@ -215,5 +214,5 @@ function BaseDataExporter(name, isDefault) {
 	this.addInfo    = function(msg) { self.msgInfos.push(msg); };
 
 	// add this packer instance to the list of available packers
-	this.register = function() { dataExporters[this.name] = this; };
+	this.register = function() { dataExporters[self.name] = self; };
 }

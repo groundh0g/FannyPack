@@ -57,7 +57,7 @@ var DoFileNew = function () {
 
 var DoFileOpen = function () {
 	var prompt = PromptUserIfDirty();
-	if(prompt) {
+	if(prompt != null) {
 		if(!confirm(prompt)) {
 			return false;
 		}
@@ -125,7 +125,7 @@ var DoPublish = function () {
 
 	var options = new Options();
 	options.read();
-	CurrentImageExporter = dataExporters[options["imageFormat"]];
+	CurrentImageExporter = imageExporters[options["imageFormat"]];
 	CurrentDataExporter = dataExporters[options["dataFormat"]];
 	CurrentDataExporter.export(imagePool, options, OnPublishComplete);
 };
@@ -606,13 +606,20 @@ var UpdateConsole = function() {
 		ConsoleMessageTypes.INFO,
 		ConsoleMessageTypes.SUCCESS
 	];
-	
+
+	// Bootstrap 3 mappings ...
+	var styles = {};
+	styles[ConsoleMessageTypes.ERROR]   = "danger";
+	styles[ConsoleMessageTypes.WARNING] = "warning";
+	styles[ConsoleMessageTypes.INFO]    = "info";
+	styles[ConsoleMessageTypes.SUCCESS] = "success";
+
 	for(var i = 0; i < keys.length; i++) {
 		var key = keys[i];
 		var msgs = consoleMessages[key];
 		if(msgs.length > 0) {
 			for(var j = 0; j < msgs.length; j++) {
-				var $alert = $("<div/>").addClass("alert alert-" + key.toLowerCase()).css("margin-bottom","2px");
+				var $alert = $("<div/>").addClass("alert alert-" + styles[key]).css("margin-bottom","2px");
 				$alert.html("<h4>" + key + ":</h4> " + msgs[j]);
 				$("#divConsole").append($alert);
 			}

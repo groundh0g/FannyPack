@@ -86,6 +86,7 @@ $("#cmdUploadProject").click(function(){ $("#uploadProject").click(); });
 
 $(window).on('beforeunload', function(e) {
 	var prompt = PromptUserIfDirty();
+	prompt = prompt == null ? undefined : prompt;
 	if(e && typeof e.returnValue != "undefined") { e.returnValue = prompt; }
 	return prompt;
 });

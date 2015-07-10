@@ -84,8 +84,7 @@ function BasePacker(name, isDefault) {
 
 	var packCallback = function(images, options, completeCallback, statusCallback) { 
 		// hand self.DoPack() the subset of options that it cares about
-		var opts = trimOptions(options);
-		self.DoPack_Options = opts;
+		self.DoPack_Options = trimOptions(options);
 		self.DoPack_AllOptions = options;
 		
 		// count frames of animated GIFs, or just use first frame?
@@ -289,9 +288,6 @@ function BasePacker(name, isDefault) {
 					case "borderPadding":
 					case "shapePadding":
 					case "innerPadding":
-					case "spritePacker":
-					case "sortBy":
-					case "allowRotate":
 					case "imageFormat":
 						switch(key) {
 							case "spritePacker":
@@ -427,7 +423,7 @@ function BasePacker(name, isDefault) {
 	this.addInfo    = function(msg) { self.msgInfos.push(msg); };
 
 	// add this packer instance to the list of available packers
-	this.register = function() { packers[this.name] = this; };
+	this.register = function() { packers[self.name] = self; };
 }
 
 BasePacker.SortBy = {};
