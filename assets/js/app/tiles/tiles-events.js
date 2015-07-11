@@ -29,7 +29,7 @@ $("#cmdSpriteRemove").click(function() { return DoSpriteRemove(); });
 $("#cmdRefresh").click(function() { OnValueChanged(); return true; });
 $("#cmdPublish").click(function() { DoPublish(); return true; });
 $("#cmdToggleHelp").click(function() { return DoToggleHelp(); });
-$("#cmdToggleSettings").click(function() { return DoToggleSettings(); } )
+$("#cmdFileOptions").click(function() { return DoToggleSettings(); } )
 
 // -- LEFT SIDEBAR --
 $("#txtName").keyup(function(event) { return UpdateSpinBox("txtName", event, 13); });

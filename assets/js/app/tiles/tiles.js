@@ -202,19 +202,21 @@ var isHelpVisible = true;
 // 	return false;
 // }
 
-var isSettingsVisible = true;
+var isSettingsVisible = false;
 var DoToggleSettings = function () {
 	if(isSettingsVisible) {
 		$("#divSidebarLeft").hide();
-		$("#divWorkspace").css("left","0");
-		$("#divWorkspaceToolbar").css("left","0");
-		$("#cmdToggleSettings").removeClass("active");
+		$("#divWorkspace").css("left","50px");
+		$("#divWorkspaceToolbar").css("left","50px");
+		$("#progressBarWrapper").css("width","200px");
+		$("#cmdFileOptions").removeClass("active").blur();
 		isSettingsVisible = false;
 	} else {
 		$("#divSidebarLeft").show();
-		$("#divWorkspace").css("left","301px");
-		$("#divWorkspaceToolbar").css("left","301px");
-		$("#cmdToggleSettings").addClass("active");
+		$("#progressBarWrapper").css("width","75px");
+		$("#divWorkspace").css("left","350px");
+		$("#divWorkspaceToolbar").css("left","350px");
+		$("#cmdFileOptions").addClass("active").blur();
 		isSettingsVisible = true;
 	}
 	return false;
