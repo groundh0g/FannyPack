@@ -44,7 +44,7 @@ body {
 	left:0; 
 	width:300px; 
 	background-color:#eee; 
-	color:333;
+	color:#333;
 	overflow:auto;
 	padding:5px;
 }
@@ -74,7 +74,7 @@ body {
 	width:300px; 
 	right:0; 
 	background-color:#eee; 
-	color:333;
+	color:#333;
 	padding:5px;
 }
 
@@ -86,7 +86,7 @@ body {
 	right:0; 
 	width:300px; 
 	background-color:#eee; 
-	color:333;
+	color:#333;
 	overflow:auto;
 	padding:5px;
 }
@@ -99,7 +99,7 @@ body {
 	top:95px; 
 	height:46px; 
 	background-color:#667; 
-	color:fff;
+	color:#fff;
 	padding:5px;
 }
 
@@ -111,7 +111,7 @@ body {
 	right:300px; 
 	left:300px; 
 	background-color:#888; 
-	color:333;
+	color:#333;
 	overflow:auto;
 	padding:5px;
 }
@@ -121,7 +121,6 @@ body {
 	height:36px;
 	background-color:#fed;
 	border-bottom:1px solid #888;
-	overflow:none;
 	line-height:32px;
 	font-weight:bold;
 	overflow:hidden;
@@ -131,8 +130,7 @@ body {
 
 .divSpritesListItem img {
 	border:0;
-	margin:2px;
-	margin-right:10px;
+	margin: 2px 10px 2px 2px;
 	width:32px;
 	height:32px;
 	/*
@@ -167,7 +165,7 @@ body {
 }
 
 .divWorkspaceContainerCrop {
-	background: url(../../../assets/img/transparent_background.png) repeat;
+	background: url(../img/transparent_background.png) repeat;
 }
 
 .divWorkspaceContainerCrop img {
