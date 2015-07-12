@@ -999,9 +999,9 @@ $(document).ready(function () {
 		var $a = $("<a/>").attr("href","#null");
 		var item = imageExporters[keys[i]];
 		if(item.isDefault) {
-			$a.text(item.name + " *");
-			$("#ddlImageFormat").text(item.name);
-		} else {
+            $a.text(item.name + " *");
+            $("#ddlImageFormat").text(item.name);
+        } else {
 			$a.text(item.name);
 		}
 		$li.append($a);

@@ -200,7 +200,7 @@ body {
 }
 
 /* http://stackoverflow.com/questions/9622043/turn-off-bootstraps-css3-transitions-on-progress-bars#9622873 */
-.progress #progressBar.bar {
+#progressBar {
   -webkit-transition: none; /* width 0.6s ease; */
      -moz-transition: none; /* width 0.6s ease; */
       -ms-transition: none; /* width 0.6s ease; */

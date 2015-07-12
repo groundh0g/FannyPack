@@ -365,11 +365,11 @@ isApp: true
 		<a id="cmdWorkspaceFitHeight" title="Fit Workspace Height" href="#null" class="btn btn-default"><i class="glyphicon glyphicon-resize-vertical"></i></a>
 		<a id="cmdWorkspaceFitBoth"   title="Fit to Workspace"     href="#null" class="btn btn-default"><i class="glyphicon glyphicon-resize-full"></i></a>
 	  </div>
-	  <div class="btn-group pull-right" style="width:200px;">
-		<div class="progress progress-info" style="height:34px; background-color:#889; background-image:none;">
-		  <div id="progressBar" class="bar" style="width:0;"></div>
-		</div>
-	  </div>
+      <div id="progressBarWrapper" class="btn-group pull-right" style="width:200px;">
+          <div class="progress" style="height:34px; background-color:#889; background-image:none;">
+              <div id="progressBar" class="progress-bar" role="progressbar" style="width:0;"></div>
+          </div>
+      </div>
 	</div>
 </div>
 
@@ -402,7 +402,6 @@ isApp: true
 	<div id="divConsole" style="display:none;">
 		[No messages.]
 	</div>
-</div>
 </div>
 
 <INPUT id="uploadSprites" type="file" name="submitfile" multiple="multiple" style="display:none;" onchange="return ProcessSpriteAdd(this.files);" />
