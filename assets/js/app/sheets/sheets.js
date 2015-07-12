@@ -34,8 +34,8 @@ var OnValueChanged = function(preserveLog) {
 		UpdateConsole();
 	}
 	
-	return false; 
-}
+	return false;
+};
 
 var persistedOptions = {};
 var persistedImagePool = {};
@@ -44,13 +44,13 @@ var IsDirty = function() {
 	var current = new Options();
 	current.read();
 	return !(current.equals(persistedOptions) && ImageItem.compareImagePools(imagePool, persistedImagePool));
-}
+};
 
 var PromptUserIfDirty = function() {
 	return IsDirty() ? "You have unsaved changes." : null;
-}
+};
 
-var DoFileNew = function () { 
+var DoFileNew = function () {
 	window.location.reload(true);
 	return false;
 };
@@ -132,19 +132,20 @@ var DoPublish = function () {
 
 var OnPublishComplete = function(result) {
 	var dataExporter = CurrentDataExporter;
-	
+    var i;
+
 	var msgs = dataExporter.msgErrors;
-	for(var i = 0; i < msgs.length; i++) {
+	for(i = 0; i < msgs.length; i++) {
 		LogConsoleMessage(ConsoleMessageTypes.ERROR, msgs[i]);
 	}
 
 	msgs = dataExporter.msgWarnings;
-	for(var i = 0; i < msgs.length; i++) {
+	for(i = 0; i < msgs.length; i++) {
 		LogConsoleMessage(ConsoleMessageTypes.WARNING, msgs[i]);
 	}
 
 	msgs = dataExporter.msgInfos;
-	for(var i = 0; i < msgs.length; i++) {
+	for(i = 0; i < msgs.length; i++) {
 		LogConsoleMessage(ConsoleMessageTypes.INFO, msgs[i]);
 	}
 
@@ -161,7 +162,7 @@ var OnPublishComplete = function(result) {
 	isPublishing = false;
 };
 
-var DoSpriteAdd = function () { 
+var DoSpriteAdd = function () {
 	$("#popupFileModalTitle").text("Add Sprite(s)");
 	$("#popupFileModalDropLabel").text("Drag and drop image files here, or ...");
 	$("#popupFileModalDropInfo").text("No file(s) selected.");
@@ -169,7 +170,8 @@ var DoSpriteAdd = function () {
 	$("#cmdUploadSprites").show();
 	$("#popupFileModal").modal("show");
 	return false; 
-};		
+};
+
 var DoSpriteRemove = function () { 
 	ClearConsoleMessages();
 	var countDeleted = 0;
@@ -218,7 +220,7 @@ var DoToggleSettings = function () {
 		isSettingsVisible = true;
 	}
 	return false;
-}
+};
 
 var UpdateDropDownValue = function(ddlName, $obj) {
 	$("#" + ddlName).text($obj.text().replace(" *",""));
@@ -655,7 +657,7 @@ var EnableToolbarButtons = function(enable) {
 		"cmdSpriteRemove",
 		"cmdRefresh",
 		"cmdPublish",
-		"cmdToggleSettings",
+		"cmdToggleSettings"
 	];
 	
 	if(enable) {

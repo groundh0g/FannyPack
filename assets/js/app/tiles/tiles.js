@@ -35,7 +35,7 @@ var OnValueChanged = function(preserveLog) {
 	}
 	
 	return false; 
-}
+};
 
 var persistedOptions = {};
 var persistedImagePool = {};
@@ -44,11 +44,11 @@ var IsDirty = function() {
 	var current = new Options();
 	current.read();
 	return !(current.equals(persistedOptions) && ImageItem.compareImagePools(imagePool, persistedImagePool));
-}
+};
 
 var PromptUserIfDirty = function() {
 	return IsDirty() ? "You have unsaved changes." : null;
-}
+};
 
 var DoFileNew = function () { 
 	window.location.reload(true);
@@ -132,19 +132,20 @@ var DoPublish = function () {
 
 var OnPublishComplete = function(result) {
 	var dataExporter = CurrentDataExporter;
-	
+    var i = 0;
+
 	var msgs = dataExporter.msgErrors;
-	for(var i = 0; i < msgs.length; i++) {
+	for(i = 0; i < msgs.length; i++) {
 		LogConsoleMessage(ConsoleMessageTypes.ERROR, msgs[i]);
 	}
 
 	msgs = dataExporter.msgWarnings;
-	for(var i = 0; i < msgs.length; i++) {
+	for(i = 0; i < msgs.length; i++) {
 		LogConsoleMessage(ConsoleMessageTypes.WARNING, msgs[i]);
 	}
 
 	msgs = dataExporter.msgInfos;
-	for(var i = 0; i < msgs.length; i++) {
+	for(i = 0; i < msgs.length; i++) {
 		LogConsoleMessage(ConsoleMessageTypes.INFO, msgs[i]);
 	}
 
@@ -169,8 +170,9 @@ var DoSpriteAdd = function () {
 	$("#cmdUploadSprites").show();
 	$("#popupFileModal").modal("show");
 	return false; 
-};		
-var DoSpriteRemove = function () { 
+};
+
+var DoSpriteRemove = function () {
 	ClearConsoleMessages();
 	var countDeleted = 0;
 	$(".spriteListItemSelected").each(function(e) {
@@ -185,22 +187,6 @@ var DoSpriteRemove = function () {
 	OnValueChanged(); 
 	return false; 
 };
-
-var isHelpVisible = true;
-// var DoToggleHelp = function () {
-// 	if(isHelpVisible) {
-// 		$("td.tipcol").hide();
-// 		$("table.leftSidebar").css("width","274px");
-// 		$("td.leftSidebar").css("width","284px");
-// 		isHelpVisible = false;
-// 	} else {
-// 		$("td.leftSidebar").css("width","305px");
-// 		$("table.leftSidebar").css("width","295px");
-// 		$("td.tipcol").show();
-// 		isHelpVisible = true;
-// 	}
-// 	return false;
-// }
 
 var isSettingsVisible = false;
 var DoToggleSettings = function () {
@@ -942,6 +928,15 @@ var OnPackStatusUpdate = function(count) {
 		}
 	}
 };
+
+
+
+
+
+
+
+
+
 
 $(document).ready(function () {
 	var i = 0;
