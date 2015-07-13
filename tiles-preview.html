@@ -399,6 +399,7 @@ isApp: true
             <a id="cmdWorkSpaceRefresh"   title="Refresh Workspace"    href="#null" class="btn btn-default"><i class="glyphicon glyphicon-refresh"></i></a>
         </div>
         <div class="btn-group">
+            <a id="cmdSnapToGrid" title="Snap to Grid"     href="#null" class="btn btn-default active"><i class="fa fa-th"></i></a>
             <a id="cmdDrawRandom" title="Randomize Tiles"  href="#null" class="btn btn-default active"><i class="fa fa-random"></i></a>
         </div>
         <div class="btn-group">
@@ -438,15 +439,17 @@ isApp: true
         <tr><td>
             <div id="divLayersToolbar" style="padding:2px; border-bottom:1px solid #888;">
                 <div class="btn-group" role="group">
-                    <button id="cmdTilesAdd"    href="#null" class="btn btn-default btn-xs" role="button" title="Add Tiles"><i class="fa fa-plus"></i></button>
-                    <button id="cmdTilesRemove" href="#null" class="btn btn-default btn-xs" role="button" title="Remove Tiles"><i class="fa fa-minus"></i></button>
+                    <button id="cmdLayersSelectAll"   href="#null" class="btn btn-default btn-xs" role="button" title="Select All"><i class="fa fa-check"></i></button>
                 </div>
                 <div class="btn-group" role="group">
-                    <button id="cmdTilesGroup"  href="#null" class="btn btn-default btn-xs" role="button" title="Group Tiles"><i class="fa fa-share-alt"></i></button>
+                    <button id="cmdLayersMoveUp"   href="#null" class="btn btn-default btn-xs" role="button" title="Zoom Out"><i class="fa fa-caret-up"></i></button>
+                    <button id="cmdLayersMoveDown" href="#null" class="btn btn-default btn-xs" role="button" title="Zoom In"><i class="fa fa-caret-down"></i></button>
                 </div>
                 <div class="btn-group" role="group">
-                    <button id="cmdTilesZoomOut" href="#null" class="btn btn-default btn-xs" role="button" title="Zoom Out"><i class="fa fa-search-minus"></i></button>
-                    <button id="cmdTilesZoomIn"  href="#null" class="btn btn-default btn-xs" role="button" title="Zoom In"><i class="fa fa-search-plus"></i></button>
+                    <button id="cmdLayersAddTiles"   href="#null" class="btn btn-default btn-xs" role="button" title="Add Tiles Layer"><i class="fa fa-plus"></i> <i class="fa fa-image"></i></button>
+                    <button id="cmdLayersAddObjects" href="#null" class="btn btn-default btn-xs" role="button" title="Add Objects Layer"><i class="fa fa-plus"></i> <i class="fa fa-cubes"></i></button>
+                    <button id="cmdLayersAddActors"  href="#null" class="btn btn-default btn-xs" role="button" title="Add Actors Layer"><i class="fa fa-plus"></i> <i class="fa fa-users"></i></button>
+                    <button id="cmdTilesRemove"      href="#null" class="btn btn-default btn-xs" role="button" title="Remove Layer"><i class="fa fa-trash"></i></button>
                 </div>
             </div>
         </td></tr>
@@ -454,14 +457,6 @@ isApp: true
             <div style="width:100%; height: 100%; margin:0; padding:0; background-color:#fff; overflow:auto;">
                 <div id="divLayersList" style="">
                     <!--[No tiles selected.]-->
-                    &nbsp;<i class="fa fa-eye"></i>&nbsp;<i class="fa fa-lock"></i>&nbsp;<i class="fa fa-image"></i>&nbsp;Layer Tiles 1<br/>
-                    &nbsp;<i class="fa fa-eye"></i>&nbsp;<i class="fa fa-lock"></i>&nbsp;<i class="fa fa-users"></i>&nbsp;Layer Actors<br/>
-                    &nbsp;<i class="fa fa-eye"></i>&nbsp;<i class="fa fa-lock"></i>&nbsp;<i class="fa fa-cubes"></i>&nbsp;Layer Objects<br/>
-                    &nbsp;<i class="fa fa-eye"></i>&nbsp;<i class="fa fa-lock"></i>&nbsp;<i class="fa fa-image"></i>&nbsp;Layer Tiles 4<br/>
-                    &nbsp;<i class="fa fa-eye"></i>&nbsp;<i class="fa fa-lock"></i>&nbsp;<i class="fa fa-image"></i>&nbsp;Layer Tiles 5<br/>
-                    &nbsp;<i class="fa fa-eye"></i>&nbsp;<i class="fa fa-lock"></i>&nbsp;<i class="fa fa-image"></i>&nbsp;Layer Tiles 6<br/>
-                    &nbsp;<i class="fa fa-eye"></i>&nbsp;<i class="fa fa-lock"></i>&nbsp;<i class="fa fa-image"></i>&nbsp;Layer Tiles 7<br/>
-                    &nbsp;<i class="fa fa-eye"></i>&nbsp;<i class="fa fa-lock"></i>&nbsp;<i class="fa fa-image"></i>&nbsp;Layer Tiles 8<br/>
                 </div>
                 <div id="divMap" style="display:none;">
                     <!--[No tiles selected.]-->

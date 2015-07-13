@@ -932,8 +932,93 @@ var OnPackStatusUpdate = function(count) {
 
 
 
+var LayerTypes = {
+    "TILE"   : "image",
+    "OBJECT" : "cubes",
+    "ACTOR"  : "users"
+};
+var layers = [
+    { type: "TILE",   id:"00000000-0000-0000-0000-000000000001", selected: false, visible: true,  locked: false, name:"Tile Layer 1"},
+    { type: "TILE",   id:"00000000-0000-0000-0000-000000000002", selected: false, visible: false, locked: false, name:"Tile Layer 2"},
+    { type: "OBJECT", id:"00000000-0000-0000-0000-000000000003", selected: true,  visible: true,  locked: false, name:"Object Layer"},
+    { type: "TILE",   id:"00000000-0000-0000-0000-000000000004", selected: false, visible: true,  locked: true,  name:"Tile Layer 3"},
+    { type: "ACTOR",  id:"00000000-0000-0000-0000-000000000005", selected: true,  visible: true,  locked: false, name:"Actor Layer"},
+    { type: "TILE",   id:"00000000-0000-0000-0000-000000000006", selected: false, visible: false, locked: true,  name:"Tile Layer 4"},
+    { type: "TILE",   id:"00000000-0000-0000-0000-000000000007", selected: false, visible: false, locked: false, name:"Tile Layer 5"}
+];
+var BuildLayerList = function() {
+    var $divLayersList = $("#divLayersList");
+    $divLayersList.empty();
+    if(false === true) {
+        $divLayersList.text("&nbsp;&nbsp;No Layers to Display ...");
+    } else {
+        $.each(layers, function(index, layer) {
+            var $chkSelected = $("<button/>")
+                .attr("role", "button")
+                .addClass("btn btn-default btn-xs chkSelected active")
+                .css("width", "27px")
+                .append($("<i/>").addClass("fa fa-check-square-o"));
+            var $cmdVisible = $("<button/>")
+                .attr("role", "button")
+                .addClass("btn btn-default btn-xs cmdVisible active")
+                .css("width", "27px")
+                .append($("<i/>").addClass("fa fa-eye"));
+            var $cmdLocked = $("<button/>")
+                .attr("role", "button")
+                .addClass("btn btn-default btn-xs cmdLocked active")
+                .css("width", "27px")
+                .append($("<i/>").addClass("fa fa-lock"));
+            var $lblTypeAndName = $("<span/>").html("&nbsp;<i class='fa fa-" + LayerTypes[layer.type] + "'></i>&nbsp;" + layer.name);
+            var $div = $("<div/>")
+                .addClass("divLayerListItem")
+                .attr("id",layer.id)
+                .append($chkSelected)
+                .append($cmdVisible)
+                .append($cmdLocked)
+                .append($lblTypeAndName);
+            if(!layer.visible) {
+                $div.children(".cmdVisible").children("i").removeClass("fa-eye").addClass("fa-eye-slash");
+                $div.children(".cmdVisible").removeClass("active");
+            } else {
+                // TODO: move this bit
+                $div.children(".cmdVisible").removeClass("active");
+            }
+            if(!layer.locked) {
+                $div.children(".cmdLocked").children("i").removeClass("fa-lock").addClass("fa-unlock");
+                $div.children(".cmdLocked").removeClass("active");
+            }
+            if(!layer.selected) {
+                $div.children(".chkSelected").children("i").removeClass("fa-check-square-o").addClass("fa-square-o");
+                $div.children(".chkSelected").removeClass("active");
+            } else {
+                // TODO: move this bit
+                $div.css("background-color","#eef")
+                $div.children(".chkSelected").removeClass("active");
+                $div.children("button").removeClass("btn-default").addClass("btn-primary");
+            }
+            $divLayersList.append($div);
+        });
+    }
 
-
+    //$(".divSpritesListItem").mouseenter(function(e) {
+    //    $(".divSpritesListItem").siblings().removeClass("spriteListItemHighlight");
+    //    $(this).addClass("spriteListItemHighlight");
+    //});
+    //
+    //$(".divSpritesListItem").mouseleave(function(e) {
+    //    $(".divSpritesListItem").siblings().removeClass("spriteListItemHighlight");
+    //});
+    //
+    //$(".divSpritesListItem").click(function(e) {
+    //    if($(this).hasClass("spriteListItemSelected")) {
+    //        $(this).removeClass("spriteListItemSelected");
+    //    } else {
+    //        $(this).addClass("spriteListItemSelected");
+    //    }
+    //});
+    //
+    //PackSprites();
+};
 
 
 
@@ -942,6 +1027,11 @@ $(document).ready(function () {
 	var i = 0;
 	var keys = [];
 	var defaultSortBy = BasePacker.SortByDefault;
+
+
+
+    BuildLayerList();
+
 
 	// add Sprite Packer options
 	keys = BasePacker.SortBy["NAME"](packers);
