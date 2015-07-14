@@ -931,47 +931,40 @@ var OnPackStatusUpdate = function(count) {
 
 
 
-
-var LayerTypes = {
-    "TILE"   : "image",
-    "OBJECT" : "cubes",
-    "ACTOR"  : "users"
-};
-var layers = [
-    { type: "TILE",   id:"00000000-0000-0000-0000-000000000001", selected: false, visible: true,  locked: false, name:"Tile Layer 1"},
-    { type: "TILE",   id:"00000000-0000-0000-0000-000000000002", selected: false, visible: false, locked: false, name:"Tile Layer 2"},
-    { type: "OBJECT", id:"00000000-0000-0000-0000-000000000003", selected: true,  visible: true,  locked: false, name:"Object Layer"},
-    { type: "TILE",   id:"00000000-0000-0000-0000-000000000004", selected: false, visible: true,  locked: true,  name:"Tile Layer 3"},
-    { type: "ACTOR",  id:"00000000-0000-0000-0000-000000000005", selected: true,  visible: true,  locked: false, name:"Actor Layer"},
-    { type: "TILE",   id:"00000000-0000-0000-0000-000000000006", selected: false, visible: false, locked: true,  name:"Tile Layer 4"},
-    { type: "TILE",   id:"00000000-0000-0000-0000-000000000007", selected: false, visible: false, locked: false, name:"Tile Layer 5"}
-];
 var BuildLayerList = function() {
     var $divLayersList = $("#divLayersList");
     $divLayersList.empty();
     if(false === true) {
         $divLayersList.text("&nbsp;&nbsp;No Layers to Display ...");
     } else {
-        $.each(layers, function(index, layer) {
+        $.each(Layers.getLayers(), function(index, layer) {
             var $chkSelected = $("<button/>")
                 .attr("role", "button")
                 .addClass("btn btn-default btn-xs chkSelected active")
                 .css("width", "27px")
-                .append($("<i/>").addClass("fa fa-check-square-o"));
+                .css("cursor", "pointer")
+                .append($("<i/>").addClass("fa fa-check-square-o"))
+                .click(eventHandler_LayerButtons);
             var $cmdVisible = $("<button/>")
                 .attr("role", "button")
                 .addClass("btn btn-default btn-xs cmdVisible active")
                 .css("width", "27px")
-                .append($("<i/>").addClass("fa fa-eye"));
+                .css("cursor", "pointer")
+                .append($("<i/>").addClass("fa fa-eye"))
+                .click(eventHandler_LayerButtons);
             var $cmdLocked = $("<button/>")
                 .attr("role", "button")
                 .addClass("btn btn-default btn-xs cmdLocked active")
                 .css("width", "27px")
-                .append($("<i/>").addClass("fa fa-lock"));
-            var $lblTypeAndName = $("<span/>").html("&nbsp;<i class='fa fa-" + LayerTypes[layer.type] + "'></i>&nbsp;" + layer.name);
+                .css("cursor", "pointer")
+                .append($("<i/>").addClass("fa fa-lock"))
+                .click(eventHandler_LayerButtons);
+            var $lblTypeAndName = $("<span/>").html("&nbsp;<i class='fa fa-" + Layers.LayerTypes[layer.type].icon + "'></i>&nbsp;" + layer.name)
+                .css("cursor", "pointer")
+                .click(eventHandler_LayerButtons);
             var $div = $("<div/>")
                 .addClass("divLayerListItem")
-                .attr("id",layer.id)
+                .attr("id","layer_" + layer.id)
                 .append($chkSelected)
                 .append($cmdVisible)
                 .append($cmdLocked)
@@ -993,8 +986,8 @@ var BuildLayerList = function() {
             } else {
                 // TODO: move this bit
                 $div.css("background-color","#eef")
-                $div.children(".chkSelected").removeClass("active");
                 $div.children("button").removeClass("btn-default").addClass("btn-primary");
+                $div.children(".chkSelected").removeClass("active");
             }
             $divLayersList.append($div);
         });
@@ -1031,6 +1024,14 @@ $(document).ready(function () {
 
 
     BuildLayerList();
+    Layers.doSelectedLayersChanged();
+
+
+
+
+
+
+
 
 
 	// add Sprite Packer options
