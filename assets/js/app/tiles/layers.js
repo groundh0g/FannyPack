@@ -39,6 +39,10 @@ function LayersCollection() {
         { type: self.LayerTypes.TILE.value,   id:"00000000-0000-0000-0000-000000000007", selected: false, visible: false, locked: false, name:"Tile Layer 5"}
     ];
 
+    this.count = function() {
+        return layers.length;
+    };
+
     this.addLayer = function(obj) {
         var layer = null;
 

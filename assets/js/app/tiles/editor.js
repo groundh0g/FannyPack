@@ -934,8 +934,8 @@ var OnPackStatusUpdate = function(count) {
 var BuildLayerList = function() {
     var $divLayersList = $("#divLayersList");
     $divLayersList.empty();
-    if(false === true) {
-        $divLayersList.text("&nbsp;&nbsp;No Layers to Display ...");
+    if(Layers.count() === 0) {
+        $divLayersList.html("&nbsp;&nbsp;No Layers to Display ...");
     } else {
         $.each(Layers.getLayers(), function(index, layer) {
             var $chkSelected = $("<button/>")

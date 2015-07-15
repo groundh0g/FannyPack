@@ -164,34 +164,37 @@ Layers.addOnSelectedLayersChangedListener(function (selected) {
     var firstSelected = false;
     var lastSelected = false;
 
-    if(selected) {
-        noneSelected = selected.length === 0;
-        oneSelected = selected.length === 1;
-        anySelected = selected.length > 0;
-        manySelected = selected.length > 1;
+    if(selected && selected.length > 0) {
+        noneSelected  = selected.length === 0;
+        oneSelected   = selected.length === 1;
+        anySelected   = selected.length > 0;
+        manySelected  = selected.length > 1;
         firstSelected = anySelected && Layers.getCount() > 0 && selected[0].id === Layers.getLayer(0).id;
-        lastSelected = anySelected && Layers.getCount() > 0 && selected[selected.length-1].id === Layers.getLayers()[Layers.getCount()-1].id;
+        lastSelected  = anySelected && Layers.getCount() > 0 && selected[selected.length-1].id === Layers.getLayers()[Layers.getCount()-1].id;
     }
 
-    $("#cmdLayersMoveUp").prop("disabled", noneSelected || manySelected || firstSelected);
+    $("#cmdLayersMoveUp")  .prop("disabled", noneSelected || manySelected || firstSelected);
     $("#cmdLayersMoveDown").prop("disabled", noneSelected || manySelected || lastSelected);
-    $("#cmdTilesRemove").prop("disabled", noneSelected);
+    $("#cmdTilesRemove")   .prop("disabled", noneSelected);
 });
 
 var eventHandler_LayerButtons = function(evt) {
     var $src = $(this);
-    var layer = Layers.getLayerById($src.parent().attr("id").split('_')[1]);
-    if(layer) {
-        if($src.hasClass("chkSelected")) {
-            layer.selected = !layer.selected;
-        } else if($src.hasClass("cmdVisible")) {
-            layer.visible = !layer.visible;
-        } else if($src.hasClass("cmdLocked")) {
-            layer.locked = !layer.locked;
-        } else {
-            Layers.selectSingleLayer(layer.id);
+    if($src) {
+        var layer = Layers.getLayerById($src.parent().attr("id").split('_')[1]);
+        if (layer) {
+            if ($src.hasClass("chkSelected")) {
+                layer.selected = !layer.selected;
+            } else if ($src.hasClass("cmdVisible")) {
+                layer.visible = !layer.visible;
+            } else if ($src.hasClass("cmdLocked")) {
+                layer.locked = !layer.locked;
+            } else {
+                Layers.selectSingleLayer(layer.id);
+            }
+            Layers.doSelectedLayersChanged();
+            BuildLayerList();
         }
-        BuildLayerList();
     }
 };
 
