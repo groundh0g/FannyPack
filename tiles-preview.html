@@ -4,7 +4,7 @@ title: FannyPack
 tagline: a suite of &#35;gamedev tools
 description: FannyPack is a suite of &#35;gamedev tools.
 pagename: tiles
-scripts: [image-item, options, packers/base, packers/basic, packers/joe, exporters/data/base, exporters/data/exportJson, exporters/data/exportXml, exporters/data/exportCss, exporters/image/base, exporters/image/exportGif, exporters/image/exportJpg, exporters/image/exportPng, layers, tiles, tiles-events]
+scripts: [image-item, options, packers/base, packers/basic, packers/joe, exporters/data/base, exporters/data/exportJson, exporters/data/exportXml, exporters/data/exportCss, exporters/image/base, exporters/image/exportGif, exporters/image/exportJpg, exporters/image/exportPng, layers, editor, editor-events]
 isApp: true
 ---
 {% include JB/setup %}
@@ -430,39 +430,55 @@ isApp: true
 <div class="divSidebarRightTop">
     <table cellpadding="0" cellspacing="0" border="0" style="width:100%; height:100%; border:1px; vertical-align:top;">
         <tr><td>
-            <ul class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="#">Layers</a></li>
-                <li role="presentation"><a href="#">Map</a></li>
-                <li role="presentation"><a href="#">Properties</a></li>
+            <ul id="tabSidebarRightTop" class="nav nav-tabs">
+                <li role="presentation" class="active"><a href="#" title="Layers"><i class="fa fa-navicon"></i></a></li>
+                <li role="presentation"><a href="#" title="Map"><i class="fa fa-map-marker"></i></a></li>
+                <li role="presentation"><a href="#" title="Properties"><i class="fa fa-list-alt"></i></a></li>
             </ul>
         </td></tr>
         <tr><td>
+            <div id="divRightTopToolbars" style="display:none;"></div>
             <div id="divLayersToolbar" style="padding:2px; border-bottom:1px solid #888;">
                 <div class="btn-group" role="group">
                     <button id="cmdLayersSelectAll"   href="#null" class="btn btn-default btn-xs" role="button" title="Select All"><i class="fa fa-check"></i></button>
                 </div>
                 <div class="btn-group" role="group">
-                    <button id="cmdLayersMoveUp"   href="#null" class="btn btn-default btn-xs" role="button" title="Zoom Out"><i class="fa fa-caret-up"></i></button>
-                    <button id="cmdLayersMoveDown" href="#null" class="btn btn-default btn-xs" role="button" title="Zoom In"><i class="fa fa-caret-down"></i></button>
+                    <button id="cmdLayersMoveUp"   href="#null" class="btn btn-default btn-xs" role="button" title="Move Layer Up"><i class="fa fa-caret-up"></i></button>
+                    <button id="cmdLayersMoveDown" href="#null" class="btn btn-default btn-xs" role="button" title="Move Layer Down"><i class="fa fa-caret-down"></i></button>
                 </div>
                 <div class="btn-group" role="group">
                     <button id="cmdLayersAddTiles"   href="#null" class="btn btn-default btn-xs" role="button" title="Add Tiles Layer"><i class="fa fa-plus"></i> <i class="fa fa-image"></i></button>
                     <button id="cmdLayersAddObjects" href="#null" class="btn btn-default btn-xs" role="button" title="Add Objects Layer"><i class="fa fa-plus"></i> <i class="fa fa-cubes"></i></button>
                     <button id="cmdLayersAddActors"  href="#null" class="btn btn-default btn-xs" role="button" title="Add Actors Layer"><i class="fa fa-plus"></i> <i class="fa fa-users"></i></button>
+                </div>
+                <div class="btn-group" role="group">
                     <button id="cmdTilesRemove"      href="#null" class="btn btn-default btn-xs" role="button" title="Remove Layer"><i class="fa fa-trash"></i></button>
+                </div>
+            </div>
+            <div id="divMapToolbar" style="padding:2px; border-bottom:1px solid #888; display:none;">
+                <div class="btn-group" role="group">
+                    <button id="cmdMapZoomIn"  href="#null" class="btn btn-default btn-xs" role="button" title="Zoom In"><i class="glyphicon glyphicon-zoom-in"></i></button>
+                    <button id="cmdMapZoomOut" href="#null" class="btn btn-default btn-xs" role="button" title="Zoom Out"><i class="glyphicon glyphicon-zoom-out"></i></button>
+                </div>
+            </div>
+            <div id="divPropertiesToolbar" style="padding:2px; border-bottom:1px solid #888; display:none;">
+                <div class="btn-group" role="group">
+                    <button id="cmdPropertiesAdd"    href="#null" class="btn btn-default btn-xs" role="button" title="Select All"><i class="fa fa-plus"></i></button>
+                    <button id="cmdPropertiesRemove" href="#null" class="btn btn-default btn-xs" role="button" title="Select All"><i class="fa fa-trash"></i></button>
                 </div>
             </div>
         </td></tr>
         <tr><td style="height:100%">
             <div style="width:100%; height: 100%; margin:0; padding:0; background-color:#fff; overflow:auto;">
+                <div id="divRightTopLists" style="display:none;"></div>
                 <div id="divLayersList" style="">
                     <!--[No tiles selected.]-->
                 </div>
-                <div id="divMap" style="display:none;">
+                <div id="divMapList" style="display:none;">
                     <!--[No tiles selected.]-->
                     &nbsp;
                 </div>
-                <div id="divProperties" style="display:none;">
+                <div id="divPropertiesList" style="display:none;">
                     <!--[No tiles selected.]-->
                     &nbsp;
                 </div>
@@ -474,13 +490,16 @@ isApp: true
 <div class="divSidebarRightBottom">
     <table cellpadding="0" cellspacing="0" border="0" style="width:100%; height:100%; border:1px; vertical-align:top;">
         <tr><td>
-            <ul class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="#">Tiles</a></li>
-                <li role="presentation"><a href="#">Tile Groups</a></li>
-                <li role="presentation"><a href="#">Console <span id="lblConsoleCount" class="badge badge-default">0</span></a></li>
+            <ul id="tabSidebarRightBottom" class="nav nav-tabs">
+                <li role="presentation" class="active"><a href="#" title="Tiles"><i class="fa fa-square"></i></a></li>
+                <li role="presentation"><a href="#" title="Tile Groups"><i class="fa fa-th-large"></i></a></li>
+                <li role="presentation"><a href="#" title="Actors"><i class="fa fa-child"></i></a></li>
+                <li role="presentation"><a href="#" title="Objects"><i class="fa fa-cube"></i></a></li>
+                <li role="presentation"><a href="#" title="Console"><i class="fa fa-bell"></i> <span id="lblConsoleCount" class="badge badge-default">0</span></a></li>
             </ul>
         </td></tr>
         <tr><td>
+            <div id="divRightBottomToolbars" style="display:none;"></div>
             <div id="divTilesToolbar" style="padding:2px; border-bottom:1px solid #888;">
                 <div class="btn-group" role="group">
                     <button id="cmdTilesAdd"    href="#null" class="btn btn-default btn-xs" role="button" title="Add Tiles"><i class="fa fa-plus"></i></button>
@@ -494,9 +513,34 @@ isApp: true
                     <button id="cmdTilesZoomIn"  href="#null" class="btn btn-default btn-xs" role="button" title="Zoom In"><i class="fa fa-search-plus"></i></button>
                 </div>
             </div>
+            <div id="divTileGroupsToolbar" style="padding:2px; border-bottom:1px solid #888; display:none;">
+                <div class="btn-group" role="group">
+                    <button id="cmdTileGroupAdd"    href="#null" class="btn btn-default btn-xs" role="button" title="Add Tiles"><i class="fa fa-plus"></i></button>
+                    <button id="cmdTileGroupRemove" href="#null" class="btn btn-default btn-xs" role="button" title="Remove Tiles"><i class="fa fa-minus"></i></button>
+                </div>
+            </div>
+            <div id="divActorsToolbar" style="padding:2px; border-bottom:1px solid #888; display:none;">
+                <div class="btn-group" role="group">
+                    <button id="cmdActorsAdd"    href="#null" class="btn btn-default btn-xs" role="button" title="Add Actors"><i class="fa fa-plus"></i></button>
+                    <button id="cmdActorsRemove" href="#null" class="btn btn-default btn-xs" role="button" title="Remove Actors"><i class="fa fa-minus"></i></button>
+                </div>
+            </div>
+            <div id="divObjectsToolbar" style="padding:2px; border-bottom:1px solid #888; display:none;">
+                <div class="btn-group" role="group">
+                    <button id="cmdActorsAdd"    href="#null" class="btn btn-default btn-xs" role="button" title="Add Actors"><i class="fa fa-plus"></i></button>
+                    <button id="cmdActorsRemove" href="#null" class="btn btn-default btn-xs" role="button" title="Remove Actors"><i class="fa fa-minus"></i></button>
+                </div>
+            </div>
+            <div id="divConsoleToolbar" style="padding:2px; border-bottom:1px solid #888; display:none;">
+                <div class="btn-group" role="group">
+                    <button id="cmdConsoleAdd"    href="#null" class="btn btn-default btn-xs" role="button" title="Add Tiles"><i class="fa fa-plus"></i></button>
+                    <button id="cmdConsoleRemove" href="#null" class="btn btn-default btn-xs" role="button" title="Remove Tiles"><i class="fa fa-minus"></i></button>
+                </div>
+            </div>
         </td></tr>
         <tr><td style="height:100%">
             <div style="width:100%; height: 100%; margin:0; padding:0; background-color:#fff; overflow:auto;">
+                <div id="divRightBottomLists" style="display:none;"></div>
                 <div id="divTilesList" style="">
                     <!--[No tiles selected.]-->
                     &nbsp;A<br/>
@@ -526,13 +570,121 @@ isApp: true
                     &nbsp;Y<br/>
                     &nbsp;Z<br/>
                 </div>
-                <div id="divTileGroups" style="display:none;">
+                <div id="divTileGroupsList" style="display:none;">
                     <!--[No tiles selected.]-->
-                    &nbsp;
+                    &nbsp;A<br/>
+                    &nbsp;B<br/>
+                    &nbsp;C<br/>
+                    &nbsp;D<br/>
+                    &nbsp;E<br/>
+                    &nbsp;F<br/>
+                    &nbsp;G<br/>
+                    &nbsp;H<br/>
+                    &nbsp;I<br/>
+                    &nbsp;J<br/>
+                    &nbsp;K<br/>
+                    &nbsp;L<br/>
+                    &nbsp;M<br/>
+                    &nbsp;N<br/>
+                    &nbsp;O<br/>
+                    &nbsp;P<br/>
+                    &nbsp;Q<br/>
+                    &nbsp;R<br/>
+                    &nbsp;S<br/>
+                    &nbsp;T<br/>
+                    &nbsp;U<br/>
+                    &nbsp;V<br/>
+                    &nbsp;W<br/>
+                    &nbsp;X<br/>
+                    &nbsp;Y<br/>
+                    &nbsp;Z<br/>
                 </div>
-                <div id="divConsole" style="display:none;">
-                    <!--[No messages.]-->
-                    &nbsp;
+                <div id="divActorsList" style="display:none;">
+                    <!--[No tiles selected.]-->
+                    &nbsp;A<br/>
+                    &nbsp;B<br/>
+                    &nbsp;C<br/>
+                    &nbsp;D<br/>
+                    &nbsp;E<br/>
+                    &nbsp;F<br/>
+                    &nbsp;G<br/>
+                    &nbsp;H<br/>
+                    &nbsp;I<br/>
+                    &nbsp;J<br/>
+                    &nbsp;K<br/>
+                    &nbsp;L<br/>
+                    &nbsp;M<br/>
+                    &nbsp;N<br/>
+                    &nbsp;O<br/>
+                    &nbsp;P<br/>
+                    &nbsp;Q<br/>
+                    &nbsp;R<br/>
+                    &nbsp;S<br/>
+                    &nbsp;T<br/>
+                    &nbsp;U<br/>
+                    &nbsp;V<br/>
+                    &nbsp;W<br/>
+                    &nbsp;X<br/>
+                    &nbsp;Y<br/>
+                    &nbsp;Z<br/>
+                </div>
+                <div id="divObjectsList" style="display:none;">
+                    <!--[No tiles selected.]-->
+                    &nbsp;A<br/>
+                    &nbsp;B<br/>
+                    &nbsp;C<br/>
+                    &nbsp;D<br/>
+                    &nbsp;E<br/>
+                    &nbsp;F<br/>
+                    &nbsp;G<br/>
+                    &nbsp;H<br/>
+                    &nbsp;I<br/>
+                    &nbsp;J<br/>
+                    &nbsp;K<br/>
+                    &nbsp;L<br/>
+                    &nbsp;M<br/>
+                    &nbsp;N<br/>
+                    &nbsp;O<br/>
+                    &nbsp;P<br/>
+                    &nbsp;Q<br/>
+                    &nbsp;R<br/>
+                    &nbsp;S<br/>
+                    &nbsp;T<br/>
+                    &nbsp;U<br/>
+                    &nbsp;V<br/>
+                    &nbsp;W<br/>
+                    &nbsp;X<br/>
+                    &nbsp;Y<br/>
+                    &nbsp;Z<br/>
+                </div>
+                <div id="divConsoleList" style="display:none;">
+                    <!--[No tiles selected.]-->
+                    &nbsp;A<br/>
+                    &nbsp;B<br/>
+                    &nbsp;C<br/>
+                    &nbsp;D<br/>
+                    &nbsp;E<br/>
+                    &nbsp;F<br/>
+                    &nbsp;G<br/>
+                    &nbsp;H<br/>
+                    &nbsp;I<br/>
+                    &nbsp;J<br/>
+                    &nbsp;K<br/>
+                    &nbsp;L<br/>
+                    &nbsp;M<br/>
+                    &nbsp;N<br/>
+                    &nbsp;O<br/>
+                    &nbsp;P<br/>
+                    &nbsp;Q<br/>
+                    &nbsp;R<br/>
+                    &nbsp;S<br/>
+                    &nbsp;T<br/>
+                    &nbsp;U<br/>
+                    &nbsp;V<br/>
+                    &nbsp;W<br/>
+                    &nbsp;X<br/>
+                    &nbsp;Y<br/>
+                    &nbsp;Z<br/>
                 </div>
             </div>
         </td></tr>

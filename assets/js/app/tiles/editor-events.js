@@ -78,6 +78,30 @@ THE SOFTWARE.
 			}
 		});
 
+// -- RIGHT NAV: TOP TABS --
+$("#tabSidebarRightTop").children("li").click(function(event){
+    var $this = $(this);
+    $this.siblings("li").removeClass("active");
+    $this.addClass("active");
+
+    $("#divRightTopToolbars").siblings("div").hide();
+    $("#divRightTopLists").siblings("div").hide();
+    $("#div" + $this.children("a").attr("title").replace(" ", "") + "Toolbar").show();
+    $("#div" + $this.children("a").attr("title").replace(" ", "") + "List").show();
+});
+
+// -- RIGHT NAV: BOTTOM TABS --
+$("#tabSidebarRightBottom").children("li").click(function(event){
+    var $this = $(this);
+    $this.siblings("li").removeClass("active");
+    $this.addClass("active");
+
+    $("#divRightBottomToolbars").siblings("div").hide();
+    $("#divRightBottomLists").siblings("div").hide();
+    $("#div" + $this.children("a").attr("title").replace(" ", "") + "Toolbar").show();
+    $("#div" + $this.children("a").attr("title").replace(" ", "") + "List").show();
+});
+
 // -- RIGHT NAV: LAYERS --
 $("#cmdLayersSelectAll").click(function() {
     Layers.selectAllLayers();
