@@ -178,7 +178,7 @@ Layers.addOnSelectedLayersChangedListener(function (selected) {
     $("#cmdTilesRemove")   .prop("disabled", noneSelected);
 });
 
-var eventHandler_LayerButtons = function(evt) {
+var eventHandler_LayerToolbarButtons = function(evt) {
     var $src = $(this);
     if($src) {
         var layer = Layers.getLayerById($src.parent().attr("id").split('_')[1]);

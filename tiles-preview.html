@@ -4,427 +4,33 @@ title: FannyPack
 tagline: a suite of &#35;gamedev tools
 description: FannyPack is a suite of &#35;gamedev tools.
 pagename: tiles
-scripts: [image-item, options, packers/base, packers/basic, packers/joe, exporters/data/base, exporters/data/exportJson, exporters/data/exportXml, exporters/data/exportCss, exporters/image/base, exporters/image/exportGif, exporters/image/exportJpg, exporters/image/exportPng, layers, editor, editor-events]
 isApp: true
+scripts: [
+    options,
+    layers,
+    editor,
+    ui-events/left/options,
+    ui-events/right/tabs,
+    ui-events/right/layers,
+    ui-events/toolbar,
+    ui-events/palette,
+    ui-events/workspace,
+    ui-events/events]
 ---
 {% include JB/setup %}
 
-<!--suppress ALL -->
-<div class="" style="background-color:#eee; padding:5px 0px; margin:0;">
-	<div style="margin-left:0; margin-right:0;">
-          <div class="btn-toolbar" role="toolbar" style="margin:0 20px;">
-            <div class="btn-group" role="group">
-              <button id="cmdFileNew"     class="btn btn-default" role="button" title="New Project"><i class="glyphicon glyphicon-file"></i></button>
-              <button id="cmdFileOpen"    class="btn btn-default" role="button" title="Open Project"><i class="glyphicon glyphicon-folder-open"></i></button>
-            </div>
-          <div class="btn-group" role="group">
-            <div class="btn-group" role="group">
-                <button id="cmdFileSave" class="btn btn-default" data-toggle="dropdown" title="Save Project"><i class="glyphicon glyphicon-download-alt"></i></button>
-                <button class="btn btn-default dropdown-toggle"  data-toggle="dropdown" title="Save Project As ..."><span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    <li><a href="#"><b>Save Project, Plaintext</b></a></li>
-                    <li><a href="#">Save Project, Compressed</a></li>
-                </ul>
-            </div>
-		  </div>
-          <div class="btn-group" role="group">
-              <div class="btn-group" role="group">
-                  <button id="cmdFilePublish" href="#null" class="btn btn-default" role="button" title="Publish Project"><i class="glyphicon glyphicon-share"></i></button>
-                  <button class="btn btn-default dropdown-toggle"  data-toggle="dropdown" title="Export Project As ..."><span class="caret"></span></button>
-                  <ul class="dropdown-menu">
-                      <li><a href="#">Publish Project, TMX</a></li>
-                      <li><a href="#"><b>Publish Project, FPTiles</b></a></li>
-                  </ul>
-              </div>
-          </div>
-          <div class="btn-group" role="group">
-              <button id="cmdFileOptions" href="#null" class="btn btn-default" role="button" title="Project Options"><i class="glyphicon glyphicon-wrench"></i></button>
-          </div>
-          <div class="btn-group" role="group">
-			<button id="cmdEditUndo" href="#null" class="btn btn-default" role="button" title="Undo"><i class="fa fa-reply"></i></button>
-			<button id="cmdEditRedo" href="#null" class="btn btn-default" role="button" title="Redo"><i class="fa fa-share"></i></button>
-		  </div>
-		  <div class="btn-group pull-right" role="group" style="">
-			<a id="cmdStatus" href="#null" class="btn btn-link" style="color:#000;">STATUS: <span id="txtStatusMessage">Ready.</span></a>
-		  </div>
-		</div>
-	</div>
-</div>
+{% include app-fragments/tiles/toolbar.html %}
 
 <div id="divSidebarLeft" class="divSidebarLeft">
-	<table style="width:100%;">
-	
-		<tr><td colspan="3"><div class="optionHeading">Output</div></td></tr>
-	
-		<tr><td class="optionLabel" title="">Name&nbsp;</td>
-			<td><input id="txtName" type="text" value="Untitled" class="form-control" style="margin:0; width:140px;" />
-			</td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-		<tr><td class="optionLabel" title="What format should the published image be?">Image&nbsp;</td>
-			<td><div class="btn-toolbar" style="margin:0;">
-				<div class="btn-group">
-				  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="ddlImageFormat">UNKNOWN</span> <span class="caret"></span></a>
-				  <ul id="ddlImageFormatOptions" class="dropdown-menu">
-				  </ul>
-				</div>
-				</div>
-			</td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-		<tr><td class="optionLabel" title="What format should the atlas use?">Data&nbsp;</td>
-			<td><div class="btn-toolbar" style="margin:0;">
-				<div class="btn-group">
-				  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="ddlDataFormat">UNKNOWN</span> <span class="caret"></span></a>
-				  <ul id="ddlDataFormatOptions" class="dropdown-menu">
-				  </ul>
-				</div>
-				</div>
-			</td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-		<tr><td class="optionLabel" title="Strip filename extensions in sprite names?">Name&nbsp;in&nbsp;Sheet</td>
-			<td><div class="btn-toolbar" style="margin:0;">
-				<div class="btn-group">
-				  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="ddlNameInSheet">Strip Extension</span> <span class="caret"></span></a>
-				  <ul id="ddlNameInSheetOptions" class="dropdown-menu">
-					<li><a href="#null">Strip Extension *</a></li>
-					<li><a href="#null">Keep Extension</a></li>
-				  </ul>
-				</div>
-				</div>
-			</td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-
-		<tr><td colspan="3"><div class="optionHeading">Algorithm</div></td></tr>
-
-		<tr><td class="optionLabel" title="What method should be used to pack the sprites?">Sprite&nbsp;Packer&nbsp;</td>
-			<td><div class="btn-toolbar" style="margin:0;">
-				<div class="btn-group">
-				  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="ddlSpritePacker">UNKNOWN</span> <span class="caret"></span></a>
-				  <ul id="ddlSpritePackerOptions" class="dropdown-menu">
-				  </ul>
-				</div>
-				</div>
-			</td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-		
-		<tr><td class="optionLabel" title="Order images by ...?">Sort&nbsp;By&nbsp;</td>
-			<td><div class="btn-toolbar" style="margin:0;">
-				<div class="btn-group">
-				  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="ddlSortBy">UNKNOWN</span> <span class="caret"></span></a>
-				  <ul id="ddlSortByOptions" class="dropdown-menu">
-				  </ul>
-				</div>
-				</div>
-			</td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-		<tr><td class="optionLabel" title="May sprites be rotated in published image?">Allow&nbsp;Rotate&nbsp;</td>
-			<td><div class="btn-toolbar" style="margin:0;">
-				<div class="btn-group">
-				  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="ddlAllowRotate">No</span> <span class="caret"></span></a>
-				  <ul id="ddlAllowRotateOptions" class="dropdown-menu">
-					<li><a href="#null">Yes</a></li>
-					<li><a href="#null">No *</a></li>
-				  </ul>
-				</div>
-				</div>
-			</td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-		
-		<tr><td colspan="3"><div class="optionHeading">Dimensions</div></td></tr>
-
-		<tr><td class="optionLabel" title="The width of the published image.">Width&nbsp;</td>
-			<td>
-				<div class="input-group btn-group" style="margin:0;"><input id="txtWidth" type="text" value=" 1024" class="form-control" style="width:110px;" /><a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-				  <ul id="txtWidthOptions" class="dropdown-menu">
-					<li><a href="#null">&nbsp;&nbsp;&nbsp;16</a></li>
-					<li><a href="#null">&nbsp;&nbsp;&nbsp;32</a></li>
-					<li><a href="#null">&nbsp;&nbsp;&nbsp;64</a></li>
-					<li><a href="#null">&nbsp;&nbsp;128</a></li>
-					<li><a href="#null">&nbsp;&nbsp;256</a></li>
-					<li><a href="#null">&nbsp;&nbsp;512</a></li>
-					<li><a href="#null">&nbsp;1024 *</a></li>
-					<li><a href="#null">&nbsp;2048</a></li>
-					<li><a href="#null">&nbsp;4096</a></li>
-					<li><a href="#null">&nbsp;8192</a></li>
-					<li><a href="#null">16384</a></li>
-				  </ul>
-				</div>
-			</td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-		<tr><td class="optionLabel" title="The height of the published image.">Height&nbsp;</td>
-			<td>
-				<div class="input-group btn-group" style="margin:0;"><input id="txtHeight" type="text" value=" 1024" class="form-control" style="width:110px;" /><a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-				  <ul id="txtHeightOptions" class="dropdown-menu">
-					<li><a href="#null">&nbsp;&nbsp;&nbsp;16</a></li>
-					<li><a href="#null">&nbsp;&nbsp;&nbsp;32</a></li>
-					<li><a href="#null">&nbsp;&nbsp;&nbsp;64</a></li>
-					<li><a href="#null">&nbsp;&nbsp;128</a></li>
-					<li><a href="#null">&nbsp;&nbsp;256</a></li>
-					<li><a href="#null">&nbsp;&nbsp;512</a></li>
-					<li><a href="#null">&nbsp;1024 *</a></li>
-					<li><a href="#null">&nbsp;2048</a></li>
-					<li><a href="#null">&nbsp;4096</a></li>
-					<li><a href="#null">&nbsp;8192</a></li>
-					<li><a href="#null">16384</a></li>
-				  </ul>
-				</div>
-			</td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-		<tr><td class="optionLabel" title="Are Width and Height maximum size or actual size?">Size&nbsp;Mode&nbsp;</td>
-			<td><div class="btn-toolbar" style="margin:0;">
-				<div class="btn-group">
-				  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="ddlSizeMode">Max Size</span> <span class="caret"></span></a>
-				  <ul id="ddlSizeModeOptions" class="dropdown-menu">
-					<li><a href="#null">Fixed Size</a></li>
-					<li><a href="#null">Max Size *</a></li>
-				  </ul>
-				</div>
-				</div>
-			</td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-		<tr><td class="optionLabel" title="Published image must have power of two size?">Constraint&nbsp;</td>
-			<td><div class="btn-toolbar" style="margin:0;">
-				<div class="btn-group">
-				  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="ddlConstraint">Power of Two</span> <span class="caret"></span></a>
-				  <ul id="ddlConstraintOptions" class="dropdown-menu">
-					<li><a href="#null">Any Size</a></li>
-					<li><a href="#null">Power of Two *</a></li>
-				  </ul>
-				</div>
-				</div>
-			</td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-		<tr><td class="optionLabel" title="Published image must be square?">Force&nbsp;Square&nbsp;</td>
-			<td><div class="btn-toolbar" style="margin:0;">
-				<div class="btn-group">
-				  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="ddlForceSquare">No</span> <span class="caret"></span></a>
-				  <ul id="ddlForceSquareOptions" class="dropdown-menu">
-					<li><a href="#null">Yes</a></li>
-					<li><a href="#null">No *</a></li>
-				  </ul>
-				</div>
-				</div>
-			</td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-		<tr><td class="optionLabel" title="Publish full size as '*@2x'. Include 1/2 size copy.">Include&nbsp;@2x</td>
-			<td><div class="btn-toolbar" style="margin:0;">
-				<div class="btn-group">
-				  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="ddlIncludeAt2x">No</span> <span class="caret"></span></a>
-				  <ul id="ddlIncludeAt2xOptions" class="dropdown-menu">
-					<li><a href="#null">Yes</a></li>
-					<li><a href="#null">No *</a></li>
-				  </ul>
-				</div>
-				</div>
-			</td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-
-		<tr><td colspan="3"><div class="optionHeading">Padding</div></td></tr>
-
-		<tr><td class="optionLabel" title="Minimum transparent space from edge of image.">Border&nbsp;Padding&nbsp;</td>
-			<td><form class="form-inline"><div class="input-group btn-group" style="margin:0;"><input id="txtBorderPadding" type="text" value="2" class="form-control" style="margin:0; width:115px;" /><span class="input-group-addon"><i class="glyphicon glyphicon-resize-vertical"></i></span></div></form></td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-		<tr><td class="optionLabel" title="Minimum transparent space between sprites.">Shape&nbsp;Padding&nbsp;</td>
-			<td><form class="form-inline"><div class="input-group btn-group" style="margin:0;"><input id="txtShapePadding" type="text" value="2" class="form-control" style="margin:0; width:115px;" /><span class="input-group-addon"><i class="glyphicon glyphicon-resize-vertical"></i></span></div></form></td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-		<tr><td class="optionLabel" title="Add transparent pixels around each sprite.">Inner&nbsp;Padding&nbsp;</td>
-			<td><form class="form-inline"><div class="input-group btn-group" style="margin:0;"><input id="txtInnerPadding" type="text" value="0" class="form-control" style="margin:0; width:115px;" /><span class="input-group-addon"><i class="glyphicon glyphicon-resize-vertical"></i></span></div></form></td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-
-		<tr><td colspan="3"><div class="optionHeading">Filters</div></td></tr>
-
-		<tr><td class="optionLabel" title="Make transparent pixels RGBA(0,0,0,0)? Compresses better.">Clean&nbsp;Alpha&nbsp;</td>
-			<td><div class="btn-toolbar" style="margin:0;">
-				<div class="btn-group">
-				  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="ddlCleanAlpha">No</span> <span class="caret"></span></a>
-				  <ul id="ddlCleanAlphaOptions" class="dropdown-menu">
-					<li><a href="#null">Yes</a></li>
-					<li><a href="#null">No *</a></li>
-				  </ul>
-				</div>
-				</div>
-			</td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-		<tr><td class="optionLabel" title="Use top-left pixel color as transparency mask?">Color&nbsp;Mask&nbsp;</td>
-			<td><div class="btn-toolbar" style="margin:0;">
-				<div class="btn-group">
-				  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="ddlColorMask">No</span> <span class="caret"></span></a>
-				  <ul id="ddlColorMaskOptions" class="dropdown-menu">
-					<li><a href="#null">Yes</a></li>
-					<li><a href="#null">No *</a></li>
-				  </ul>
-				</div>
-				</div>
-			</td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-		<tr><td class="optionLabel" title="Merge identical sprites into one instance?">Alias&nbsp;Sprites&nbsp;</td>
-			<td><div class="btn-toolbar" style="margin:0;">
-				<div class="btn-group">
-				  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="ddlAliasSprites">No</span> <span class="caret"></span></a>
-				  <ul id="ddlAliasSpritesOptions" class="dropdown-menu">
-					<li><a href="#null">Yes</a></li>
-					<li><a href="#null">No *</a></li>
-				  </ul>
-				</div>
-				</div>
-			</td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-		<tr><td class="optionLabel" title="Draw shape borders?">Debug&nbsp;Mode&nbsp;</td>
-			<td><div class="btn-toolbar" style="margin:0;">
-				<div class="btn-group">
-				  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="ddlDebugMode">No</span> <span class="caret"></span></a>
-				  <ul id="ddlDebugModeOptions" class="dropdown-menu">
-					<li><a href="#null">Yes</a></li>
-					<li><a href="#null">No *</a></li>
-				  </ul>
-				</div>
-				</div>
-			</td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-		<tr><td class="optionLabel" title="Trim transparent border pixels?">Trim&nbsp;Mode&nbsp;</td>
-			<td><div class="btn-toolbar" style="margin:0;">
-				<div class="btn-group">
-				  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="ddlTrimMode">None</span> <span class="caret"></span></a>
-				  <ul id="ddlTrimModeOptions" class="dropdown-menu">
-					<li><a href="#null">None *</a></li>
-					<li><a href="#null">Trim</a></li>
-				  </ul>
-				</div>
-				</div>
-			</td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-		<tr><td class="optionLabel" title="Alpha values below this value are considered transparent.">Trim&nbsp;Threshold&nbsp;</td>
-			<td><form class="form-inline"><div class="input-group btn-group" style="margin:0;"><input id="txtTrimThreshold" type="text" value="1" class="form-control" style="margin:0; width:115px;" /><span class="input-group-addon"><i class="glyphicon glyphicon-resize-vertical"></i></span></div></form></td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-
-		<tr><td colspan="3"><div class="optionHeading">Advanced</div></td></tr>
-
-		<tr><td class="optionLabel" title="Extract animation frames?">Animated&nbsp;GIF&nbsp;</td>
-			<td><div class="btn-toolbar" style="margin:0;">
-				<div class="btn-group">
-				  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="ddlAnimatedGif">Use First Frame</span> <span class="caret"></span></a>
-				  <ul id="ddlAnimatedGifOptions" class="dropdown-menu">
-					<li><a href="#null">Use First Frame *</a></li>
-					<li><a href="#null">Extract Frames</a></li>
-				  </ul>
-				</div>
-				</div>
-			</td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-		<tr><td class="optionLabel" title="Compress project file? Not human-readable.">ZIP&nbsp;Project&nbsp;</td>
-			<td><div class="btn-toolbar" style="margin:0;">
-				<div class="btn-group">
-				  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="ddlCompressProject">No</span> <span class="caret"></span></a>
-				  <ul id="ddlCompressProjectOptions" class="dropdown-menu">
-					<li><a href="#null">Yes</a></li>
-					<li><a href="#null">No *</a></li>
-				  </ul>
-				</div>
-				</div>
-			</td>
-			<td class="tipcol"><i class="glyphicon glyphicon-question-signx"></i></td>
-		</tr>
-
-		<tr><td colspan="3"><div><br/><br/><br/><br/></div></td></tr>
-
-	</table>
+    {% include app-fragments/tiles/left-nav/options.html %}
 </div>
 
-<div id="divSidebarToolsLeft" class="divSidebarToolsLeft">
-	<table style="width:100%;">
+{% include app-fragments/tiles/palette.html %}
 
-		<tr><td>
-            <button id="cmdSelectTiles" class="btn btn-info active" title="Select Tiles"><i class="fa fa-location-arrow"></i></button><br/>
-            <button id="cmdSelectMagic" class="btn btn-default"     title="Magic Select" ><i class="fa fa-magic"></i></button><br/>
-            <br/>
-            <button id="cmdDrawTiles"  class="btn btn-default"><i class="fa fa-paint-brush"></i></button><br/>
-            <button id="cmdDrawStamp"  class="btn btn-default"><i class="fa fa-paw"></i></button><br/>
-            <button id="cmdDrawErase"  class="btn btn-default"><i class="fa fa-eraser"></i></button><br/>
-            <button id="cmdPickTile"   class="btn btn-default"><i class="fa fa-eyedropper"></i></button><br/>
-            <br/>
-            <button id="cmdDrawObject" class="btn btn-default"><i class="fa fa-cube"></i></button><br/>
-            <button id="cmdDrawActor"  class="btn btn-default"><i class="fa fa-user"></i></button><br/>
-            <button id="cmdDrawPath"   class="btn btn-default"><i class="fa fa-code-fork"></i></button><br/>
-        </td></tr>
-	</table>
-</div>
-
-<div id="divWorkspaceToolbar" class="divWorkspaceToolbar">
-	<div class="btn-toolbar" style="margin:0; ">
-        <div class="btn-group">
-            <a id="cmdWorkspaceZoomOut" title="Zoom Out" href="#null" class="btn btn-default"><i class="glyphicon glyphicon-zoom-out"></i></a>
-            <a id="cmdWorkspaceZoomIn"  title="Zoom In" href="#null" class="btn btn-default"><i class="glyphicon glyphicon-zoom-in"></i></a>
-        </div>
-        <div class="btn-group input-group">
-        <input id="txtWorkspaceZoom" type="text" value="100%" size="5" class="form-control" style="width:66px;" /><a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-          <ul id="txtWorkspaceZoomOptions" class="dropdown-menu">
-            <li><a href="#null">1600.0%</a></li>
-            <li><a href="#null">&nbsp;800.0%</a></li>
-            <li><a href="#null">&nbsp;400.0%</a></li>
-            <li><a href="#null">&nbsp;200.0%</a></li>
-            <li><a href="#null">&nbsp;100.0% *</a></li>
-            <li><a href="#null">&nbsp;&nbsp;50.0%</a></li>
-            <li><a href="#null">&nbsp;&nbsp;25.0%</a></li>
-            <li><a href="#null">&nbsp;&nbsp;12.5%</a></li>
-          </ul>
-        </div>
-        <div class="btn-group">
-            <a id="cmdWorkspaceFitWidth"  title="Fit Workspace Width"  href="#null" class="btn btn-default"><i class="glyphicon glyphicon-resize-horizontal"></i></a>
-            <a id="cmdWorkspaceFitHeight" title="Fit Workspace Height" href="#null" class="btn btn-default"><i class="glyphicon glyphicon-resize-vertical"></i></a>
-            <a id="cmdWorkspaceFitBoth"   title="Fit to Workspace"     href="#null" class="btn btn-default"><i class="glyphicon glyphicon-resize-full"></i></a>
-        </div>
-        <div class="btn-group">
-            <a id="cmdWorkSpaceRefresh"   title="Refresh Workspace"    href="#null" class="btn btn-default"><i class="glyphicon glyphicon-refresh"></i></a>
-        </div>
-        <div class="btn-group">
-            <a id="cmdSnapToGrid" title="Snap to Grid"     href="#null" class="btn btn-default active"><i class="fa fa-th"></i></a>
-            <a id="cmdDrawRandom" title="Randomize Tiles"  href="#null" class="btn btn-default active"><i class="fa fa-random"></i></a>
-        </div>
-        <div class="btn-group">
-            <button id="cmdAlignBottom" class="btn btn-default disabled"><i class="glyphicon glyphicon-object-align-bottom"></i></button>
-            <button id="cmdAlignMiddle" class="btn btn-default disabled"><i class="glyphicon glyphicon-object-align-horizontal"></i></button>
-            <button id="cmdAlignTop"    class="btn btn-default disabled"><i class="glyphicon glyphicon-object-align-top"></i></button>
-        </div>
-        <div class="btn-group">
-            <button id="cmdAlignLeft"   class="btn btn-default disabled"><i class="glyphicon glyphicon-object-align-left"></i></button>
-            <button id="cmdAlignCenter" class="btn btn-default disabled"><i class="glyphicon glyphicon-object-align-vertical"></i></button>
-            <button id="cmdAlignRight"  class="btn btn-default disabled"><i class="glyphicon glyphicon-object-align-right"></i></button>
-        </div>
-	  <div id="progressBarWrapper" class="btn-group pull-right" style="width:200px;">
-		<div class="progress" style="height:34px; background-color:#889; background-image:none;">
-		  <div id="progressBar" class="progress-bar" style="width:0;"></div>
-		</div>
-	  </div>
-	</div>
-</div>
+{% include app-fragments/tiles/workspace/toolbar.html %}
 
 <div id="divWorkspace" class="divWorkspace">
-	<div class="divWorkspaceContainer">
-		<div id="divWorkspaceContainerCrop" class="divWorkspaceContainerCrop" style="width:2048px; height:1024px;">
-		</div>
-	</div>
+    {% include app-fragments/tiles/workspace/content.html %}
 </div>
 
 <div class="divSidebarRightTop">
@@ -438,50 +44,16 @@ isApp: true
         </td></tr>
         <tr><td>
             <div id="divRightTopToolbars" style="display:none;"></div>
-            <div id="divLayersToolbar" style="padding:2px; border-bottom:1px solid #888;">
-                <div class="btn-group" role="group">
-                    <button id="cmdLayersSelectAll"   href="#null" class="btn btn-default btn-xs" role="button" title="Select All"><i class="fa fa-check"></i></button>
-                </div>
-                <div class="btn-group" role="group">
-                    <button id="cmdLayersMoveUp"   href="#null" class="btn btn-default btn-xs" role="button" title="Move Layer Up"><i class="fa fa-caret-up"></i></button>
-                    <button id="cmdLayersMoveDown" href="#null" class="btn btn-default btn-xs" role="button" title="Move Layer Down"><i class="fa fa-caret-down"></i></button>
-                </div>
-                <div class="btn-group" role="group">
-                    <button id="cmdLayersAddTiles"   href="#null" class="btn btn-default btn-xs" role="button" title="Add Tiles Layer"><i class="fa fa-plus"></i> <i class="fa fa-image"></i></button>
-                    <button id="cmdLayersAddObjects" href="#null" class="btn btn-default btn-xs" role="button" title="Add Objects Layer"><i class="fa fa-plus"></i> <i class="fa fa-cubes"></i></button>
-                    <button id="cmdLayersAddActors"  href="#null" class="btn btn-default btn-xs" role="button" title="Add Actors Layer"><i class="fa fa-plus"></i> <i class="fa fa-users"></i></button>
-                </div>
-                <div class="btn-group" role="group">
-                    <button id="cmdTilesRemove"      href="#null" class="btn btn-default btn-xs" role="button" title="Remove Layer"><i class="fa fa-trash"></i></button>
-                </div>
-            </div>
-            <div id="divMapToolbar" style="padding:2px; border-bottom:1px solid #888; display:none;">
-                <div class="btn-group" role="group">
-                    <button id="cmdMapZoomIn"  href="#null" class="btn btn-default btn-xs" role="button" title="Zoom In"><i class="glyphicon glyphicon-zoom-in"></i></button>
-                    <button id="cmdMapZoomOut" href="#null" class="btn btn-default btn-xs" role="button" title="Zoom Out"><i class="glyphicon glyphicon-zoom-out"></i></button>
-                </div>
-            </div>
-            <div id="divPropertiesToolbar" style="padding:2px; border-bottom:1px solid #888; display:none;">
-                <div class="btn-group" role="group">
-                    <button id="cmdPropertiesAdd"    href="#null" class="btn btn-default btn-xs" role="button" title="Select All"><i class="fa fa-plus"></i></button>
-                    <button id="cmdPropertiesRemove" href="#null" class="btn btn-default btn-xs" role="button" title="Select All"><i class="fa fa-trash"></i></button>
-                </div>
-            </div>
+            {% include app-fragments/tiles/right-nav/layers-toolbar.html %}
+            {% include app-fragments/tiles/right-nav/map-thumbnail-toolbar.html %}
+            {% include app-fragments/tiles/right-nav/properties-toolbar.html %}
         </td></tr>
         <tr><td style="height:100%">
             <div style="width:100%; height: 100%; margin:0; padding:0; background-color:#fff; overflow:auto;">
                 <div id="divRightTopLists" style="display:none;"></div>
-                <div id="divLayersList" style="">
-                    <!--[No tiles selected.]-->
-                </div>
-                <div id="divMapList" style="display:none;">
-                    <!--[No tiles selected.]-->
-                    &nbsp;
-                </div>
-                <div id="divPropertiesList" style="display:none;">
-                    <!--[No tiles selected.]-->
-                    &nbsp;
-                </div>
+                {% include app-fragments/tiles/right-nav/layers-content.html %}
+                {% include app-fragments/tiles/right-nav/map-thumbnail-content.html %}
+                {% include app-fragments/tiles/right-nav/properties-content.html %}
             </div>
         </td></tr>
     </table>
@@ -500,222 +72,23 @@ isApp: true
         </td></tr>
         <tr><td>
             <div id="divRightBottomToolbars" style="display:none;"></div>
-            <div id="divTilesToolbar" style="padding:2px; border-bottom:1px solid #888;">
-                <div class="btn-group" role="group">
-                    <button id="cmdTilesAdd"    href="#null" class="btn btn-default btn-xs" role="button" title="Add Tiles"><i class="fa fa-plus"></i></button>
-                    <button id="cmdTilesRemove" href="#null" class="btn btn-default btn-xs" role="button" title="Remove Tiles"><i class="fa fa-minus"></i></button>
-                </div>
-                <div class="btn-group" role="group">
-                    <button id="cmdTilesGroup"  href="#null" class="btn btn-default btn-xs" role="button" title="Group Tiles"><i class="fa fa-share-alt"></i></button>
-                </div>
-                <div class="btn-group" role="group">
-                    <button id="cmdTilesZoomOut" href="#null" class="btn btn-default btn-xs" role="button" title="Zoom Out"><i class="fa fa-search-minus"></i></button>
-                    <button id="cmdTilesZoomIn"  href="#null" class="btn btn-default btn-xs" role="button" title="Zoom In"><i class="fa fa-search-plus"></i></button>
-                </div>
-            </div>
-            <div id="divTileGroupsToolbar" style="padding:2px; border-bottom:1px solid #888; display:none;">
-                <div class="btn-group" role="group">
-                    <button id="cmdTileGroupAdd"    href="#null" class="btn btn-default btn-xs" role="button" title="Add Tiles"><i class="fa fa-plus"></i></button>
-                    <button id="cmdTileGroupRemove" href="#null" class="btn btn-default btn-xs" role="button" title="Remove Tiles"><i class="fa fa-minus"></i></button>
-                </div>
-            </div>
-            <div id="divActorsToolbar" style="padding:2px; border-bottom:1px solid #888; display:none;">
-                <div class="btn-group" role="group">
-                    <button id="cmdActorsAdd"    href="#null" class="btn btn-default btn-xs" role="button" title="Add Actors"><i class="fa fa-plus"></i></button>
-                    <button id="cmdActorsRemove" href="#null" class="btn btn-default btn-xs" role="button" title="Remove Actors"><i class="fa fa-minus"></i></button>
-                </div>
-            </div>
-            <div id="divObjectsToolbar" style="padding:2px; border-bottom:1px solid #888; display:none;">
-                <div class="btn-group" role="group">
-                    <button id="cmdActorsAdd"    href="#null" class="btn btn-default btn-xs" role="button" title="Add Actors"><i class="fa fa-plus"></i></button>
-                    <button id="cmdActorsRemove" href="#null" class="btn btn-default btn-xs" role="button" title="Remove Actors"><i class="fa fa-minus"></i></button>
-                </div>
-            </div>
-            <div id="divConsoleToolbar" style="padding:2px; border-bottom:1px solid #888; display:none;">
-                <div class="btn-group" role="group">
-                    <button id="cmdConsoleAdd"    href="#null" class="btn btn-default btn-xs" role="button" title="Add Tiles"><i class="fa fa-plus"></i></button>
-                    <button id="cmdConsoleRemove" href="#null" class="btn btn-default btn-xs" role="button" title="Remove Tiles"><i class="fa fa-minus"></i></button>
-                </div>
-            </div>
+            {% include app-fragments/tiles/right-nav/tiles-toolbar.html %}
+            {% include app-fragments/tiles/right-nav/tilegroups-toolbar.html %}
+            {% include app-fragments/tiles/right-nav/actors-toolbar.html %}
+            {% include app-fragments/tiles/right-nav/objects-toolbar.html %}
+            {% include app-fragments/tiles/right-nav/console-toolbar.html %}
         </td></tr>
         <tr><td style="height:100%">
             <div style="width:100%; height: 100%; margin:0; padding:0; background-color:#fff; overflow:auto;">
                 <div id="divRightBottomLists" style="display:none;"></div>
-                <div id="divTilesList" style="">
-                    <!--[No tiles selected.]-->
-                    &nbsp;A<br/>
-                    &nbsp;B<br/>
-                    &nbsp;C<br/>
-                    &nbsp;D<br/>
-                    &nbsp;E<br/>
-                    &nbsp;F<br/>
-                    &nbsp;G<br/>
-                    &nbsp;H<br/>
-                    &nbsp;I<br/>
-                    &nbsp;J<br/>
-                    &nbsp;K<br/>
-                    &nbsp;L<br/>
-                    &nbsp;M<br/>
-                    &nbsp;N<br/>
-                    &nbsp;O<br/>
-                    &nbsp;P<br/>
-                    &nbsp;Q<br/>
-                    &nbsp;R<br/>
-                    &nbsp;S<br/>
-                    &nbsp;T<br/>
-                    &nbsp;U<br/>
-                    &nbsp;V<br/>
-                    &nbsp;W<br/>
-                    &nbsp;X<br/>
-                    &nbsp;Y<br/>
-                    &nbsp;Z<br/>
-                </div>
-                <div id="divTileGroupsList" style="display:none;">
-                    <!--[No tiles selected.]-->
-                    &nbsp;A<br/>
-                    &nbsp;B<br/>
-                    &nbsp;C<br/>
-                    &nbsp;D<br/>
-                    &nbsp;E<br/>
-                    &nbsp;F<br/>
-                    &nbsp;G<br/>
-                    &nbsp;H<br/>
-                    &nbsp;I<br/>
-                    &nbsp;J<br/>
-                    &nbsp;K<br/>
-                    &nbsp;L<br/>
-                    &nbsp;M<br/>
-                    &nbsp;N<br/>
-                    &nbsp;O<br/>
-                    &nbsp;P<br/>
-                    &nbsp;Q<br/>
-                    &nbsp;R<br/>
-                    &nbsp;S<br/>
-                    &nbsp;T<br/>
-                    &nbsp;U<br/>
-                    &nbsp;V<br/>
-                    &nbsp;W<br/>
-                    &nbsp;X<br/>
-                    &nbsp;Y<br/>
-                    &nbsp;Z<br/>
-                </div>
-                <div id="divActorsList" style="display:none;">
-                    <!--[No tiles selected.]-->
-                    &nbsp;A<br/>
-                    &nbsp;B<br/>
-                    &nbsp;C<br/>
-                    &nbsp;D<br/>
-                    &nbsp;E<br/>
-                    &nbsp;F<br/>
-                    &nbsp;G<br/>
-                    &nbsp;H<br/>
-                    &nbsp;I<br/>
-                    &nbsp;J<br/>
-                    &nbsp;K<br/>
-                    &nbsp;L<br/>
-                    &nbsp;M<br/>
-                    &nbsp;N<br/>
-                    &nbsp;O<br/>
-                    &nbsp;P<br/>
-                    &nbsp;Q<br/>
-                    &nbsp;R<br/>
-                    &nbsp;S<br/>
-                    &nbsp;T<br/>
-                    &nbsp;U<br/>
-                    &nbsp;V<br/>
-                    &nbsp;W<br/>
-                    &nbsp;X<br/>
-                    &nbsp;Y<br/>
-                    &nbsp;Z<br/>
-                </div>
-                <div id="divObjectsList" style="display:none;">
-                    <!--[No tiles selected.]-->
-                    &nbsp;A<br/>
-                    &nbsp;B<br/>
-                    &nbsp;C<br/>
-                    &nbsp;D<br/>
-                    &nbsp;E<br/>
-                    &nbsp;F<br/>
-                    &nbsp;G<br/>
-                    &nbsp;H<br/>
-                    &nbsp;I<br/>
-                    &nbsp;J<br/>
-                    &nbsp;K<br/>
-                    &nbsp;L<br/>
-                    &nbsp;M<br/>
-                    &nbsp;N<br/>
-                    &nbsp;O<br/>
-                    &nbsp;P<br/>
-                    &nbsp;Q<br/>
-                    &nbsp;R<br/>
-                    &nbsp;S<br/>
-                    &nbsp;T<br/>
-                    &nbsp;U<br/>
-                    &nbsp;V<br/>
-                    &nbsp;W<br/>
-                    &nbsp;X<br/>
-                    &nbsp;Y<br/>
-                    &nbsp;Z<br/>
-                </div>
-                <div id="divConsoleList" style="display:none;">
-                    <!--[No tiles selected.]-->
-                    &nbsp;A<br/>
-                    &nbsp;B<br/>
-                    &nbsp;C<br/>
-                    &nbsp;D<br/>
-                    &nbsp;E<br/>
-                    &nbsp;F<br/>
-                    &nbsp;G<br/>
-                    &nbsp;H<br/>
-                    &nbsp;I<br/>
-                    &nbsp;J<br/>
-                    &nbsp;K<br/>
-                    &nbsp;L<br/>
-                    &nbsp;M<br/>
-                    &nbsp;N<br/>
-                    &nbsp;O<br/>
-                    &nbsp;P<br/>
-                    &nbsp;Q<br/>
-                    &nbsp;R<br/>
-                    &nbsp;S<br/>
-                    &nbsp;T<br/>
-                    &nbsp;U<br/>
-                    &nbsp;V<br/>
-                    &nbsp;W<br/>
-                    &nbsp;X<br/>
-                    &nbsp;Y<br/>
-                    &nbsp;Z<br/>
-                </div>
+                {% include app-fragments/tiles/right-nav/tiles-content.html %}
+                {% include app-fragments/tiles/right-nav/tilegroups-content.html %}
+                {% include app-fragments/tiles/right-nav/actors-content.html %}
+                {% include app-fragments/tiles/right-nav/objects-content.html %}
+                {% include app-fragments/tiles/right-nav/console-content.html %}
             </div>
         </td></tr>
     </table>
 </div>
 
-<INPUT id="uploadSprites" type="file" name="submitfile" multiple="multiple" style="display:none;" onchange="return ProcessSpriteAdd(this.files);" />
-<INPUT id="uploadProject" type="file" name="submitfile" style="display:none;" onchange="return ProcessProjectOpen(this.files);" />
-
-<div id="popupFileModal" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="popupFileModalTitle">Add Sprite(s)</h4>
-			</div>
-			<div class="modal-body">
-				<div class="dropzone">
-					<span id="popupFileModalDropLabel" style="text-decoration:line-through;">Drag and drop image files here, or ...</span>
-					<br/><br/><br/>
-					<a id="cmdUploadProject" class="btn btn-primary" href="#null">Click to Upload</a>
-					<a id="cmdUploadSprites" class="btn btn-primary" href="#null">Click to Upload</a>
-					<br/><br/><br/>
-					<span id="popupFileModalDropInfo">No file(s) selected.</span>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-				<button type="button" class="btn btn-primary">OK</button>
-			</div>
-		</div>
-	</div>
-</div>
-
+{% include app-fragments/tiles/dialogs/open.html %}

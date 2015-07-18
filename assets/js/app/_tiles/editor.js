@@ -43,7 +43,7 @@ var persistedImagePool = {};
 var IsDirty = function() {
 	var current = new Options();
 	current.read();
-	return !(current.equals(persistedOptions)); // && ImageItem.compareImagePools(imagePool, persistedImagePool));
+	return !(current.equals(persistedOptions) && ImageItem.compareImagePools(imagePool, persistedImagePool));
 };
 
 var PromptUserIfDirty = function() {
