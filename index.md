@@ -105,6 +105,35 @@ name. It's a geeky representation of a utility belt. (Think Schneider or Batman.
 
 Besides, I like it.
 
+## Want to Work in the Cloud?
+
+The beauty of FannyPack is that there are no dependencies on the client. It's OS and, to a great extent, 
+browser independent. Also nice is that your data need never leave your computer. That is, until you want 
+to work with a team. If you think emailing ZIP files is clunky (I certainly do), then there's a new option 
+coming your way soon!
+
+If you're already using one of the popular cloud storage providers, you can tell FannyPack to reference 
+assets as file links rather than embedding those resources in the project files. That makes the project 
+files smaller, and it makes it easier to edit an asset without having to remove it from the project and 
+add it back.
+
+<p><div class="btn-toolbar" style="margin-left:20px;">
+    <div class="btn-group">
+        <button class="btn btn-default disabled" role="button" id="cmdConnectGoogleDrive"><i class="fa fa-google"></i> Google Drive</button>
+        <button class="btn btn-default disabled" role="button" id="cmdConnectDropBox"><i class="fa fa-dropbox"></i> DropBox</button>
+        <button class="btn btn-default disabled" role="button" id="cmdConnectOneDrive"><i class="fa fa-windows"></i> OneDrive</button>
+        <button class="btn btn-default disabled" role="button" id="cmdConnectICloud"><i class="fa fa-apple"></i> iCloud</button>
+    </div>
+    <div class="btn-group">
+        <button class="btn btn-default disabled" role="button" id="cmdConnectGitHub"><i class="fa fa-github"></i> GitHub</button>
+        <button class="btn btn-default disabled" role="button" id="cmdConnectGitHub"><i class="fa fa-bitbucket"></i> BitBucket</button>
+    </div>
+</div></p>
+
+I know what you're thinking ... *Hey GitHub and BitBucket aren't cloud storage providers!* You're absolutely right. 
+But, after the cloud storage support is in place, I hope to provide GitHub &amp; BitBucket integration for the 
+ultimate in team collaboration.
+
 <div id="popupFeatureSheets" class="modal fade">
   <div class="modal-dialog">
 	<div class="modal-content">
