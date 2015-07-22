@@ -112,10 +112,10 @@ browser independent. Also nice is that your data need never leave your computer.
 to work with a team. If you think emailing ZIP files is clunky (I certainly do), then there's a new option 
 coming your way soon!
 
-If you're already using one of the popular cloud storage providers, you can tell FannyPack to reference 
-assets as file links rather than embedding those resources in the project files. That makes the project 
-files smaller, and it makes it easier to edit an asset without having to remove it from the project and 
-add it back.
+You're probably already using one of the many popular cloud storage providers. If so, you can tell FannyPack 
+to reference assets as file links rather than embedding those resources in the project files. That makes the 
+project files smaller, and it makes it easier to edit an asset without having to remove it from the project 
+and add it back.
 
 <p><div class="btn-toolbar" style="margin-left:20px;">
     <div class="btn-group">
