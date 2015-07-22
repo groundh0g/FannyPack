@@ -130,9 +130,10 @@ add it back.
     </div>
 </div></p>
 
-I know what you're thinking ... *Hey GitHub and BitBucket aren't cloud storage providers!* You're absolutely right. 
-But, after the cloud storage support is in place, I hope to provide GitHub &amp; BitBucket integration for the 
-ultimate in team collaboration.
+I know what you're thinking ... *Hey! GitHub and BitBucket aren't cloud storage providers!*
+
+You're absolutely right. But, after the cloud storage support is in place, I hope to provide GitHub &amp; 
+BitBucket integration for the ultimate in team collaboration.
 
 <div id="popupFeatureSheets" class="modal fade">
   <div class="modal-dialog">
