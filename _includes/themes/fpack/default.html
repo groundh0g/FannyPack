@@ -40,6 +40,7 @@ THE SOFTWARE.
     <link href="{{ ASSET_PATH }}/bootstrap-3.3.5/css/bootstrap-theme.min.css" rel="stylesheet">
 	<link href="{{ ASSET_PATH }}/font-awesome-4.3.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="{{ ASSET_PATH }}/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="{{ ASSET_PATH }}/css/typeahead.css" rel="stylesheet" type="text/css">
 
     <!-- Page-Specific Styles -->
     {% if page.pagename %}<link href="{{ BASE_PATH }}/assets/css/{{ page.pagename }}.css" rel="stylesheet">{% endif %}
@@ -243,7 +244,7 @@ THE SOFTWARE.
 		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/jquery-1.11.3.min.js"></script>
 		<script type="text/javascript" src="{{ ASSET_PATH }}/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 	
-{% if page.isApp %}
+    {% if page.isApp %}
 
 		<!-- app version -->
 		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/version.js"></script>
@@ -263,7 +264,12 @@ THE SOFTWARE.
 		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/libgif.js"></script>
 		<script type="text/javascript" src="{{ HOME_PATH }}assets/js/app/util/libgifparser.js"></script>
 
-{% endif %}
+        <script type="text/javascript" src="{{BASE_PATH}}/script/polyfill.js"></script>
+        <script type="text/javascript" src="{{BASE_PATH}}/script/queryString.js"></script>
+        <script type="text/javascript" src="{{BASE_PATH}}/script/typeahead.bundle.js"></script>
+
+
+    {% endif %}
 
 	{% if page.scripts %}
 		{% if page.scripts.size > 0 %}
