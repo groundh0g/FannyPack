@@ -28,7 +28,7 @@ isApp: true
     <p style="font-size:0.75em;">The quick brown fox jumps over the lazy dog.</p>
 </div>
 
-{% include app-fragments/fonts/dialogs/fontpicker.html %}
+{% include app-fragments/fonts/dialogs/fontPicker.html %}
 
 <div id="foo" style="display:none;"></div>
 
@@ -189,7 +189,7 @@ console.log(url);
         });
         
         $("#cmdGetFontDetails").click(function() {
-            $("#frameFontPicker").prop("src", "fontPickerFrame.html?_=" + Date.now());
+            $("#frameFontPicker").prop("src", "fontPickerFrame.html");
             $("#popupFontPickerModal").modal("show");
         });
     }
