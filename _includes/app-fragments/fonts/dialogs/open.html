@@ -1,0 +1,27 @@
+<INPUT id="uploadSprites" type="file" name="submitfile" multiple="multiple" style="display:none;" onchange="return ProcessSpriteAdd(this.files);" />
+<INPUT id="uploadProject" type="file" name="submitfile" style="display:none;" onchange="return ProcessProjectOpen(this.files);" />
+
+<div id="popupFileModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="popupFileModalTitle">Add Sprite(s)</h4>
+            </div>
+            <div class="modal-body">
+                <div class="dropzone">
+                    <span id="popupFileModalDropLabel" style="text-decoration:line-through;">Drag and drop image files here, or ...</span>
+                    <br/><br/><br/>
+                    <a id="cmdUploadProject" class="btn btn-primary" href="#null">Click to Upload</a>
+                    <a id="cmdUploadSprites" class="btn btn-primary" href="#null">Click to Upload</a>
+                    <br/><br/><br/>
+                    <span id="popupFileModalDropInfo">No file(s) selected.</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+</div>

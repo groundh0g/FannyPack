@@ -1,0 +1,163 @@
+<html>
+    <head>
+        <!-- Enable responsive viewport -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <!-- Le styles -->
+        <link href="assets/themes/fpack/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link href="assets/themes/fpack/bootstrap-3.3.5/css/bootstrap-theme.min.css" rel="stylesheet">
+        <link href="assets/themes/fpack/font-awesome-4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="assets/themes/fpack/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+        <link href="assets/themes/fpack/css/typeahead.css" rel="stylesheet" type="text/css">
+
+        <style type="text/css">
+            /*html, body, * { margin:0; padding:0; }*/
+            body { padding-top: 65px; }
+            .example  { width:100%; background-color:#ddd; margin-bottom:10px; clear:both; }
+            .example p { margin:5px; }
+            .sample   { float:left; width:85%; background-color:#eee; }
+            .controls { float:right; width:15%; padding-left:5px; }
+            .info     { clear:both; background-color:#ccc; }
+            div.input-group input { font-size:0.75em; }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="form form-horizontal">
+
+                <div class="col-sm-2">
+                    <div class="input-group">
+                        <input id="txtShowAs" title="Sample Text" type="text" class="form-control" autocomplete="off" spellcheck="false" placeholder="Paragraph" />
+                        <span id="cmdShowAs" title="Sample Text" class="btn btn-default dropdown-toggle input-group-addon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-chevron-down"></i></span>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <li><a href="#null">Sentence</a></li>
+                            <li><a href="#null">Paragraph</a></li>
+                            <li><a href="#null">Title</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="input-group">
+                        <input id="txtFontSize" title="Size" type="text" class="form-control" autocomplete="off" spellcheck="false" placeholder="28px" />
+                        <span id="cmdFontSize" title="Size" class="btn btn-default dropdown-toggle input-group-addon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-chevron-down"></i></span>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><a href="#null">10px</a></li>
+                            <li><a href="#null">18px</a></li>
+                            <li><a href="#null">24px</a></li>
+                            <li><a href="#null">28px</a></li>
+                            <li><a href="#null">36px</a></li>
+                            <li><a href="#null">48px</a></li>
+                            <li><a href="#null">64px</a></li>
+                            <li><a href="#null">72px</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="input-group">
+                        <input id="txtLicense" title="License" type="text" class="form-control" autocomplete="off" spellcheck="false" placeholder="All" />
+                        <span id="cmdLicense" title="License" class="btn btn-default dropdown-toggle input-group-addon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-chevron-down"></i></span>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <li><a href="#null">All</a></li>
+                            <li><a href="#null">Apache</a></li>
+                            <li><a href="#null">OFL</a></li>
+                            <li><a href="#null">UFL</a></li>
+                            <li><a href="#null">Unknown</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="input-group">
+                        <input id="txtCategory" title="Category" type="text" class="form-control" autocomplete="off" spellcheck="false" placeholder="All" />
+                        <span id="cmdCategory" title="Category" class="btn btn-default dropdown-toggle input-group-addon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-chevron-down"></i></span>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <li><a href="#null">All</a></li>
+                            <li><a href="#null">Cute</a></li>
+                            <li><a href="#null">Handwriting</a></li>
+                            <li><a href="#null">Invitation</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <input id="txtSearchFonts" type="text" class="form-control" autocomplete="off" spellcheck="false" placeholder="Search" />
+                        <span id="cmdSearchFonts" class="btn btn-default input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+                    </div>
+                </div>
+
+            </div>
+        </nav>
+
+        <div style="width:100%; clear:both;">
+            <div class="example">
+                <div class="controls">
+                    <div class="btn btn-default"><i class="fa fa-square-o"></i> Add Font</div>
+                </div>
+                <div class="sample">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc tempor tellus id vestibulum hendrerit. Donec lobortis facilisis justo nec maximus. Nullam libero ante, mattis eu iaculis vitae, malesuada a urna. Sed viverra odio ligula, accumsan lacinia ligula elementum sed. Fusce et diam viverra augue pulvinar tincidunt in ultrices metus. Etiam vitae purus enim. Etiam sollicitudin euismod sapien, vel tempor turpis sodales id. Vestibulum a mauris blandit, molestie orci at, tristique odio. Quisque tristique at ipsum in facilisis.</p>
+                    <p>0123456789!@#$%^&*()[]{};:'"\|,./?&lt;&gt;</p>
+                </div>
+                <div class="info"><p>This is an example of blah ...</p></div>
+            </div>
+
+            <div class="example">
+                <div class="controls">
+                    <div class="btn btn-primary"><i class="fa fa-check-square-o"></i> Add Font</div>
+                    <b>Size:</b> 28px;
+                </div>
+                <div class="sample">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc tempor tellus id vestibulum hendrerit. Donec lobortis facilisis justo nec maximus. Nullam libero ante, mattis eu iaculis vitae, malesuada a urna. Sed viverra odio ligula, accumsan lacinia ligula elementum sed. Fusce et diam viverra augue pulvinar tincidunt in ultrices metus. Etiam vitae purus enim. Etiam sollicitudin euismod sapien, vel tempor turpis sodales id. Vestibulum a mauris blandit, molestie orci at, tristique odio. Quisque tristique at ipsum in facilisis.</p>
+                    <p>0123456789!@#$%^&*()[]{};:'"\|,./?&lt;&gt;</p>
+                </div>
+                <div class="info"><p>This is an example of blah ...</p></div>
+            </div>
+
+            <div class="example">
+                <div class="controls">
+                    <div class="btn btn-default"><i class="fa fa-square-o"></i> Add Font</div>
+                </div>
+                <div class="sample">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc tempor tellus id vestibulum hendrerit. Donec lobortis facilisis justo nec maximus. Nullam libero ante, mattis eu iaculis vitae, malesuada a urna. Sed viverra odio ligula, accumsan lacinia ligula elementum sed. Fusce et diam viverra augue pulvinar tincidunt in ultrices metus. Etiam vitae purus enim. Etiam sollicitudin euismod sapien, vel tempor turpis sodales id. Vestibulum a mauris blandit, molestie orci at, tristique odio. Quisque tristique at ipsum in facilisis.</p>
+                    <p>0123456789!@#$%^&*()[]{};:'"\|,./?&lt;&gt;</p>
+                </div>
+                <div class="info"><p>This is an example of blah ...</p></div>
+            </div>
+
+        </div>
+
+        <!-- common libs -->
+        <script type="text/javascript" src="assets/js/jquery-1.11.3.min.js"></script>
+        <script type="text/javascript" src="assets/themes/fpack/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+
+        <!-- utils -->
+        <script type="text/javascript" src="assets/js/app/util/base64.js"></script>
+        <script type="text/javascript" src="assets/js/app/util/hmac-md5.js"></script>
+        <script type="text/javascript" src="assets/js/app/util/hmac-sha256.js"></script>
+        <script type="text/javascript" src="assets/js/app/util/object-keys.js"></script>
+        <script type="text/javascript" src="assets/js/app/util/param-helpers.js"></script>
+        <script type="text/javascript" src="assets/js/app/util/string-helpers.js"></script>
+        <script type="text/javascript" src="assets/js/app/util/guid.js"></script>
+        <script type="text/javascript" src="assets/js/app/util/json2.js"></script>
+        <script type="text/javascript" src="assets/js/app/util/jszip.js"></script>
+        <script type="text/javascript" src="assets/js/app/util/Blob.js"></script>
+        <script type="text/javascript" src="assets/js/app/util/FileSaver.js"></script>
+        <script type="text/javascript" src="assets/js/app/util/libgif.js"></script>
+        <script type="text/javascript" src="assets/js/app/util/libgifparser.js"></script>
+
+        <script type="text/javascript" src="script/polyfill.js"></script>
+        <script type="text/javascript" src="script/queryString.js"></script>
+        <script type="text/javascript" src="script/typeahead.bundle.js"></script>
+
+        <!-- page scripts -->
+        <script type="text/javascript" src="assets/js/app/fonts/fontPicker.js?_=v1.0.1"></script>
+    </body>
+</html>
+
