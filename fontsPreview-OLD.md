@@ -32,91 +32,7 @@ isApp: true
 
 <div id="foo" style="display:none;"></div>
 
-<script type="text/javascript" src="{{BASE_PATH}}/script/search.js"></script>
-
 <script type="text/javascript">
-/*
-    var FontList = [];
-    var FontMeta = {};
-    
-    function appendFonts(data, vendor, propName, propPath) {
-        if(data) {
-            var meta = [];
-            for(var i = 0; i < data.length; i++) {
-                var name = data[i][propName || "name"];
-                var path = data[i][propPath || "path"];
-                vendor = vendor || "unknown";
-                FontList.push(name);
-                meta.push({ 
-                    name: name, 
-                    path: path, 
-                    vendor: vendor || "unknown",
-                    display: path // name + " [" + path + "]"
-                });
-            }
-            FontList.sort();
-            meta.sort(function (a,b) {
-                return ((a.name < b.name) ? -1 : ((a.name > b.name) ? 1 : 0));
-            });
-            var html = "";
-            for(var i = 0; i < meta.length; i++) {
-                html += "<br/>" + meta[i].name + " [" + meta[i].vendor + ":" + meta[i].path + "]";
-                FontMeta[meta[i].name] = meta[i];
-            }
-            $("#foo").html(html);
-        }
-    }
-
-    function initSearch() {
-        if(loadedFontLists["googleApache"] && loadedFontLists["googleOfl"]) {
-            var list = [];
-            for(var i = 0; i < FontList.length; i++) {
-                list.push(FontMeta[FontList[i]].display);
-            }
-            list.sort();
-            initTypeahead(list);
-            
-        }
-    }
-    
-    function findMetaByDisplay(display) {
-        var result = null;
-        for(var i = 0; i < FontList.length; i++) {
-            var meta = FontMeta[FontList[i]];
-            if(meta && meta.display === display) {
-                result = meta;
-                break;
-            }
-        }
-        return result;
-    }
-
-    function buildFontList(fontdata) {
-        var fontlist = [];
-        for(var i = 0; i < licenses.length; i++) {
-            var families = fontdata[licenses[i]]; 
-            for(var j = 0; j < families.length; j++) {
-                var fonts = families[j].fonts;
-                for(var k = 0; fonts && k < fonts.length; k++) {
-                    var display = fonts[k].postScriptName || fonts[k].fullName || fonts[k].name;
-                    fonts[k].display = display;
-                    fontlist.push(fonts[k])
-                }
-            }
-        }
-        fontlist.sort(function (a,b) {
-            a = a.display.toLowerCase();
-            b = b.display.toLowerCase();
-            return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-        });
-        var html = "";
-        for(var i = 0; i < fontlist.length; i++) {
-            html += fontlist[i].display + "<br/>";
-        }
-        $("#foo").html(html).show();
-        console.log(fontlist);
-    }
-*/
 
     var vendors = [];
     
@@ -131,7 +47,6 @@ isApp: true
                 var height = docHeight
                     - (modHeight - bodHeight)
                     - modPosTop * 2;
-                    
                 $("#popupFontPickerModalBody").css("height", height + "px");
             }, 5);
         });
@@ -141,7 +56,6 @@ isApp: true
             null,
             function(data, textStatus, jqXHR) {
                 vendors = data;
-                initSearchIndexes();
             }
         );
 
