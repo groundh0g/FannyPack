@@ -11,6 +11,10 @@ var typeaheadCategory = [];
 var typeaheadWeight = [];
 var typeaheadFont = [];
 
+var dropdownVendor = [];
+var dropdownLicense = [];
+var dropdownCategory = [];
+
 var initSearchIndexes = function () {
     if(vendors && vendors.length > 0) {
         for(var v = 0; v < vendors.length; v++) {
@@ -18,6 +22,7 @@ var initSearchIndexes = function () {
             var vendorName = vendor.name.toLowerCase();
             indexByVendor[vendorName] = [];
             typeaheadVendor.push("vendor:" + vendorName);
+            dropdownVendor.push(vendorName);
             for(var l = 0; l < vendor.licenses.length; l++) {
                 var license = vendor.licenses[l];
                 for(var ff = 0; ff < license.fontFamilies.length; ff++) {
@@ -28,8 +33,14 @@ var initSearchIndexes = function () {
                     indexByLicense[licenseName] = indexByLicense[licenseName] || [];
                     indexByCategory[categoryName] = indexByCategory[categoryName] || [];
                     indexByFamily[fontFamilyName] = indexByFamily[fontFamilyName] || [];
-                    if(indexByLicense[licenseName].length === 0)   typeaheadLicense.push("license:" + licenseName);
-                    if(indexByCategory[categoryName].length === 0) typeaheadCategory.push("category:" + categoryName);
+                    if(indexByLicense[licenseName].length === 0) {
+                        typeaheadLicense.push("license:" + licenseName);
+                        dropdownLicense.push(licenseName);
+                    }
+                    if(indexByCategory[categoryName].length === 0) {
+                        typeaheadCategory.push("category:" + categoryName);
+                        dropdownCategory.push(categoryName);
+                    }
                     for(var f = 0; f < fontFamily.fonts.length; f++) {
                         var font = fontFamily.fonts[f];
                         var fontName = font.postScriptName;
@@ -37,7 +48,7 @@ var initSearchIndexes = function () {
                         var weightName = "" + font.weight;
                         indexByVendor[vendorName].push(key);
                         indexByLicense[licenseName].push(key);
-                        indexByCategory[categoryName].push(key)
+                        indexByCategory[categoryName].push(key);
                         indexByFamily[fontFamilyName].push(key);
                         indexByFont[fontName] = indexByFont[fontName] || [];
                         if(indexByFont[fontName].length === 0) typeaheadFont.push(fontName);
@@ -53,6 +64,10 @@ var initSearchIndexes = function () {
             typeaheadCategory.sort();
             typeaheadWeight.sort();
             typeaheadFont.sort();
+
+            dropdownVendor.sort();
+            dropdownLicense.sort();
+            dropdownCategory.sort();
         }
     }
 };
@@ -63,8 +78,7 @@ var filterByCategory = undefined;
 var filterByWeight = undefined;
 
 var initFilterByValues = function(text) {
-    //filterByVendor   = $("#txtVendor").val().toLowerCase()   || undefined;
-    filterByVendor   = undefined;
+    filterByVendor   = $("#txtVendor").val().toLowerCase()  || undefined;
     filterByLicense  = $("#txtLicense").val().toLowerCase()  || undefined;
     filterByCategory = $("#txtCategory").val().toLowerCase() || undefined;
     //filterByWeight   = $("#txtWeight").val().toLowerCase()   || undefined;
@@ -160,8 +174,11 @@ var fontNamesThatMatchAllFilters = function (searchText) {
                 if (match && filterByVendor) {
                     match = filterByVendor === vendors[indexes[0]].name.toLowerCase();
                 }
+                //if (match && filterByLicense) {
+                //    match = filterByLicense === vendors[indexes[0]].licenses[indexes[1]].name.toLowerCase();
+                //}
                 if (match && filterByLicense) {
-                    match = filterByLicense === vendors[indexes[0]].licenses[indexes[1]].name.toLowerCase();
+                    match = filterByLicense === vendors[indexes[0]].licenses[indexes[1]].fontFamilies[indexes[2]].license.toLowerCase();
                 }
                 if (match && filterByCategory) {
                     match = filterByCategory === vendors[indexes[0]].licenses[indexes[1]].fontFamilies[indexes[2]].category.toLowerCase();

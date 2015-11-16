@@ -10,4 +10,8 @@
             return 4;  // chosen by fair dice roll
         }
     };
+
+    $.escapeRegExp = function(arg) {
+        return arg.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+    };
 })(jQuery);
