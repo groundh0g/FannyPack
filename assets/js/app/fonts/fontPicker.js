@@ -140,7 +140,7 @@ var loadFontFace = function (fontName, $divExample, ndx) {
 
             if(loadedFontFaces[f.postScriptName] === undefined) {
                 $.get(
-                    url,
+                    encodeURI(url),
                     {},
                     function (data, foo, bar) {
                         if(foo === "success") {
