@@ -162,7 +162,7 @@ var loadFontFace = function (fontName, $divExample, ndx) {
                                         } catch(e) {
                                             parent.window.logError(e);
                                         }
-                                        var appliedFF = $divExample.children("div.sample").first().css("font-family");
+                                        var appliedFF = $divExample.children("div.sample").first().css("font-family").replace(/['"]/g, "");
                                         var isApplied = appliedFF === f.postScriptName;
                                         if(loadedFontFaces[f.postScriptName] === undefined || !isApplied) {
                                             $divExample.children("div.sample")
@@ -172,7 +172,11 @@ var loadFontFace = function (fontName, $divExample, ndx) {
                                                 .html(
                                                 infoText +
                                                 "<br/>" +
-                                                "<strong>ERROR:</strong> Font loaded, but could not apply to style."
+                                                "<strong>ERROR:</strong> Font loaded, but could not apply to sample text. ['" +
+                                                appliedFF +
+                                                "' != '" +
+                                                f.postScriptName +
+                                                "']"
                                             );
                                             loadedFontFaces[f.postScriptName] = undefined
                                         }
