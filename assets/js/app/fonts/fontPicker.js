@@ -103,6 +103,11 @@ var highlightSearchTerm = function (text, filterByValue) {
     }
 };
 
+var escapeFontFaceName = function(name) {
+    var result = (name || "").replace(/[!\.\[\]&\s]/g, "-");
+    return "fp-" + result;
+};
+
 var loadedFontFaces = {};
 
 var loadFontFace = function (fontName, $divExample, ndx) {
@@ -129,6 +134,8 @@ var loadFontFace = function (fontName, $divExample, ndx) {
                 highlightSearchTerm(ff.category, filterByCategory);
             var fontName =
                 highlightSearchTerm(f.postScriptName, $("#txtSearchFonts").val());
+            var weightName =
+                highlightSearchTerm("" + f.weight, filterByWeight);
 
             var infoText =
                 "#" + ndx +
@@ -136,7 +143,10 @@ var loadFontFace = function (fontName, $divExample, ndx) {
                 ", Family: " + ff.name +
                 ", Font: " + fontName +
                 ", License: " + licenseName +
-                ", Category: " + categoryName;
+                ", <br/>" +
+                "Category: " + categoryName +
+                ", Format: " + f.uriFormat +
+                ", Weight: " + weightName;
 
             if(loadedFontFaces[f.postScriptName] === undefined) {
                 $.get(
@@ -146,7 +156,7 @@ var loadFontFace = function (fontName, $divExample, ndx) {
                         if(foo === "success") {
                             try {
                                 var face = new FontFace(
-                                    f.postScriptName,
+                                    escapeFontFaceName(f.postScriptName),
                                     "url(data:" + f.uriFormat.replace(/font\//, "application/") +
                                     ";charset=utf-8;base64," +
                                     data.replace(/[\r\n]*/gm, "") + ")",
@@ -157,16 +167,16 @@ var loadFontFace = function (fontName, $divExample, ndx) {
                                         try {
                                             document.fonts.add(fontFace);
                                             loadedFontFaces[f.postScriptName] = fontFace;
-                                            $divExample.children("div.sample").css({"font-family": f.postScriptName});
+                                            $divExample.children("div.sample").css({"font-family": escapeFontFaceName(f.postScriptName)});
                                             $divExample.children("div.info").html(infoText);
                                         } catch(e) {
                                             parent.window.logError(e);
                                         }
                                         var appliedFF = $divExample.children("div.sample").first().css("font-family").replace(/['"]/g, "");
-                                        var isApplied = appliedFF === f.postScriptName;
+                                        var isApplied = appliedFF === escapeFontFaceName(f.postScriptName);
                                         if(loadedFontFaces[f.postScriptName] === undefined || !isApplied) {
                                             $divExample.children("div.sample")
-                                                .css({"font-family": f.postScriptName})
+                                                .css({"font-family": escapeFontFaceName(f.postScriptName)})
                                                 .css("background-color", "#fdd");
                                             $divExample.children("div.info")
                                                 .html(
@@ -175,7 +185,7 @@ var loadFontFace = function (fontName, $divExample, ndx) {
                                                 "<strong>ERROR:</strong> Font loaded, but could not apply to sample text. ['" +
                                                 appliedFF +
                                                 "' != '" +
-                                                f.postScriptName +
+                                                escapeFontFaceName(f.postScriptName) +
                                                 "']"
                                             );
                                             loadedFontFaces[f.postScriptName] = undefined
@@ -183,7 +193,7 @@ var loadFontFace = function (fontName, $divExample, ndx) {
                                     },
                                     function (e) {
                                         $divExample.children("div.sample")
-                                            .css({"font-family": f.postScriptName})
+                                            .css({"font-family": escapeFontFaceName(f.postScriptName)})
                                             .css("background-color", "#fdd");
                                         $divExample.children("div.info")
                                             .html(
@@ -203,7 +213,7 @@ var loadFontFace = function (fontName, $divExample, ndx) {
                     "text"
                 );
             } else {
-                $divExample.children("div.sample").css({"font-family": f.postScriptName });
+                $divExample.children("div.sample").css({"font-family": escapeFontFaceName(f.postScriptName) });
                 $divExample.children("div.info").html(infoText);
             }
         }
@@ -253,17 +263,34 @@ var doShowAsOrFontSizeChanged = function() {
     });
 };
 
-var doVendorOrLicenseOrCategoryChanged = function () {
+var highlightActiveFilterDropdowns = function () {
+    $("#ddlVendor")
+        .removeClass("btn-info").removeClass("btn-default")
+        .addClass(filterByVendor ? "btn-info" : "btn-default");
+    $("#ddlLicense")
+        .removeClass("btn-info").removeClass("btn-default")
+        .addClass(filterByLicense ? "btn-info" : "btn-default");
+    $("#ddlCategory")
+        .removeClass("btn-info").removeClass("btn-default")
+        .addClass(filterByCategory ? "btn-info" : "btn-default");
+    $("#ddlWeight")
+        .removeClass("btn-info").removeClass("btn-default")
+        .addClass(filterByWeight ? "btn-info" : "btn-default");
+}
+
+var doVendorOrLicenseOrCategoryOrWeightChanged = function () {
     if($("#txtVendor").val() === "All") { $("#txtVendor").val(""); }
     if($("#txtLicense").val() === "All") { $("#txtLicense").val(""); }
     if($("#txtCategory").val() === "All") { $("#txtCategory").val(""); }
+    if($("#txtWeight").val() === "All") { $("#txtWeight").val(""); }
     fontNamesThatMatchAllFilters(initFilterByValues($("#txtSearchFonts").val()));
+    highlightActiveFilterDropdowns();
     clearFontExamples();
     loadFontExamples();
 };
 
 var doSearchFontsClicked = function () {
-    doVendorOrLicenseOrCategoryChanged();
+    doVendorOrLicenseOrCategoryOrWeightChanged();
 };
 
 $(document).ready(function () {
@@ -307,6 +334,14 @@ $(document).ready(function () {
         $ul.append($("<li>").append($("<a>").text(dropdownCategory[i]).prop("href", "#null")));
     }
 
+    $ul = $("#ddlWeight").siblings("ul");
+    $ul.html("");
+    $ul.append($("<li>").append($("<a>").text("All").prop("href", "#null")));
+    $ul.append($("<li>").prop("role", "separator").addClass("divider"));
+    for(var i = 0; i < dropdownWeight.length; i++) {
+        $ul.append($("<li>").append($("<a>").text(dropdownWeight[i]).prop("href", "#null")));
+    }
+
     // register event handlers
 
     $("#cmdSearchFonts").click(function () {
@@ -334,15 +369,19 @@ $(document).ready(function () {
     });
 
     $("#ddlVendor").siblings("ul").children("li").click(function () {
-        $("#txtVendor").val($(this).text()); doVendorOrLicenseOrCategoryChanged();
+        $("#txtVendor").val($(this).text()); doVendorOrLicenseOrCategoryOrWeightChanged();
     });
 
     $("#ddlLicense").siblings("ul").children("li").click(function () {
-        $("#txtLicense").val($(this).text()); doVendorOrLicenseOrCategoryChanged();
+        $("#txtLicense").val($(this).text()); doVendorOrLicenseOrCategoryOrWeightChanged();
     });
 
     $("#ddlCategory").siblings("ul").children("li").click(function () {
-        $("#txtCategory").val($(this).text()); doVendorOrLicenseOrCategoryChanged();
+        $("#txtCategory").val($(this).text()); doVendorOrLicenseOrCategoryOrWeightChanged();
+    });
+
+    $("#ddlWeight").siblings("ul").children("li").click(function () {
+        $("#txtWeight").val($(this).text()); doVendorOrLicenseOrCategoryOrWeightChanged();
     });
 
     window.parent.registerViewSelectedClickHandler();

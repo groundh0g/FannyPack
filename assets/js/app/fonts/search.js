@@ -14,6 +14,7 @@ var typeaheadFont = [];
 var dropdownVendor = [];
 var dropdownLicense = [];
 var dropdownCategory = [];
+var dropdownWeight = [];
 
 var initSearchIndexes = function () {
     if(vendors && vendors.length > 0) {
@@ -54,7 +55,10 @@ var initSearchIndexes = function () {
                         if(indexByFont[fontName].length === 0) typeaheadFont.push(fontName);
                         indexByFont[fontName].push(key);
                         indexByWeight[weightName] = indexByWeight[weightName] || [];
-                        if(indexByWeight[weightName].length === 0) typeaheadWeight.push("weight:" + weightName);
+                        if(indexByWeight[weightName].length === 0) {
+                            typeaheadWeight.push("weight:" + weightName);
+                            dropdownWeight.push(weightName);
+                        }
                         indexByWeight[weightName].push(key);
                     }
                 }
@@ -68,6 +72,7 @@ var initSearchIndexes = function () {
             dropdownVendor.sort();
             dropdownLicense.sort();
             dropdownCategory.sort();
+            dropdownWeight.sort();
         }
     }
 };
@@ -81,8 +86,7 @@ var initFilterByValues = function(text) {
     filterByVendor   = $("#txtVendor").val().toLowerCase()  || undefined;
     filterByLicense  = $("#txtLicense").val().toLowerCase()  || undefined;
     filterByCategory = $("#txtCategory").val().toLowerCase() || undefined;
-    //filterByWeight   = $("#txtWeight").val().toLowerCase()   || undefined;
-    filterByWeight = undefined;
+    filterByWeight   = $("#txtWeight").val().toLowerCase()   || undefined;
 
     return text;
 };
