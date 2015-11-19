@@ -3,6 +3,7 @@ var BASE_PATH = BASE_PATH || "/";
 var currentFontList = currentFontList || [];
 var currentFontListLoadedCount = 0;
 var currentFontScrollTop = 0;
+var selectedFonts = {};
 
 var clearFontExamples = function () {
     // window.location.hash = "#fontsExample";
@@ -15,7 +16,7 @@ var clearFontExamples = function () {
 
 var createFontExampleDiv = function (name, selected, size) {
     name = name || "";
-    var $divExample = $("<div>").addClass("example");
+    var $divExample = $("<div>").addClass("example" + (selected ? " example-selected" : ""));
     var $divControls = $("<div>").addClass("controls")
             .html(
                 "<div class='btn " + (selected ? "btn-primary" : "btn-default") + "'>" +
@@ -29,6 +30,66 @@ var createFontExampleDiv = function (name, selected, size) {
         .append($divControls)
         .append($divSample)
         .append($divInfo);
+};
+
+var getSelectedFonts = function() {
+    var fonts = [];
+    for(var key in selectedFonts) {
+        if(selectedFonts.hasOwnProperty(key) && selectedFonts[key]) {
+            fonts.push(key + "|" + selectedFonts[key]);
+        }
+    }
+    return fonts;
+};
+
+//var getSelectedFontCount = function() {
+//    return getSelectedFonts().length;
+//};
+
+var getCurrentFontSize = function() {
+    var txtFontSize = $("#txtFontSize").val();
+    if(txtFontSize === "") {
+        switch($("#txtShowAs").val()) {
+            case "Paragraph": txtFontSize = SAMPLE_TEXT_PARAGRAPH_DEFAULT_SIZE; break;
+            case "Sentence": txtFontSize = SAMPLE_TEXT_SENTENCE_DEFAULT_SIZE; break;
+            case "Title": txtFontSize = SAMPLE_TEXT_TITLE_DEFAULT_SIZE; break;
+            case "FontName": txtFontSize = SAMPLE_TEXT_TITLE_DEFAULT_SIZE; break;
+            case "": txtFontSize = SAMPLE_TEXT_TITLE_DEFAULT_SIZE; break;
+            default: txtFontSize = SAMPLE_TEXT_SENTENCE_DEFAULT_SIZE; break;
+        }
+    }
+    return txtFontSize;
+};
+
+var getAddFontButton = function($divExample) {
+    return $divExample.children("div.controls").first().children("div.btn").first();
+};
+
+var doToggleSelectFont = function($divExample) {
+    var $divControls = $divExample.children("div.controls").first();
+    var $cmdAddFont = $divControls.children("div.btn").first();
+    var $spanFontSize = $divControls.children("span.fontSize").first();
+
+    var isSelected = $cmdAddFont.children("i").first().hasClass("fa-check-square");
+
+    isSelected = !isSelected; // toggle
+
+    var fontName = $divControls.children("input.fontName").first().val();
+    var fontSize = isSelected ? getCurrentFontSize() : "";
+
+    $divExample
+        .removeClass("example-selected")
+        .addClass(isSelected ? "example-selected" : "");
+    $cmdAddFont
+        .removeClass("btn-default").removeClass("btn-primary")
+        .addClass(isSelected ? "btn-primary" : "btn-default");
+    $cmdAddFont.children("i").first()
+        .removeClass("fa-check-square").removeClass("fa-square-o")
+        .addClass(isSelected ? "fa-check-square" : "fa-square-o");
+    $spanFontSize.text(isSelected ? getCurrentFontSize() : "");
+
+    selectedFonts[fontName] = isSelected ? fontSize : undefined;
+    window.parent.setSelectedFonts(getSelectedFonts());
 };
 
 var SAMPLE_TEXT_PARAGRAPH_DEFAULT_SIZE = "14px";
@@ -77,11 +138,13 @@ var loadFontExamples = function (numExamples) {
         var fontName = currentFontList[currentFontListLoadedCount];
         var $divExample = createFontExampleDiv(fontName);
         $("#divFontExamples").append($divExample);
-        //var $divSample = $divExample.find("div.sample").first();
         setTimeout((function (name, $div, ndx) {
             return function() {
                 loadFontFace(name, $div, ndx);
                 updateSampleText($div, name);
+                getAddFontButton($div).click(function() {
+                    doToggleSelectFont($div);
+                });
             }
         })(fontName, $divExample, currentFontListLoadedCount + 1), delay);
         delay += 200;
@@ -221,43 +284,37 @@ var loadFontFace = function (fontName, $divExample, ndx) {
 };
 
 var updateSampleText = function($divExample, fontName) {
-    var $divSample = $divExample.children("div.sample");
-    if(!fontName) {
-        fontName = $divSample.siblings("div.controls").children("input.fontName").first().val();
-    }
-    var txtShowAs = $("#txtShowAs").val() || "FontName";
-    if (txtShowAs === "Paragraph") {
-        $divSample.html(SAMPLE_TEXT_PARAGRAPH);
-    } else if (txtShowAs === "Sentence") {
-        $divSample.html($.rand(SAMPLE_TEXT_SENTENCE));
-    } else if (txtShowAs === "Title") {
-        $divSample.html($.rand(SAMPLE_TEXT_TITLE));
-    } else if (txtShowAs === "FontName") {
-        $divSample.html("<p>" + fontName + "</p>");
-    } else {
-        $divSample.html("").append($("<p>").text(txtShowAs));
-    }
-
-    var txtFontSize = $("#txtFontSize").val();
-    if(txtFontSize === "") {
-        switch(txtShowAs) {
-            case "Paragraph": txtFontSize = SAMPLE_TEXT_PARAGRAPH_DEFAULT_SIZE; break;
-            case "Sentence": txtFontSize = SAMPLE_TEXT_SENTENCE_DEFAULT_SIZE; break;
-            case "Title": txtFontSize = SAMPLE_TEXT_TITLE_DEFAULT_SIZE; break;
-            case "FontName": txtFontSize = SAMPLE_TEXT_TITLE_DEFAULT_SIZE; break;
-            default: txtFontSize = SAMPLE_TEXT_SENTENCE_DEFAULT_SIZE; break;
+    if(!$divExample.hasClass("example-selected")) {
+        var $divSample = $divExample.children("div.sample");
+        if (!fontName) {
+            fontName = $divSample.siblings("div.controls").children("input.fontName").first().val();
         }
-    }
+        var txtShowAs = $("#txtShowAs").val() || "FontName";
+        if (txtShowAs === "Paragraph") {
+            $divSample.html(SAMPLE_TEXT_PARAGRAPH);
+        } else if (txtShowAs === "Sentence") {
+            $divSample.html($.rand(SAMPLE_TEXT_SENTENCE));
+        } else if (txtShowAs === "Title") {
+            $divSample.html($.rand(SAMPLE_TEXT_TITLE));
+        } else if (txtShowAs === "FontName") {
+            $divSample.html("<p>" + fontName + "</p>");
+        } else {
+            $divSample.html("").append($("<p>").text(txtShowAs));
+        }
 
-    $divSample.find("p").each(function(){
-        $(this).css("font-size", txtFontSize);
-    });
+        var txtFontSize = getCurrentFontSize();
+
+        $divSample.find("p").each(function () {
+            $(this).css("font-size", txtFontSize);
+        });
+    }
 
     currentFontScrollTop = $(window).scrollTop();
 };
 
 var doShowAsOrFontSizeChanged = function() {
     if($("#txtFontSize").val() === "Default") { $("#txtFontSize").val(""); }
+    if($("#txtShowAs").val() === "FontName") { $("#txtShowAs").val(""); }
     $("#divFontExamples div.example").each(function () {
         updateSampleText($(this));
     });

@@ -21,9 +21,12 @@
             /*body { padding-top: 65px; }*/
             .example  { width:100%; background-color:#ddd; margin-bottom:10px; clear:both; }
             .example p { margin:5px; }
+            .example-selected  { background-color:#ddf; }
             .sample   { float:left; width:85%; background-color:#eee; }
+            .example-selected .sample  { background-color:#eef; }
             .controls { float:right; width:15%; padding-left:5px; }
             .info     { clear:both; background-color:#ccc; }
+            .example-selected .info  { background-color:#ccf; }
             div.input-group input { font-size:0.75em; }
         </style>
     </head>
@@ -50,6 +53,7 @@
                         <span id="cmdFontSize" title="Size" class="btn btn-default dropdown-toggle input-group-addon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-chevron-down"></i></span>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                             <li><a href="#null">Default</a></li>
+                            <li class="divider"></li>
                             <li><a href="#null">10px</a></li>
                             <li><a href="#null">18px</a></li>
                             <li><a href="#null">24px</a></li>

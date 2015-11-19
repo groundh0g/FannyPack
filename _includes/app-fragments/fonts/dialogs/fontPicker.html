@@ -21,9 +21,14 @@
 </div>
 
 <script type="text/javascript">
+    var selectedFonts = [];
     var BASE_PATH = "{{ BASE_PATH }}";
     var setTotalFontCount = function(val) { $("#spanTotalFontCount").text(val); };
     var setSelectedFontCount = function(val) { $("#spanSelectedFontCount").text(val); };
+    var setSelectedFonts = function(fonts) {
+        selectedFonts = fonts;
+        setSelectedFontCount(fonts.length);
+    };
     var registerViewSelectedClickHandler = function() {
         $("#lnkViewSelected").click(function() {
             $("#frameFontPicker").contents().find("#lnkFontSelected").first()[0].scrollIntoView();
