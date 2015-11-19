@@ -267,10 +267,10 @@ var loadFontFace = function (fontName, $divExample, ndx) {
                                     }
                                 );
                             } catch (e) {
-                                window.parent.logError(e);
+                                window.parent.logInfo(e);
                             }
                         } else {
-                            window.parent.logError("Status: " + foo);
+                            window.parent.logInfo("Status: " + foo);
                         }
                     },
                     "text"
