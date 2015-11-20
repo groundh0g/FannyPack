@@ -1,4 +1,4 @@
-var vendors = vendors || [];
+var vendors = [];
 var BASE_PATH = BASE_PATH || "/";
 var currentFontList = currentFontList || [];
 var currentFontListLoadedCount = 0;
@@ -6,7 +6,6 @@ var currentFontScrollTop = 0;
 var selectedFonts = {};
 
 var clearFontExamples = function () {
-    // window.location.hash = "#fontsExample";
     $("#divFontExamples").html("");
     currentFontListLoadedCount = 0;
     currentFontScrollTop = 0;
@@ -22,7 +21,7 @@ var createFontExampleDiv = function (name, selected, size) {
                 "<div class='btn " + (selected ? "btn-primary" : "btn-default") + "'>" +
                 "<i class='fa fa-" + (selected ? 'check-' : '') + "square-o'></i> Add Font" +
                 "</div>" +
-                "<span class='fontSize'></span>" +
+                "<span class='fontSize'>" + (size || "") + "</span>" +
                 "<input type='hidden' class='fontName' value='" + name + "' />");
     var $divSample = $("<div>").addClass("sample").html("<img src='assets/img/loading.gif' />");
     var $divInfo = $("<div>").addClass("info").text("Loading " + name + " ...");
@@ -41,10 +40,6 @@ var getSelectedFonts = function() {
     }
     return fonts;
 };
-
-//var getSelectedFontCount = function() {
-//    return getSelectedFonts().length;
-//};
 
 var getCurrentFontSize = function() {
     var txtFontSize = $("#txtFontSize").val();
@@ -215,8 +210,8 @@ var loadFontFace = function (fontName, $divExample, ndx) {
                 $.get(
                     encodeURI(url),
                     {},
-                    function (data, foo, bar) {
-                        if(foo === "success") {
+                    function (data, statusText, bar) {
+                        if(statusText === "success") {
                             try {
                                 var face = new FontFace(
                                     escapeFontFaceName(f.postScriptName),
@@ -233,14 +228,19 @@ var loadFontFace = function (fontName, $divExample, ndx) {
                                             $divExample.children("div.sample").css({"font-family": escapeFontFaceName(f.postScriptName)});
                                             $divExample.children("div.info").html(infoText);
                                         } catch(e) {
-                                            parent.window.logError(e);
+                                            $divExample.addClass("example-error");
+                                            $divExample.children("div.info").html(
+                                                infoText +
+                                                "<br/>" +
+                                                "<strong>ERROR:</strong> " + e
+                                            );
                                         }
                                         var appliedFF = $divExample.children("div.sample").first().css("font-family").replace(/['"]/g, "");
                                         var isApplied = appliedFF === escapeFontFaceName(f.postScriptName);
                                         if(loadedFontFaces[f.postScriptName] === undefined || !isApplied) {
+                                            $divExample.addClass("example-error");
                                             $divExample.children("div.sample")
-                                                .css({"font-family": escapeFontFaceName(f.postScriptName)})
-                                                .css("background-color", "#fdd");
+                                                .css({"font-family": escapeFontFaceName(f.postScriptName)});
                                             $divExample.children("div.info")
                                                 .html(
                                                 infoText +
@@ -255,22 +255,38 @@ var loadFontFace = function (fontName, $divExample, ndx) {
                                         }
                                     },
                                     function (e) {
+                                        $divExample.addClass("example-error");
                                         $divExample.children("div.sample")
-                                            .css({"font-family": escapeFontFaceName(f.postScriptName)})
-                                            .css("background-color", "#fdd");
+                                            .css({"font-family": escapeFontFaceName(f.postScriptName)});
                                         $divExample.children("div.info")
                                             .html(
                                             infoText +
                                             "<br/>" +
-                                            "<strong>ERROR:</strong> Font failed to load."
+                                            "<strong>ERROR:</strong> Font failed to load. " + e
                                         );
                                     }
                                 );
                             } catch (e) {
-                                window.parent.logInfo(e);
+                                $divExample.addClass("example-error");
+                                $divExample.children("div.sample")
+                                    .css({"font-family": escapeFontFaceName(f.postScriptName)});
+                                $divExample.children("div.info")
+                                    .html(
+                                        infoText +
+                                        "<br/>" +
+                                        "<strong>ERROR:</strong> " + e
+                                    );
                             }
                         } else {
-                            window.parent.logInfo("Status: " + foo);
+                            $divExample.addClass("example-error");
+                            $divExample.children("div.sample")
+                                .css({"font-family": escapeFontFaceName(f.postScriptName)});
+                            $divExample.children("div.info")
+                                .html(
+                                    infoText +
+                                    "<br/>" +
+                                    "<strong>ERROR:</strong> " + statusText
+                                );
                         }
                     },
                     "text"
@@ -284,7 +300,10 @@ var loadFontFace = function (fontName, $divExample, ndx) {
 };
 
 var updateSampleText = function($divExample, fontName) {
-    if(!$divExample.hasClass("example-selected")) {
+    var doUpdateSampleText =
+        !$divExample.hasClass("example-selected") &&
+        !$divExample.hasClass("example-error");
+    if(doUpdateSampleText) {
         var $divSample = $divExample.children("div.sample");
         if (!fontName) {
             fontName = $divSample.siblings("div.controls").children("input.fontName").first().val();
