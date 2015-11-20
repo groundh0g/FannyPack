@@ -224,7 +224,7 @@ var loadFontFace = function (fontName, $divExample, ndx) {
                             try {
                                 var face = new FontFace(
                                     escapeFontFaceName(f.postScriptName),
-                                    "url(data:" + f.uriFormat.replace(/font\//, "application/") +
+                                    "url(data:" + f.uriFormat.replace(/font\//, "application/x-font-") +
                                     ";charset=utf-8;base64," +
                                     data.replace(/[\r\n]*/gm, "") + ")",
                                     {}
@@ -447,8 +447,6 @@ $(document).ready(function () {
     $("#ddlWeight").siblings("ul").children("li").click(function () {
         $("#txtWeight").val($(this).text()); doVendorOrLicenseOrCategoryOrWeightOrSearchChanged();
     });
-
-    window.parent.registerViewSelectedClickHandler();
 
     $(window).scroll(function() {
         var $modalBody = window.parent.getHostElementUsingJQuery("#popupFontPickerModalBody");
