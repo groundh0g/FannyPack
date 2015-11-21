@@ -15,14 +15,16 @@ pagename: blog
     <a class="btn btn-default" href="/tags.html"><i class="icon icon-tags"></i> Tags</a>
   </div>
   <div class="btn-group">
-  {% if paginator.previous_page %}
-    <a class="btn btn-default" href="/page{{ paginator.previous_page }}"><i class="icon icon-chevron-left"></i> PREV</a>
+  {% if paginator.previous_page == 1 %}
+    <a class="btn btn-default" href="/blog"><i class="icon icon-chevron-left"></i> PREV</a>
+  {% elsif paginator.previous_page %}
+    <a class="btn btn-default" href="/blog/page{{ paginator.previous_page }}"><i class="icon icon-chevron-left"></i> PREV</a>
   {% else %}
     <a class="btn btn-default disabled" href="#null"><i class="icon icon-chevron-left"></i> PREV</a>
   {% endif %}
     <a class="btn btn-default disabled" href="#null">Page {{ paginator.page }} of {{ paginator.total_pages }}</a>
   {% if paginator.next_page %}
-    <a class="btn btn-default" href="/page{{ paginator.next_page }}">NEXT <i class="icon icon-chevron-right"></i></a>
+    <a class="btn btn-default" href="/blog/page{{ paginator.next_page }}">NEXT <i class="icon icon-chevron-right"></i></a>
   {% else %}
     <a class="btn btn-default disabled" href="#null">NEXT <i class="icon icon-chevron-right"></i></a>
   {% endif %}
@@ -32,12 +34,10 @@ pagename: blog
 
 <!-- This loops through the paginated posts -->
 {% for post in paginator.posts %}
-  <h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
-  <p class="author">
-    <span style="font-size:0.8em; font-weight:bold;">{{ post.date | date: "%A, %F" }} at {{ post.date | date: "%r %Z" }} by <a href="https://github.com/groundh0g" target="_blank">@groundh0g</a></span>
-  </p>
+<h2>{{ post.title }} <br/><small>{{ post.date | date: "%B %e, %Y" }} by <a href="https://github.com/groundh0g" target="_blank">@groundh0g</a></small></h2>
   <div class="content">
-    {{ post.content }}
+      <p>{{ post.content | strip_html | truncatewords: 75 }}</p>
+      <p><a href="{{ BASE_PATH }}{{ post.url }}">View Post &raquo;</a></p>
   </div>
   
   {% if forloop.last != true %}
@@ -54,14 +54,16 @@ pagename: blog
     <a class="btn btn-default" href="/tags.html"><i class="icon icon-tags"></i> Tags</a>
   </div>
   <div class="btn-group">
-  {% if paginator.previous_page %}
-    <a class="btn btn-default" href="/page{{ paginator.previous_page }}"><i class="icon icon-chevron-left"></i> PREV</a>
+  {% if paginator.previous_page == 1 %}
+      <a class="btn btn-default" href="/blog"><i class="icon icon-chevron-left"></i> PREV</a>
+  {% elsif paginator.previous_page %}
+    <a class="btn btn-default" href="/blog/page{{ paginator.previous_page }}"><i class="icon icon-chevron-left"></i> PREV</a>
   {% else %}
     <a class="btn btn-default disabled" href="#null"><i class="icon icon-chevron-left"></i> PREV</a>
   {% endif %}
     <a class="btn btn-default disabled" href="#null">Page {{ paginator.page }} of {{ paginator.total_pages }}</a>
   {% if paginator.next_page %}
-    <a class="btn btn-default" href="/page{{ paginator.next_page }}">NEXT <i class="icon icon-chevron-right"></i></a>
+    <a class="btn btn-default" href="/blog/page{{ paginator.next_page }}">NEXT <i class="icon icon-chevron-right"></i></a>
   {% else %}
     <a class="btn btn-default disabled" href="#null">NEXT <i class="icon icon-chevron-right"></i></a>
   {% endif %}
