@@ -188,20 +188,20 @@ var DoSpriteRemove = function () {
 	return false; 
 };
 
-var isSettingsVisible = false;
+var isSettingsVisible = true;
 var DoToggleSettings = function () {
 	if(isSettingsVisible) {
 		$("#divSidebarLeft").hide();
-		$("#divWorkspace").css("left","50px");
-		$("#divWorkspaceToolbar").css("left","50px");
-		$("#progressBarWrapper").css("width","200px");
+		$("#divWorkspace").css("left","0");
+		$("#divWorkspaceToolbar").css("left","0");
+		//$("#progressBarWrapper").css("width","200px");
 		$("#cmdFileOptions").removeClass("active").blur();
 		isSettingsVisible = false;
 	} else {
 		$("#divSidebarLeft").show();
-		$("#progressBarWrapper").css("width","75px");
-		$("#divWorkspace").css("left","350px");
-		$("#divWorkspaceToolbar").css("left","350px");
+		//$("#progressBarWrapper").css("width","75px");
+		$("#divWorkspace").css("left","300px");
+		$("#divWorkspaceToolbar").css("left","300px");
 		$("#cmdFileOptions").addClass("active").blur();
 		isSettingsVisible = true;
 	}

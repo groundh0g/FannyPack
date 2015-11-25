@@ -19,41 +19,36 @@ scripts: [
 ---
 {% include JB/setup %}
 
-{% include app-fragments/tiles/toolbar.html %}
+{% include app-fragments/fonts/toolbar.html %}
 
 <div id="divSidebarLeft" class="divSidebarLeft">
-    {% include app-fragments/tiles/left-nav/options.html %}
+    {% include app-fragments/fonts/left-nav/options.html %}
 </div>
 
-{% include app-fragments/tiles/palette.html %}
-
-{% include app-fragments/tiles/workspace/toolbar.html %}
+{% include app-fragments/fonts/workspace/toolbar.html %}
 
 <div id="divWorkspace" class="divWorkspace">
-    {% include app-fragments/tiles/workspace/content.html %}
+    {% include app-fragments/fonts/workspace/content.html %}
 </div>
 
 <div class="divSidebarRightTop">
     <table cellpadding="0" cellspacing="0" border="0" style="width:100%; height:100%; border:1px; vertical-align:top;">
         <tr><td>
             <ul id="tabSidebarRightTop" class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="#" title="Layers"><i class="fa fa-navicon"></i></a></li>
-                <li role="presentation"><a href="#" title="Map"><i class="fa fa-map-marker"></i></a></li>
-                <li role="presentation"><a href="#" title="Properties"><i class="fa fa-list-alt"></i></a></li>
+                <li role="presentation" class="active"><a href="#" title="Fonts"><i class="fa fa-font"></i> Fonts</a></li>
+                <li role="presentation"><a href="#" title="Console"><i class="fa fa-bell"></i> Console <span id="lblConsoleCount" class="badge badge-default">0</span></a></li>
             </ul>
         </td></tr>
         <tr><td>
             <div id="divRightTopToolbars" style="display:none;"></div>
-            {% include app-fragments/tiles/right-nav/layers-toolbar.html %}
-            {% include app-fragments/tiles/right-nav/map-thumbnail-toolbar.html %}
-            {% include app-fragments/tiles/right-nav/properties-toolbar.html %}
+            {% include app-fragments/fonts/right-nav/fonts-toolbar.html %}
+            {% include app-fragments/fonts/right-nav/console-toolbar.html %}
         </td></tr>
         <tr><td style="height:100%">
             <div style="width:100%; height: 100%; margin:0; padding:0; background-color:#fff; overflow:auto;">
                 <div id="divRightTopLists" style="display:none;"></div>
-                {% include app-fragments/tiles/right-nav/layers-content.html %}
-                {% include app-fragments/tiles/right-nav/map-thumbnail-content.html %}
-                {% include app-fragments/tiles/right-nav/properties-content.html %}
+                {% include app-fragments/fonts/right-nav/fonts-content.html %}
+                {% include app-fragments/fonts/right-nav/console-content.html %}
             </div>
         </td></tr>
     </table>
@@ -61,35 +56,17 @@ scripts: [
 
 <div class="divSidebarRightBottom">
     <table cellpadding="0" cellspacing="0" border="0" style="width:100%; height:100%; border:1px; vertical-align:top;">
-        <tr><td>
-            <ul id="tabSidebarRightBottom" class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="#" title="Tiles"><i class="fa fa-square"></i></a></li>
-                <li role="presentation"><a href="#" title="Tile Groups"><i class="fa fa-th-large"></i></a></li>
-                <li role="presentation"><a href="#" title="Actors"><i class="fa fa-child"></i></a></li>
-                <li role="presentation"><a href="#" title="Objects"><i class="fa fa-cube"></i></a></li>
-                <li role="presentation"><a href="#" title="Console"><i class="fa fa-bell"></i> <span id="lblConsoleCount" class="badge badge-default">0</span></a></li>
-            </ul>
-        </td></tr>
-        <tr><td>
-            <div id="divRightBottomToolbars" style="display:none;"></div>
-            {% include app-fragments/tiles/right-nav/tiles-toolbar.html %}
-            {% include app-fragments/tiles/right-nav/tilegroups-toolbar.html %}
-            {% include app-fragments/tiles/right-nav/actors-toolbar.html %}
-            {% include app-fragments/tiles/right-nav/objects-toolbar.html %}
-            {% include app-fragments/tiles/right-nav/console-toolbar.html %}
+        <tr><td style="line-height:40px; padding-left:20px; border-bottom:1px solid #bbb;">
+            <i class="fa fa-bars"></i> Properties
         </td></tr>
         <tr><td style="height:100%">
-            <div style="width:100%; height: 100%; margin:0; padding:0; background-color:#fff; overflow:auto;">
+            <div style="width:100%; height: 100%; margin:0; padding:0; overflow:auto;">
                 <div id="divRightBottomLists" style="display:none;"></div>
-                {% include app-fragments/tiles/right-nav/tiles-content.html %}
-                {% include app-fragments/tiles/right-nav/tilegroups-content.html %}
-                {% include app-fragments/tiles/right-nav/actors-content.html %}
-                {% include app-fragments/tiles/right-nav/objects-content.html %}
-                {% include app-fragments/tiles/right-nav/console-content.html %}
+                {% include app-fragments/fonts/right-nav/properties-content.html %}
             </div>
         </td></tr>
     </table>
 </div>
 
 {% include app-fragments/fonts/dialogs/fontPicker.html %}
-{% include app-fragments/fonts/dialogs/fontUpload.html %}
+

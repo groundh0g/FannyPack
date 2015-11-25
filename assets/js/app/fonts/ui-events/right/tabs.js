@@ -20,6 +20,18 @@
  THE SOFTWARE.
  */
 
+var onTopTabChanged = function(text) {
+    if(text === "Fonts") {
+        $(".divSidebarRightTop").css("bottom", "254px");
+        $(".divSidebarRightBottom").show()
+    } else {
+        $(".divSidebarRightTop").css("bottom", "0");
+        $(".divSidebarRightBottom").hide();
+    }
+};
+
+var onBottomTabChanged = function(text) { };
+
 // -- TOP TABS --
 $("#tabSidebarRightTop").children("li").click(function(event){
     var $this = $(this);
@@ -28,8 +40,10 @@ $("#tabSidebarRightTop").children("li").click(function(event){
 
     $("#divRightTopToolbars").siblings("div").hide();
     $("#divRightTopLists").siblings("div").hide();
-    $("#div" + $this.children("a").attr("title").replace(" ", "") + "Toolbar").show();
-    $("#div" + $this.children("a").attr("title").replace(" ", "") + "List").show();
+    var title = $this.children("a").attr("title").replace(" ", "");
+    $("#div" + title + "Toolbar").show();
+    $("#div" + title + "List").show();
+    onTopTabChanged(title);
 });
 
 // -- BOTTOM TABS --
@@ -40,6 +54,8 @@ $("#tabSidebarRightBottom").children("li").click(function(event){
 
     $("#divRightBottomToolbars").siblings("div").hide();
     $("#divRightBottomLists").siblings("div").hide();
-    $("#div" + $this.children("a").attr("title").replace(" ", "") + "Toolbar").show();
-    $("#div" + $this.children("a").attr("title").replace(" ", "") + "List").show();
+    var title = $this.children("a").attr("title").replace(" ", "");
+    $("#div" + title + "Toolbar").show();
+    $("#div" + title + "List").show();
+    onBottomTabChanged(title);
 });

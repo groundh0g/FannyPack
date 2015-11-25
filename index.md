@@ -31,11 +31,12 @@ designed in the 80's.
 			<img src="assets/img/index/iconSpriteFonts.png" alt="Sprite Sheets"/>
 		</td>
 		<td style="text-align:center; white-space:nowrap;">
-			<p>A tool to convert public domain TTF fonts <br/>
-			   into bitmap fonts - a format that is more <br/>
-			   easily consumed by game engines.
+			<p>A tool to convert public domain TTF &amp; OTF <br/>
+			   fonts into bitmap fonts - a format that is <br/>
+			   more easily consumed by game engines.
 			</p>
-			<p><a id="cmdShowFeaturesFonts" href="#null" class="btn btn-default disabled">Show Features</a></p>
+			<p><a href="#popupFeatureFonts" role="button" data-toggle="modal" class="btn btn-primary">Show Features</a></p>
+			<!-- <p><a id="cmdShowFeaturesFonts" href="#null" class="btn btn-default disabled">Show Features</a></p> -->
 		</td>
 	</tr><tr>
 		<td style="width:300px;">
@@ -143,27 +144,27 @@ BitBucket integration for the ultimate in team collaboration.
 		<h4 class="modal-title">Sprite Sheet Features</h4>
 	  </div>
 	  <div class="modal-body">
-		<p>Current Features:</p>
+		<h3>Current Features:</h3>
 		<div style="padding-left:10px;"><p>
-			<i class="icon icon-ok"></i> Import web-friendly image formats<br/>
-			<i class="icon icon-ok"></i> <em>Extract animated GIF frames!</em><br/>
-			<i class="icon icon-ok"></i> Export images as PNG, GIF, or JPG<br/>
-			<i class="icon icon-ok"></i> Export data as XML or JSON<br/>
-			<i class="icon icon-ok"></i> Export data as CSS<br/>
-			<i class="icon icon-ok"></i> Trim &amp; crop unused pixels<br/>
-			<i class="icon icon-ok"></i> Heuristic mapping (chroma key)<br/>
-			<i class="icon icon-ok"></i> Basic rects (shelf) texture packing<br/>
-			<i class="icon icon-ok"></i> MaxRects texture packing<br/>
-			<i class="icon icon-ok"></i> Alpha (transparent) cleaning (aids compression)<br/>
-			<i class="icon icon-ok"></i> Debug mode (show sprite outlines)
+			<i class="fa fa-check"></i> Import web-friendly image formats<br/>
+			<i class="fa fa-check"></i> <em>Extract animated GIF frames!</em><br/>
+			<i class="fa fa-check"></i> Export images as PNG, GIF, or JPG<br/>
+			<i class="fa fa-check"></i> Export data as XML or JSON<br/>
+			<i class="fa fa-check"></i> Export data as CSS<br/>
+			<i class="fa fa-check"></i> Trim &amp; crop unused pixels<br/>
+			<i class="fa fa-check"></i> Heuristic mapping (chroma key)<br/>
+			<i class="fa fa-check"></i> Basic rects (shelf) texture packing<br/>
+			<i class="fa fa-check"></i> MaxRects texture packing<br/>
+			<i class="fa fa-check"></i> Alpha (transparent) cleaning (aids compression)<br/>
+			<i class="fa fa-check"></i> Debug mode (show sprite outlines)
 		</p></div>
-		<p>Planned Features:</p>
+		<h3>Planned Features:</h3>
 		<div style="padding-left:10px;"><p>
-			<i class="icon icon-wrench"></i> Import non-web image formats<br/>
-			<i class="icon icon-wrench"></i> Export optimized images<br/>
-			<i class="icon icon-wrench"></i> Allow sprite rotate within sheet<br/>
-			<i class="icon icon-wrench"></i> Alias duplicate sprites<br/>
-			<i class="icon icon-wrench"></i> DropBox support
+			<i class="fa fa-wrench"></i> Import non-web image formats<br/>
+			<i class="fa fa-wrench"></i> Export optimized images<br/>
+			<i class="fa fa-wrench"></i> Allow sprite rotate within sheet<br/>
+			<i class="fa fa-wrench"></i> Alias duplicate sprites<br/>
+			<i class="fa fa-wrench"></i> DropBox (et. al.) support
 		</p></div>
 	  </div>
 	  <div class="modal-footer">
@@ -172,3 +173,42 @@ BitBucket integration for the ultimate in team collaboration.
 	</div>
   </div>
 </div>
+
+<div id="popupFeatureFonts" class="modal fade">
+  <div class="modal-dialog">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title">Sprite Fonts Features</h4>
+	  </div>
+	  <div class="modal-body">
+		<h3>Current Features:</h3>
+		<div style="padding-left:10px;"><p>
+			<i class="fa fa-check"></i> Select from a library of 2000+ fonts<br/>
+			<i class="fa fa-check"></i> Export images as PNG, GIF, or JPG<br/>
+			<i class="fa fa-check"></i> Export data as XML or JSON<br/>
+			<i class="fa fa-check"></i> Trim &amp; crop unused pixels (smaller files)<br/>
+			<i class="fa fa-check"></i> Kerning (deduced)<br/>
+			<i class="fa fa-check"></i> Metrics (deduced)<br/>
+			<i class="fa fa-check"></i> Specify included characters<br/>
+			<i class="fa fa-check"></i> Filter included characters from sample text<br/>
+			<i class="fa fa-check"></i> Debug mode (show font metrics as outlines)
+		</p></div>
+		<h3>Planned Features:</h3>
+		<div style="padding-left:10px;"><p>
+			<i class="fa fa-wrench"></i> Import your own TTF/OTF fonts<br/>
+			<i class="fa fa-wrench"></i> Kerning (inspect font data)<br/>
+			<i class="fa fa-wrench"></i> Metrics (inspect font data)<br/>
+			<i class="fa fa-wrench"></i> Embedded bounds data in image (no separate atlas)<br/>
+			<i class="fa fa-wrench"></i> Export optimized images<br/>
+			<i class="fa fa-wrench"></i> Alias duplicate glyphs<br/>
+			<i class="fa fa-wrench"></i> DropBox support
+		</p></div>
+	  </div>
+	  <div class="modal-footer">
+		<button type="button" class="btn btn-primary" data-dismiss="modal">Dismiss</button>
+	  </div>
+	</div>
+  </div>
+</div>
+
