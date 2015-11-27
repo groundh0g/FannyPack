@@ -82,11 +82,11 @@ var filterByLicense = undefined;
 var filterByCategory = undefined;
 var filterByWeight = undefined;
 
-var initFilterByValues = function(text) {
-    filterByVendor   = $("#txtVendor").val().toLowerCase()  || undefined;
-    filterByLicense  = $("#txtLicense").val().toLowerCase()  || undefined;
-    filterByCategory = $("#txtCategory").val().toLowerCase() || undefined;
-    filterByWeight   = $("#txtWeight").val().toLowerCase()   || undefined;
+var initFilterByValues = function(text, txtVendor, txtLicense, txtCategory, txtWeight) {
+    filterByVendor   = (txtVendor || "").toLowerCase()  || undefined;
+    filterByLicense  = (txtLicense || "").toLowerCase()  || undefined;
+    filterByCategory = (txtCategory || "").toLowerCase() || undefined;
+    filterByWeight   = (txtWeight || "").toLowerCase()   || undefined;
 
     return text;
 };
@@ -162,7 +162,7 @@ var initFilterByValues = function(text) {
 //    }
 //};
 
-var currentFontList = [];
+//var currentFontList = [];
 
 var fontNamesThatMatchAllFilters = function (searchText) {
     var results = [];
@@ -207,7 +207,7 @@ var fontNamesThatMatchAllFilters = function (searchText) {
         results.sort();
     }
 
-    currentFontList = results;
+    //currentFontList = results;
     return results;
 };
 
@@ -235,6 +235,7 @@ var substringMatcher = function(strs) {
   };
 };
 
+var initTypeaheadResultList = [];
 var initTypeahead = function() {
 	var list = [];
 
@@ -251,8 +252,10 @@ var initTypeahead = function() {
 	});
 	FontList.initialize();
 
-	$("#txtSearchFonts").typeahead(
-		{ hint: true, highlight: true, minLength: 1 },
-		{ name: "titles", limit: 10, source: substringMatcher(list) }
-	);
+    initTypeaheadResultList = list;
+
+	//$("#txtSearchFonts").typeahead(
+	//	{ hint: true, highlight: true, minLength: 1 },
+	//	{ name: "titles", limit: 10, source: substringMatcher(list) }
+	//);
 };

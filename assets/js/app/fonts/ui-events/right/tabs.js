@@ -20,17 +20,8 @@
  THE SOFTWARE.
  */
 
-var onTopTabChanged = function(text) {
-    if(text === "Fonts") {
-        $(".divSidebarRightTop").css("bottom", "254px");
-        $(".divSidebarRightBottom").show()
-    } else {
-        $(".divSidebarRightTop").css("bottom", "0");
-        $(".divSidebarRightBottom").hide();
-    }
-};
-
-var onBottomTabChanged = function(text) { };
+var OnTopTabChanged = OnTopTabChanged || function(text) { };
+var OnBottomTabChanged = OnBottomTabChanged || function(text) { };
 
 // -- TOP TABS --
 $("#tabSidebarRightTop").children("li").click(function(event){
@@ -43,7 +34,7 @@ $("#tabSidebarRightTop").children("li").click(function(event){
     var title = $this.children("a").attr("title").replace(" ", "");
     $("#div" + title + "Toolbar").show();
     $("#div" + title + "List").show();
-    onTopTabChanged(title);
+    OnTopTabChanged(title);
 });
 
 // -- BOTTOM TABS --
@@ -57,5 +48,5 @@ $("#tabSidebarRightBottom").children("li").click(function(event){
     var title = $this.children("a").attr("title").replace(" ", "");
     $("#div" + title + "Toolbar").show();
     $("#div" + title + "List").show();
-    onBottomTabChanged(title);
+    OnBottomTabChanged(title);
 });

@@ -1,6 +1,6 @@
 var vendors = [];
 var BASE_PATH = BASE_PATH || "/";
-var currentFontList = currentFontList || [];
+var currentFontList = [];
 var currentFontListLoadedCount = 0;
 var currentFontScrollTop = 0;
 var selectedFonts = {};
@@ -177,7 +177,7 @@ var loadFontFaceErrorMessage = function($divExample, infoText, errorText) {
 };
 
 var loadFontFace = function (fontName, $divExample, ndx) {
-    var index = indexByFont[fontName];
+    var index = window.parent.indexByFont[fontName];
     if(index && index.length > 0) {
         var indexes = index[0].split("/");
         if(indexes && indexes.length > 3) {
@@ -193,15 +193,15 @@ var loadFontFace = function (fontName, $divExample, ndx) {
                 f.postScriptName + ".json";
 
             var vendorName =
-                highlightSearchTerm(v.name, filterByVendor);
+                highlightSearchTerm(v.name, window.parent.filterByVendor);
             var licenseName =
-                highlightSearchTerm(l.name.replace(/various/, "unknown"), filterByLicense);
+                highlightSearchTerm(l.name.replace(/various/, "unknown"), window.parent.filterByLicense);
             var categoryName =
-                highlightSearchTerm(ff.category, filterByCategory);
+                highlightSearchTerm(ff.category, window.parent.filterByCategory);
             var fontName =
                 highlightSearchTerm(f.postScriptName, $("#txtSearchFonts").val());
             var weightName =
-                highlightSearchTerm("" + f.weight, filterByWeight);
+                highlightSearchTerm("" + f.weight, window.parent.filterByWeight);
 
             var infoText =
                 "#" + ndx +
@@ -330,16 +330,16 @@ var doShowAsOrFontSizeChanged = function() {
 var highlightActiveFilterDropdowns = function () {
     $("#ddlVendor")
         .removeClass("btn-info").removeClass("btn-default")
-        .addClass(filterByVendor ? "btn-info" : "btn-default");
+        .addClass(window.parent.filterByVendor ? "btn-info" : "btn-default");
     $("#ddlLicense")
         .removeClass("btn-info").removeClass("btn-default")
-        .addClass(filterByLicense ? "btn-info" : "btn-default");
+        .addClass(window.parent.filterByLicense ? "btn-info" : "btn-default");
     $("#ddlCategory")
         .removeClass("btn-info").removeClass("btn-default")
-        .addClass(filterByCategory ? "btn-info" : "btn-default");
+        .addClass(window.parent.filterByCategory ? "btn-info" : "btn-default");
     $("#ddlWeight")
         .removeClass("btn-info").removeClass("btn-default")
-        .addClass(filterByWeight ? "btn-info" : "btn-default");
+        .addClass(window.parent.filterByWeight ? "btn-info" : "btn-default");
 }
 
 var doVendorOrLicenseOrCategoryOrWeightOrSearchChanged = function () {
@@ -347,7 +347,15 @@ var doVendorOrLicenseOrCategoryOrWeightOrSearchChanged = function () {
     if($("#txtLicense").val() === "All") { $("#txtLicense").val(""); }
     if($("#txtCategory").val() === "All") { $("#txtCategory").val(""); }
     if($("#txtWeight").val() === "All") { $("#txtWeight").val(""); }
-    fontNamesThatMatchAllFilters(initFilterByValues($("#txtSearchFonts").val()));
+    currentFontList = window.parent.fontNamesThatMatchAllFilters(
+        window.parent.initFilterByValues(
+            $("#txtSearchFonts").val(),
+            $("#txtVendor").val(),
+            $("#txtLicense").val(),
+            $("#txtCategory").val(),
+            $("#txtWeight").val()
+        )
+    );
     highlightActiveFilterDropdowns();
     clearFontExamples();
     loadFontExamples();
@@ -362,10 +370,12 @@ $(document).ready(function () {
     BASE_PATH = window.parent["BASE_PATH"] || "/";
 
     // assume parent loaded font data, init indices
-
-    initSearchIndexes();
-    initTypeahead();
-    fontNamesThatMatchAllFilters();
+    //window.parent.initTypeahead();
+    //window.parent.fontNamesThatMatchAllFilters();
+    $("#txtSearchFonts").typeahead(
+        { hint: true, highlight: true, minLength: 1 },
+        { name: "titles", limit: 10, source: window.parent.substringMatcher(window.parent.initTypeaheadResultList) }
+    );
 
     // fix inline styles set by initTypeahead ... :/
 
@@ -378,32 +388,32 @@ $(document).ready(function () {
     $ul.html("");
     $ul.append($("<li>").append($("<a>").text("All").prop("href", "#null")));
     $ul.append($("<li>").prop("role", "separator").addClass("divider"));
-    for(var i = 0; i < dropdownVendor.length; i++) {
-        $ul.append($("<li>").append($("<a>").text(dropdownVendor[i]).prop("href", "#null")));
+    for(var i = 0; i < window.parent.dropdownVendor.length; i++) {
+        $ul.append($("<li>").append($("<a>").text(window.parent.dropdownVendor[i]).prop("href", "#null")));
     }
 
     var $ul = $("#ddlLicense").siblings("ul");
     $ul.html("");
     $ul.append($("<li>").append($("<a>").text("All").prop("href", "#null")));
     $ul.append($("<li>").prop("role", "separator").addClass("divider"));
-    for(var i = 0; i < dropdownLicense.length; i++) {
-        $ul.append($("<li>").append($("<a>").text(dropdownLicense[i]).prop("href", "#null")));
+    for(var i = 0; i < window.parent.dropdownLicense.length; i++) {
+        $ul.append($("<li>").append($("<a>").text(window.parent.dropdownLicense[i]).prop("href", "#null")));
     }
 
     $ul = $("#ddlCategory").siblings("ul");
     $ul.html("");
     $ul.append($("<li>").append($("<a>").text("All").prop("href", "#null")));
     $ul.append($("<li>").prop("role", "separator").addClass("divider"));
-    for(var i = 0; i < dropdownCategory.length; i++) {
-        $ul.append($("<li>").append($("<a>").text(dropdownCategory[i]).prop("href", "#null")));
+    for(var i = 0; i < window.parent.dropdownCategory.length; i++) {
+        $ul.append($("<li>").append($("<a>").text(window.parent.dropdownCategory[i]).prop("href", "#null")));
     }
 
     $ul = $("#ddlWeight").siblings("ul");
     $ul.html("");
     $ul.append($("<li>").append($("<a>").text("All").prop("href", "#null")));
     $ul.append($("<li>").prop("role", "separator").addClass("divider"));
-    for(var i = 0; i < dropdownWeight.length; i++) {
-        $ul.append($("<li>").append($("<a>").text(dropdownWeight[i]).prop("href", "#null")));
+    for(var i = 0; i < window.parent.dropdownWeight.length; i++) {
+        $ul.append($("<li>").append($("<a>").text(window.parent.dropdownWeight[i]).prop("href", "#null")));
     }
 
     // register event handlers

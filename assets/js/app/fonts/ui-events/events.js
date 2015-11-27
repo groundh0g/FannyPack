@@ -26,27 +26,63 @@ THE SOFTWARE.
 
 
 // -- RIGHT NAV --
-		$("#radioRightNav button").click(function() {
-			$(this).addClass('active').siblings().removeClass('active');
-			if($(this).attr("id") === "tabSprites") {
-				$("#divConsole").hide();
-				$("#divSpritesList").show();
-			} else {
-				$("#divSpritesList").hide();
-				$("#divConsole").show();
-			}
-		});
 
+OnTopTabChanged = function(text) {
+    if(text === "Fonts") {
+        $(".divSidebarRightTop").css("bottom", "254px");
+        $(".divSidebarRightBottom").show()
+    } else {
+        $(".divSidebarRightTop").css("bottom", "0");
+        $(".divSidebarRightBottom").hide();
+    }
+};
+
+var animateAddFontPrompt = function () {
+    var $i = $("#iconPromptToAddFont");
+    if($i) {
+        setTimeout(function(){
+            var margin = 5 + Math.round(Math.sin((new Date()).getTime() / 500) * 5.0);
+            $("#iconPromptToAddFont").css("margin-top", margin + "px");
+            animateAddFontPrompt();
+        }, 100);
+    }
+};
+
+var clearFontsListDiv = function () {
+    $("#divFontsList").html(
+        "<p>&nbsp;&nbsp;" +
+        "<i id='iconPromptToAddFont' class='fa fa-arrow-up' style='font-size:1.1em; font-weight:bold; color:#d33;'></i>" +
+        " Click 'Add' to get started.</p>"
+    );
+    updateFontsListToolbar();
+    animateAddFontPrompt();
+};
+
+var loadedFonts = loadedFonts || [];
+var selectedFontIndex = selectedFontIndex || -1;
+
+var updateFontsListToolbar = function () {
+    $("#cmdRemoveFont").removeClass("disabled");
+    if(selectedFonts.length === 0 || selectedFontIndex === -1) {
+        $("#cmdRemoveFont").addClass("disabled");
+    }
+};
 
 // -- POPUPS --
-		$("#cmdUploadSprites").click(function(){ $("#uploadSprites").click(); });
-		$("#cmdUploadProject").click(function(){ $("#uploadProject").click(); });
+$("#cmdUploadSprites").click(function(){ $("#uploadSprites").click(); });
+$("#cmdUploadProject").click(function(){ $("#uploadProject").click(); });
 
-//DoToggleHelp();
+// DoToggleHelp();
 
 $(window).on('beforeunload', function(e) {
 	var prompt = PromptUserIfDirty();
 	prompt = prompt == null ? undefined : prompt;
 	if(e && typeof e.returnValue != "undefined") { e.returnValue = prompt; }
 	return prompt;
+});
+
+
+
+$(document).ready(function() {
+    clearFontsListDiv();
 });
