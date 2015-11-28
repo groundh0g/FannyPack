@@ -1,91 +1,32 @@
-var vendors = [];
-var BASE_PATH = BASE_PATH || "/";
+/*
+ Copyright (c) 2015 Joseph B. Hall [@groundh0g]
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ */
+
+var search = {};
+var fontManager = {};
+
 var currentFontList = [];
 var currentFontListLoadedCount = 0;
 var currentFontScrollTop = 0;
 var selectedFonts = {};
-
-var clearFontExamples = function () {
-    $("#divFontExamples").html("");
-    currentFontListLoadedCount = 0;
-    currentFontScrollTop = 0;
-    window.parent.setSelectedFontCount(0);
-    window.parent.setTotalFontCount(currentFontList.length);
-};
-
-var createFontExampleDiv = function (name, selected, size) {
-    name = name || "";
-    var $divExample = $("<div>").addClass("example " + (selected ? "example-selected" : "example-loading"));
-    var $divControls = $("<div>").addClass("controls")
-            .html(
-                "<div class='btn " + (selected ? "btn-primary" : "btn-default") + "'>" +
-                "<i class='fa fa-" + (selected ? 'check-' : '') + "square-o'></i> Add Font" +
-                "</div>" +
-                "<span class='fontSize'>" + (size || "") + "</span>" +
-                "<input type='hidden' class='fontName' value='" + name + "' />");
-    var $divSample = $("<div>").addClass("sample").html("<img src='assets/img/loading.gif' />");
-    var $divInfo = $("<div>").addClass("info").text("Loading " + name + " ...");
-    return $divExample
-        .append($divControls)
-        .append($divSample)
-        .append($divInfo);
-};
-
-var getSelectedFonts = function() {
-    var fonts = [];
-    for(var key in selectedFonts) {
-        if(selectedFonts.hasOwnProperty(key) && selectedFonts[key]) {
-            fonts.push(key + "|" + selectedFonts[key]);
-        }
-    }
-    return fonts;
-};
-
-var getCurrentFontSize = function() {
-    var txtFontSize = $("#txtFontSize").val();
-    if(txtFontSize === "") {
-        switch($("#txtShowAs").val()) {
-            case "Paragraph": txtFontSize = SAMPLE_TEXT_PARAGRAPH_DEFAULT_SIZE; break;
-            case "Sentence": txtFontSize = SAMPLE_TEXT_SENTENCE_DEFAULT_SIZE; break;
-            case "Title": txtFontSize = SAMPLE_TEXT_TITLE_DEFAULT_SIZE; break;
-            case "FontName": txtFontSize = SAMPLE_TEXT_TITLE_DEFAULT_SIZE; break;
-            case "": txtFontSize = SAMPLE_TEXT_TITLE_DEFAULT_SIZE; break;
-            default: txtFontSize = SAMPLE_TEXT_SENTENCE_DEFAULT_SIZE; break;
-        }
-    }
-    return txtFontSize;
-};
-
-var getAddFontButton = function($divExample) {
-    return $divExample.children("div.controls").first().children("div.btn").first();
-};
-
-var doToggleSelectFont = function($divExample) {
-    var $divControls = $divExample.children("div.controls").first();
-    var $cmdAddFont = $divControls.children("div.btn").first();
-    var $spanFontSize = $divControls.children("span.fontSize").first();
-
-    var isSelected = $cmdAddFont.children("i").first().hasClass("fa-check-square");
-
-    isSelected = !isSelected; // toggle
-
-    var fontName = $divControls.children("input.fontName").first().val();
-    var fontSize = isSelected ? getCurrentFontSize() : "";
-
-    $divExample
-        .removeClass("example-selected")
-        .addClass(isSelected ? "example-selected" : "");
-    $cmdAddFont
-        .removeClass("btn-default").removeClass("btn-primary")
-        .addClass(isSelected ? "btn-primary" : "btn-default");
-    $cmdAddFont.children("i").first()
-        .removeClass("fa-check-square").removeClass("fa-square-o")
-        .addClass(isSelected ? "fa-check-square" : "fa-square-o");
-    $spanFontSize.text(isSelected ? getCurrentFontSize() : "");
-
-    selectedFonts[fontName] = isSelected ? fontSize : undefined;
-    window.parent.setSelectedFonts(getSelectedFonts());
-};
 
 var SAMPLE_TEXT_PARAGRAPH_DEFAULT_SIZE = "14px";
 var SAMPLE_TEXT_PARAGRAPH = "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc tempor tellus id vestibulum hendrerit. Donec lobortis facilisis justo nec maximus. Nullam libero ante, mattis eu iaculis vitae, malesuada a urna. Sed viverra odio ligula, accumsan lacinia ligula elementum sed. Fusce et diam viverra augue pulvinar tincidunt in ultrices metus. Etiam vitae purus enim. Etiam sollicitudin euismod sapien, vel tempor turpis sodales id. Vestibulum a mauris blandit, molestie orci at, tristique odio. Quisque tristique at ipsum in facilisis.</p><p>0123456789!@#$%^&*()[]{};:'\"\\|,./?&lt;&gt;</p>";
@@ -109,7 +50,7 @@ var SAMPLE_TEXT_SENTENCE = [
     "<p>Grumpy wizards make toxic brew for the evil Queen and Jack.</p>",
     "<p>The quick brown fox jumps over the lazy dog.</p>",
     "<p>My twig flicked the baroque jazz xylophone.</p>",
-    ];
+];
 
 var SAMPLE_TEXT_TITLE_DEFAULT_SIZE = "48px";
 var SAMPLE_TEXT_TITLE = [
@@ -123,238 +64,21 @@ var SAMPLE_TEXT_TITLE = [
     "<p>Rise of the Rhubarbs</p>",
     "<p>Bravely Default</p>",
     "<p>Flying Fairy</p>",
-    ];
-
-var loadFontExamples = function (numExamples) {
-    var max = Math.min(currentFontListLoadedCount + (numExamples || 10), currentFontList.length);
-    var delay = 20;
-
-    for(; currentFontListLoadedCount < max; currentFontListLoadedCount++) {
-        var fontName = currentFontList[currentFontListLoadedCount];
-        var $divExample = createFontExampleDiv(fontName);
-        $("#divFontExamples").append($divExample);
-        setTimeout((function (name, $div, ndx) {
-            return function() {
-                loadFontFace(name, $div, ndx);
-                //updateSampleText($div, name);
-                getAddFontButton($div).click(function() {
-                    doToggleSelectFont($div);
-                });
-            }
-        })(fontName, $divExample, currentFontListLoadedCount + 1), delay);
-        delay += 200;
-    }
-};
-
-var highlightSearchTerm = function (text, filterByValue) {
-    var prefix = "<span style='background-color:#ff7;'>";
-    var suffix = "</span>";
-    if(text === filterByValue) {
-        return prefix + text + suffix;
-    } else if(text && filterByValue && text.toLowerCase().includes(filterByValue.toLowerCase())) {
-        return text.replace(
-            new RegExp($.escapeRegExp(filterByValue), "i"),
-            prefix + filterByValue + suffix
-        );
-    } else {
-        return text;
-    }
-};
-
-var escapeFontFaceName = function(name) {
-    var result = (name || "").replace(/[!\.\[\]&\s]/g, "-");
-    return "fp-" + result;
-};
-
-var loadedFontFaces = {};
-
-var loadFontFaceErrorMessage = function($divExample, infoText, errorText) {
-    var message =
-        (infoText ? infoText + "<br/>" : "") +
-        (errorText ? "<strong>ERROR:</strong> " + errorText : "");
-    $divExample.addClass("example-error");
-    $divExample.children("div.info").html(message);
-};
-
-var loadFontFace = function (fontName, $divExample, ndx) {
-    var index = window.parent.indexByFont[fontName];
-    if(index && index.length > 0) {
-        var indexes = index[0].split("/");
-        if(indexes && indexes.length > 3) {
-            var v = vendors[indexes[0]];
-            var l = v.licenses[indexes[1]];
-            var ff = l.fontFamilies[indexes[2]];
-            var f = ff.fonts[indexes[3]];
-            var url = BASE_PATH +
-                "assets/data/fontdata/" +
-                v.name + "_" +
-                l.name + "_" +
-                ff.name.replace(/_/gm, "-").replace(/\-/gm, " ") + "_" +
-                f.postScriptName + ".json";
-
-            var vendorName =
-                highlightSearchTerm(v.name, window.parent.filterByVendor);
-            var licenseName =
-                highlightSearchTerm(l.name.replace(/various/, "unknown"), window.parent.filterByLicense);
-            var categoryName =
-                highlightSearchTerm(ff.category, window.parent.filterByCategory);
-            var fontName =
-                highlightSearchTerm(f.postScriptName, $("#txtSearchFonts").val());
-            var weightName =
-                highlightSearchTerm("" + f.weight, window.parent.filterByWeight);
-
-            var infoText =
-                "#" + ndx +
-                ": Vendor: " + vendorName +
-                ", Family: " + ff.name +
-                ", Font: " + fontName +
-                ", License: " + licenseName +
-                ", <br/>" +
-                "Category: " + categoryName +
-                ", Format: " + f.uriFormat +
-                ", Weight: " + weightName;
-
-            if(loadedFontFaces[f.postScriptName] === undefined) {
-                $.get(
-                    encodeURI(url),
-                    {},
-                    function (data, statusText, bar) {
-                        $divExample.removeClass("example-loading");
-                        if(statusText === "success") {
-                            try {
-                                var face = new FontFace(
-                                    escapeFontFaceName(f.postScriptName),
-                                    "url(data:" + f.uriFormat.replace(/font\//, "application/x-font-") +
-                                    ";charset=utf-8;base64," +
-                                    data.replace(/[\r\n]*/gm, "") + ")",
-                                    {}
-                                );
-                                if(face.status === "error") {
-                                    loadFontFaceErrorMessage($divExample, infoText, face["[[PromiseValue]]"]);
-                                } else {
-                                    face.load().then(
-                                        function (fontFace) {
-                                            try {
-                                                document.fonts.add(fontFace);
-                                                loadedFontFaces[f.postScriptName] = fontFace;
-                                                $divExample.children("div.sample").css({"font-family": escapeFontFaceName(f.postScriptName)});
-                                                $divExample.children("div.info").html(infoText);
-                                            } catch (e) {
-                                                loadFontFaceErrorMessage($divExample, infoText, e);
-                                            }
-                                            var appliedFF = $divExample.children("div.sample").first().css("font-family").replace(/['"]/g, "");
-                                            var isApplied = appliedFF === escapeFontFaceName(f.postScriptName);
-                                            if (loadedFontFaces[f.postScriptName] === undefined || !isApplied) {
-                                                loadFontFaceErrorMessage($divExample, infoText, "Font loaded, but could not apply to sample text. ['" +
-                                                    appliedFF +
-                                                    "' != '" +
-                                                    escapeFontFaceName(f.postScriptName) +
-                                                    "']");
-                                                $divExample.children("div.sample")
-                                                    .css({"font-family": escapeFontFaceName(f.postScriptName)});
-                                                loadedFontFaces[f.postScriptName] = undefined
-                                            }
-                                        },
-                                        function (e) {
-                                            loadFontFaceErrorMessage($divExample, infoText, e);
-                                            $divExample.children("div.sample")
-                                                .css({"font-family": escapeFontFaceName(f.postScriptName)});
-                                        }
-                                    );
-                                }
-                            } catch (e) {
-                                loadFontFaceErrorMessage($divExample, infoText, e);
-                                $divExample.children("div.sample")
-                                    .css({"font-family": escapeFontFaceName(f.postScriptName)});
-                            }
-                        } else {
-                            loadFontFaceErrorMessage($divExample, infoText, statusText);
-                            $divExample.children("div.sample")
-                                .css({"font-family": escapeFontFaceName(f.postScriptName)});
-                        }
-                        updateSampleText($divExample);
-                    },
-                    "text"
-                );
-            } else {
-                $divExample.removeClass("example-loading");
-                $divExample.children("div.sample").css({"font-family": escapeFontFaceName(f.postScriptName) });
-                $divExample.children("div.info").html(infoText);
-                updateSampleText($divExample);
-            }
-        }
-    }
-};
-
-var updateSampleText = function($divExample, fontName) {
-    var doUpdateSampleText =
-        !$divExample.hasClass("example-selected") &&
-        !$divExample.hasClass("example-error") &&
-        !$divExample.hasClass("example-loading");
-    if(doUpdateSampleText) {
-        var $divSample = $divExample.children("div.sample");
-        if (!fontName) {
-            fontName = $divSample.siblings("div.controls").children("input.fontName").first().val();
-        }
-        var txtShowAs = $("#txtShowAs").val() || "FontName";
-        if (txtShowAs === "Paragraph") {
-            $divSample.html(SAMPLE_TEXT_PARAGRAPH);
-        } else if (txtShowAs === "Sentence") {
-            $divSample.html($.rand(SAMPLE_TEXT_SENTENCE));
-        } else if (txtShowAs === "Title") {
-            $divSample.html($.rand(SAMPLE_TEXT_TITLE));
-        } else if (txtShowAs === "FontName") {
-            $divSample.html("<p>" + fontName + "</p>");
-        } else {
-            $divSample.html("").append($("<p>").text(txtShowAs));
-        }
-
-        var txtFontSize = getCurrentFontSize();
-
-        $divSample.find("p").each(function () {
-            $(this).css("font-size", txtFontSize);
-        });
-    }
-
-    currentFontScrollTop = $(window).scrollTop();
-};
-
-var doShowAsOrFontSizeChanged = function() {
-    if($("#txtFontSize").val() === "Default") { $("#txtFontSize").val(""); }
-    if($("#txtShowAs").val() === "FontName") { $("#txtShowAs").val(""); }
-    $("#divFontExamples div.example").each(function () {
-        updateSampleText($(this));
-    });
-};
-
-var highlightActiveFilterDropdowns = function () {
-    $("#ddlVendor")
-        .removeClass("btn-info").removeClass("btn-default")
-        .addClass(window.parent.filterByVendor ? "btn-info" : "btn-default");
-    $("#ddlLicense")
-        .removeClass("btn-info").removeClass("btn-default")
-        .addClass(window.parent.filterByLicense ? "btn-info" : "btn-default");
-    $("#ddlCategory")
-        .removeClass("btn-info").removeClass("btn-default")
-        .addClass(window.parent.filterByCategory ? "btn-info" : "btn-default");
-    $("#ddlWeight")
-        .removeClass("btn-info").removeClass("btn-default")
-        .addClass(window.parent.filterByWeight ? "btn-info" : "btn-default");
-}
+];
 
 var doVendorOrLicenseOrCategoryOrWeightOrSearchChanged = function () {
     if($("#txtVendor").val() === "All") { $("#txtVendor").val(""); }
     if($("#txtLicense").val() === "All") { $("#txtLicense").val(""); }
     if($("#txtCategory").val() === "All") { $("#txtCategory").val(""); }
     if($("#txtWeight").val() === "All") { $("#txtWeight").val(""); }
-    currentFontList = window.parent.fontNamesThatMatchAllFilters(
-        window.parent.initFilterByValues(
-            $("#txtSearchFonts").val(),
-            $("#txtVendor").val(),
-            $("#txtLicense").val(),
-            $("#txtCategory").val(),
-            $("#txtWeight").val()
-        )
+    search.initFilterByValues(
+        $("#txtVendor").val(),
+        $("#txtLicense").val(),
+        $("#txtCategory").val(),
+        $("#txtWeight").val()
+    );
+    currentFontList = search.fontNamesThatMatchAllFilters(
+        $("#txtSearchFonts").val()
     );
     highlightActiveFilterDropdowns();
     clearFontExamples();
@@ -366,18 +90,11 @@ var doSearchFontsClicked = function () {
 };
 
 $(document).ready(function () {
-    vendors = window.parent["vendors"] || [];
-    BASE_PATH = window.parent["BASE_PATH"] || "/";
+    fontManager = new FontManager(window.parent["BASE_PATH"]);
+    search = new Search(window.parent["vendors"], window.parent["BASE_PATH"]);
+    search.initTypeahead($("#txtSearchFonts"));
 
-    // assume parent loaded font data, init indices
-    //window.parent.initTypeahead();
-    //window.parent.fontNamesThatMatchAllFilters();
-    $("#txtSearchFonts").typeahead(
-        { hint: true, highlight: true, minLength: 1 },
-        { name: "titles", limit: 10, source: window.parent.substringMatcher(window.parent.initTypeaheadResultList) }
-    );
-
-    // fix inline styles set by initTypeahead ... :/
+    // fix inline styles set by initTypeahead
 
     $("#groupSearchFonts span.twitter-typeahead").css("position", "").css("display", "");
     $("#cmdSearchFonts").css("position", "relative").css("display", "").css("z-index", "444");
@@ -388,32 +105,32 @@ $(document).ready(function () {
     $ul.html("");
     $ul.append($("<li>").append($("<a>").text("All").prop("href", "#null")));
     $ul.append($("<li>").prop("role", "separator").addClass("divider"));
-    for(var i = 0; i < window.parent.dropdownVendor.length; i++) {
-        $ul.append($("<li>").append($("<a>").text(window.parent.dropdownVendor[i]).prop("href", "#null")));
+    for(var i = 0; i < search.dropdownVendor.length; i++) {
+        $ul.append($("<li>").append($("<a>").text(search.dropdownVendor[i]).prop("href", "#null")));
     }
 
     var $ul = $("#ddlLicense").siblings("ul");
     $ul.html("");
     $ul.append($("<li>").append($("<a>").text("All").prop("href", "#null")));
     $ul.append($("<li>").prop("role", "separator").addClass("divider"));
-    for(var i = 0; i < window.parent.dropdownLicense.length; i++) {
-        $ul.append($("<li>").append($("<a>").text(window.parent.dropdownLicense[i]).prop("href", "#null")));
+    for(var i = 0; i < search.dropdownLicense.length; i++) {
+        $ul.append($("<li>").append($("<a>").text(search.dropdownLicense[i]).prop("href", "#null")));
     }
 
     $ul = $("#ddlCategory").siblings("ul");
     $ul.html("");
     $ul.append($("<li>").append($("<a>").text("All").prop("href", "#null")));
     $ul.append($("<li>").prop("role", "separator").addClass("divider"));
-    for(var i = 0; i < window.parent.dropdownCategory.length; i++) {
-        $ul.append($("<li>").append($("<a>").text(window.parent.dropdownCategory[i]).prop("href", "#null")));
+    for(var i = 0; i < search.dropdownCategory.length; i++) {
+        $ul.append($("<li>").append($("<a>").text(search.dropdownCategory[i]).prop("href", "#null")));
     }
 
     $ul = $("#ddlWeight").siblings("ul");
     $ul.html("");
     $ul.append($("<li>").append($("<a>").text("All").prop("href", "#null")));
     $ul.append($("<li>").prop("role", "separator").addClass("divider"));
-    for(var i = 0; i < window.parent.dropdownWeight.length; i++) {
-        $ul.append($("<li>").append($("<a>").text(window.parent.dropdownWeight[i]).prop("href", "#null")));
+    for(var i = 0; i < search.dropdownWeight.length; i++) {
+        $ul.append($("<li>").append($("<a>").text(search.dropdownWeight[i]).prop("href", "#null")));
     }
 
     // register event handlers
@@ -474,5 +191,216 @@ $(document).ready(function () {
     doSearchFontsClicked();
 });
 
+var updateSampleText = function($divExample, fontName) {
+    var doUpdateSampleText =
+        !$divExample.hasClass("example-selected") &&
+        !$divExample.hasClass("example-error") &&
+        !$divExample.hasClass("example-loading");
+    if(doUpdateSampleText) {
+        var $divSample = $divExample.children("div.sample");
+        if (!fontName) {
+            fontName = $divSample.siblings("div.controls").children("input.fontName").first().val();
+        }
+        var txtShowAs = $("#txtShowAs").val() || "FontName";
+        if (txtShowAs === "Paragraph") {
+            $divSample.html(SAMPLE_TEXT_PARAGRAPH);
+        } else if (txtShowAs === "Sentence") {
+            $divSample.html($.rand(SAMPLE_TEXT_SENTENCE));
+        } else if (txtShowAs === "Title") {
+            $divSample.html($.rand(SAMPLE_TEXT_TITLE));
+        } else if (txtShowAs === "FontName") {
+            $divSample.html("<p>" + fontName + "</p>");
+        } else {
+            $divSample.html("").append($("<p>").text(txtShowAs));
+        }
 
+        var txtFontSize = getCurrentFontSize();
 
+        $divSample.find("p").each(function () {
+            $(this).css("font-size", txtFontSize);
+        });
+    }
+
+    currentFontScrollTop = $(window).scrollTop();
+};
+
+var doShowAsOrFontSizeChanged = function() {
+    if($("#txtFontSize").val() === "Default") { $("#txtFontSize").val(""); }
+    if($("#txtShowAs").val() === "FontName") { $("#txtShowAs").val(""); }
+    $("#divFontExamples").children("div.example").each(function () {
+        updateSampleText($(this));
+    });
+};
+
+var highlightActiveFilterDropdowns = function () {
+    $("#ddlVendor")
+        .removeClass("btn-info").removeClass("btn-default")
+        .addClass(search.filterByVendor ? "btn-info" : "btn-default");
+    $("#ddlLicense")
+        .removeClass("btn-info").removeClass("btn-default")
+        .addClass(search.filterByLicense ? "btn-info" : "btn-default");
+    $("#ddlCategory")
+        .removeClass("btn-info").removeClass("btn-default")
+        .addClass(search.filterByCategory ? "btn-info" : "btn-default");
+    $("#ddlWeight")
+        .removeClass("btn-info").removeClass("btn-default")
+        .addClass(search.filterByWeight ? "btn-info" : "btn-default");
+};
+
+var createFontExampleDiv = function (name, selected, size) {
+    name = name || "";
+    var $divExample = $("<div>").addClass("example " + (selected ? "example-selected" : "example-loading"));
+    var $divControls = $("<div>").addClass("controls")
+        .html(
+            "<div class='btn " + (selected ? "btn-primary" : "btn-default") + "'>" +
+            "<i class='fa fa-" + (selected ? 'check-' : '') + "square-o'></i> Add Font" +
+            "</div>" +
+            "<span class='fontSize'>" + (size || "") + "</span>" +
+            "<input type='hidden' class='fontName' value='" + name + "' />");
+    var $divSample = $("<div>").addClass("sample").html("<img src='assets/img/loading.gif' />");
+    var $divInfo = $("<div>").addClass("info").text("Loading " + name + " ...");
+    return $divExample
+        .append($divControls)
+        .append($divSample)
+        .append($divInfo);
+};
+
+var clearFontExamples = function () {
+    $("#divFontExamples").html("");
+    currentFontListLoadedCount = 0;
+    currentFontScrollTop = 0;
+    window.parent.setSelectedFontCount(0);
+    window.parent.setTotalFontCount(currentFontList.length);
+};
+
+var getSelectedFonts = function() {
+    var fonts = [];
+    for(var key in selectedFonts) {
+        if(selectedFonts.hasOwnProperty(key) && selectedFonts[key]) {
+            fonts.push(key + "|" + selectedFonts[key]);
+        }
+    }
+    return fonts;
+};
+
+var getCurrentFontSize = function() {
+    var txtFontSize = $("#txtFontSize").val();
+    if(txtFontSize === "") {
+        switch($("#txtShowAs").val()) {
+            case "Paragraph": txtFontSize = SAMPLE_TEXT_PARAGRAPH_DEFAULT_SIZE; break;
+            case "Sentence": txtFontSize = SAMPLE_TEXT_SENTENCE_DEFAULT_SIZE; break;
+            case "Title": txtFontSize = SAMPLE_TEXT_TITLE_DEFAULT_SIZE; break;
+            case "FontName": txtFontSize = SAMPLE_TEXT_TITLE_DEFAULT_SIZE; break;
+            case "": txtFontSize = SAMPLE_TEXT_TITLE_DEFAULT_SIZE; break;
+            default: txtFontSize = SAMPLE_TEXT_SENTENCE_DEFAULT_SIZE; break;
+        }
+    }
+    return txtFontSize;
+};
+
+var getAddFontButton = function($divExample) {
+    return $divExample.children("div.controls").first().children("div.btn").first();
+};
+
+var doToggleSelectFont = function($divExample) {
+    var $divControls = $divExample.children("div.controls").first();
+    var $cmdAddFont = $divControls.children("div.btn").first();
+    var $spanFontSize = $divControls.children("span.fontSize").first();
+
+    var isSelected = $cmdAddFont.children("i").first().hasClass("fa-check-square");
+
+    isSelected = !isSelected; // toggle
+
+    var fontName = $divControls.children("input.fontName").first().val();
+    var fontSize = isSelected ? getCurrentFontSize() : "";
+
+    $divExample
+        .removeClass("example-selected")
+        .addClass(isSelected ? "example-selected" : "");
+    $cmdAddFont
+        .removeClass("btn-default").removeClass("btn-primary")
+        .addClass(isSelected ? "btn-primary" : "btn-default");
+    $cmdAddFont.children("i").first()
+        .removeClass("fa-check-square").removeClass("fa-square-o")
+        .addClass(isSelected ? "fa-check-square" : "fa-square-o");
+    $spanFontSize.text(isSelected ? getCurrentFontSize() : "");
+
+    selectedFonts[fontName] = isSelected ? fontSize : undefined;
+    window.parent.setSelectedFonts(getSelectedFonts());
+};
+
+var loadFontExamples = function (numExamples) {
+    var max = Math.min(currentFontListLoadedCount + (numExamples || 10), currentFontList.length);
+    var delay = 20;
+
+    for(; currentFontListLoadedCount < max; currentFontListLoadedCount++) {
+        var fontName = currentFontList[currentFontListLoadedCount];
+        var $divExample = createFontExampleDiv(fontName);
+        $("#divFontExamples").append($divExample);
+        setTimeout((function (name, $div, ndx) {
+            return function() {
+                loadFontFace(name, $div, ndx);
+                //updateSampleText($div, name);
+                getAddFontButton($div).click(function() {
+                    doToggleSelectFont($div);
+                });
+            }
+        })(fontName, $divExample, currentFontListLoadedCount + 1), delay);
+        delay += 200;
+    }
+};
+
+var highlightSearchTerm = function (text, filterByValue) {
+    var prefix = "<span style='background-color:#ff7;'>";
+    var suffix = "</span>";
+    if(text === filterByValue) {
+        return prefix + text + suffix;
+    } else if(text && filterByValue && text.toLowerCase().includes(filterByValue.toLowerCase())) {
+        return text.replace(
+            new RegExp($.escapeRegExp(filterByValue), "i"),
+            prefix + filterByValue + suffix
+        );
+    } else {
+        return text;
+    }
+};
+
+var loadFontFace = function (fontName, $divExample, ndx) {
+    var meta = search.getFontMetadata(fontName);
+
+    if(meta.indexes && meta.indexes.length > 3) {
+        var fontNameEscaped = meta.fontNameEscaped;
+        var infoHtml =
+            "#" + ndx +
+            ": Vendor: "  + highlightSearchTerm(meta.vendor.name, search.filterByVendor) +
+            ", Family: "  + meta.fontFamily.name +
+            ", Font: "    + highlightSearchTerm(meta.font.postScriptName, $("#txtSearchFonts").val()) +
+            ", License: " + highlightSearchTerm(meta.license.name.replace(/various/, "unknown"), search.filterByLicense) +
+            ", <br/>" +
+            "Category: "  + highlightSearchTerm(meta.fontFamily.category, search.filterByCategory) +
+            ", Format: "  + meta.font.uriFormat +
+            ", Weight: "  + highlightSearchTerm("" + meta.font.weight, search.filterByWeight);
+
+        fontManager.loadFontFromUrl(
+            meta.url,
+            meta.font.postScriptName,
+            meta.font.uriFormat,
+            $divExample, infoHtml,
+            function ($div, info) {
+                $div.removeClass("example-loading");
+                $div.children("div.sample").css({"font-family": fontNameEscaped });
+                $div.children("div.info").html(info);
+                updateSampleText($div);
+            },
+            function ($div, info, err) {
+                var message =
+                    (info ? info + "<br/>" : "") +
+                    (err ? "<strong>ERROR:</strong> " + err : "");
+                $div.removeClass("example-loading");
+                $div.addClass("example-error");
+                $div.children("div.info").html(message);
+                updateSampleText($div);
+            }
+        );
+    }
+};
