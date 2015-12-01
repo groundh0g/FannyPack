@@ -116,37 +116,35 @@ body {
     padding:5px;
 }
 
-.divSpritesListItem {
+.divFontsListItem {
     padding:2px;
-    height:36px;
-    background-color:#fed;
+    background-color:#fff;
     border-bottom:1px solid #888;
-    line-height:32px;
-    font-weight:bold;
-    overflow:hidden;
-    white-space:nowrap;
     cursor:pointer;
 }
 
-.divSpritesListItem img {
-    border:0;
-    margin: 2px 10px 2px 2px;
-    width:32px;
-    height:32px;
-    /*
-    -webkit-transform: rotate(90deg);
-    -moz-transform: rotate(90deg);
-    -o-transform: rotate(90deg);
-    -ms-transform: rotate(90deg);
-    transform: rotate(90deg);
-    */
+.divFontsListItem .sample {
+    height:36px;
+    line-height:32px;
+    font-size:1.5em;
+    font-weight:bold;
+    overflow:hidden;
+    white-space:nowrap;
 }
 
-.spriteListItemHighlight {
+.divFontsListItem .info {
+    font-size:0.80em;
+}
+
+.divFontsListItem .values {
+    display:none;
+}
+
+.fontsListItemHighlight {
     background-color:#def;
 }
 
-.spriteListItemSelected {
+.fontsListItemSelected {
     background-color:#abd;
 }
 

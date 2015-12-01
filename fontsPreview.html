@@ -130,14 +130,12 @@ scripts: [
                 .addClass("sample")
                 .html(fontName)
                 .css({
-                    "font-family": FontManager.escapeFontFaceName(fontName),
-                    "font-size" : "1.5em"
+                    "font-family": FontManager.escapeFontFaceName(fontName)
                 });
         var $divInfo = $("<div>")
                 .addClass("info")
-                .css("font-size", "0.80em")
                 .text(fontName + " @ " + fontSize + ", default glyphs");
-        var $divHidden = $("<div>").addClass("values").css("display", "none").html(
+        var $divHidden = $("<div>").addClass("values").html(
                 "<input type='hidden' class='fontName' value='" + fontName + "' />" +
                 "<input type='hidden' class='fontSize' value='" + fontSize + "' />" +
                 "<input type='hidden' class='charList' value='" + DEFAULT_CHARLIST_KEY + "' />"
@@ -164,8 +162,49 @@ scripts: [
                     var $divFontListItem = createFontsListDivItem(fontNameAndSize);
                     loadFontFace(fontName, $divFontListItem);
                     $("#divFontsList").append($divFontListItem);
+                    $divFontListItem.mouseenter(function(){
+                        $(this).siblings("div.divFontsListItem").each(function(){ $(this).removeClass("fontsListItemHighlight"); });
+                        $(this).addClass("fontsListItemHighlight");
+                    }).mouseleave(function(){
+                        $(this).removeClass("fontsListItemHighlight");
+                    }).click(function(){
+                        var selected = $(this).hasClass("fontsListItemSelected");
+                        $(this).siblings("div.divFontsListItem").each(function(){ $(this).removeClass("fontsListItemSelected"); });
+                        $(this).removeClass("fontsListItemSelected");
+                        if(!selected) {
+                            $(this).addClass("fontsListItemSelected");
+                            updateSelectedFontsListItem($(this));
+                        } else {
+                            updateSelectedFontsListItem(null);
+                        }
+                    });
                 }
             }
+        }
+    };
+
+    var updateSelectedFontsListItem = function($div) {
+        if($div) {
+            selectedFontIndex = $div.index();
+        } else {
+            selectedFontIndex = -1;
+        }
+
+        $("#cmdRemoveFont").removeClass("disabled")
+        if(selectedFontIndex === -1) {
+            $("#cmdRemoveFont").addClass("disabled")
+        }
+
+        updateFontItemProperties($div);
+    };
+
+    var updateFontItemProperties = function($div) {
+        if($div) {
+            $("#divPropertiesFontsListNoneSelected").hide();
+            $("#divPropertiesFontsListItemSelected").show();
+        } else {
+            $("#divPropertiesFontsListNoneSelected").show();
+            $("#divPropertiesFontsListItemSelected").hide();
         }
     };
 
