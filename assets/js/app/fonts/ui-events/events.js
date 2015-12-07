@@ -20,6 +20,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+//var loadedFonts = loadedFonts || [];
+var vendors = [];
+var search = {};
+var fontManager = {};
+
+var addedFontNamesAndSizes = [];
+var selectedFontIndex = -1;
+var DEFAULT_CHARLIST_KEY = "{default}";
+
 // -- TOOLBAR --
 
 // -- LEFT SIDEBAR --
@@ -27,7 +36,7 @@ THE SOFTWARE.
 
 // -- RIGHT NAV --
 
-OnTopTabChanged = function(text) {
+var OnTopTabChanged = function(text) {
     if(text === "Fonts") {
         $(".divSidebarRightTop").css("bottom", "254px");
         $(".divSidebarRightBottom").show()
@@ -58,8 +67,32 @@ var clearFontsListDiv = function () {
     animateAddFontPrompt();
 };
 
-var loadedFonts = loadedFonts || [];
-var selectedFontIndex = selectedFontIndex || -1;
+var createFontsListDivItem = function(fontNameAndSize) {
+    var parts = fontNameAndSize.split("|");
+    var fontName = parts[0];
+    var fontSize = parts[1];
+
+    var $divItem = $("<div>").addClass("divFontsListItem");
+    var $divSample = $("<div>")
+        .addClass("sample")
+        .html(fontName)
+        .css({
+            "font-family": FontManager.escapeFontFaceName(fontName)
+        });
+    var $divInfo = $("<div>")
+        .addClass("info")
+        .text(fontName + " @ " + fontSize + ", default glyphs");
+    var $divHidden = $("<div>").addClass("values").html(
+        "<input type='hidden' class='fontName' value='" + fontName + "' />" +
+        "<input type='hidden' class='fontSize' value='" + fontSize + "' />" +
+        "<input type='hidden' class='charList' value='" + DEFAULT_CHARLIST_KEY + "' />"
+    );
+
+    return $divItem
+        .append($divSample)
+        .append($divInfo)
+        .append($divHidden);
+};
 
 var updateFontsListToolbar = function () {
     $("#cmdRemoveFont").removeClass("disabled");
@@ -68,21 +101,146 @@ var updateFontsListToolbar = function () {
     }
 };
 
+var updateSelectedFontsListItem = function($div) {
+    if($div) {
+        selectedFontIndex = $div.index();
+    } else {
+        selectedFontIndex = -1;
+    }
+
+    $("#cmdRemoveFont").removeClass("disabled")
+    if(selectedFontIndex === -1) {
+        $("#cmdRemoveFont").addClass("disabled")
+    }
+
+    updateFontItemProperties($div);
+};
+
+var updateFontItemProperties = function($div) {
+    if($div) {
+        $("#divPropertiesFontsListNoneSelected").hide();
+        $("#divPropertiesFontsListItemSelected").show();
+    } else {
+        $("#divPropertiesFontsListNoneSelected").show();
+        $("#divPropertiesFontsListItemSelected").hide();
+    }
+};
+
 // -- POPUPS --
 $("#cmdUploadSprites").click(function(){ $("#uploadSprites").click(); });
 $("#cmdUploadProject").click(function(){ $("#uploadProject").click(); });
 
-// DoToggleHelp();
+// -- Load and manage fonts --
+
+var loadSelectedFonts = function() {
+    if(selectedFonts && selectedFonts.length > 0) {
+        for(var i = 0; i < selectedFonts.length; i++) {
+            var fontNameAndSize = selectedFonts[i];
+            var parts = fontNameAndSize.split("|");
+            var fontName = parts[0];
+            var fontSize = parts[1];
+
+            var containsNameAndSize = ~addedFontNamesAndSizes.indexOf(fontNameAndSize);
+            if(!containsNameAndSize) {
+                addedFontNamesAndSizes.push(fontNameAndSize);
+                if(addedFontNamesAndSizes.length === 1) { $("#divFontsList").html(""); }
+                var $divFontListItem = createFontsListDivItem(fontNameAndSize);
+                $("#divFontsList").append($divFontListItem);
+                loadFontFace(fontName, $divFontListItem);
+                $divFontListItem.mouseenter(function(){
+                    $(this).siblings("div.divFontsListItem").each(function(){ $(this).removeClass("fontsListItemHighlight"); });
+                    $(this).addClass("fontsListItemHighlight");
+                }).mouseleave(function(){
+                    $(this).removeClass("fontsListItemHighlight");
+                }).click(function(){
+                    var selected = $(this).hasClass("fontsListItemSelected");
+                    $(this).siblings("div.divFontsListItem").each(function(){ $(this).removeClass("fontsListItemSelected"); });
+                    $(this).removeClass("fontsListItemSelected");
+                    if(!selected) {
+                        $(this).addClass("fontsListItemSelected");
+                        updateSelectedFontsListItem($(this));
+                    } else {
+                        updateSelectedFontsListItem(null);
+                    }
+                });
+            }
+        }
+    }
+};
+
+var loadFontFace = function (fontName, $divExample, ndx) {
+    var meta = search.getFontMetadata(fontName);
+
+    if(meta.indexes && meta.indexes.length > 3) {
+        var fontNameEscaped = meta.fontNameEscaped;
+        fontManager.loadFontFromUrl(
+            meta.url,
+            meta.font.postScriptName,
+            meta.font.uriFormat,
+            $divExample, null /*infoHtml*/,
+            function ($div, info) {
+                $div.removeClass("example-loading");
+                $div.children("div.sample").css({"font-family": fontNameEscaped });
+                if(info) { $div.children("div.info").html(info); }
+            },
+            function ($div, info, err) {
+                var message =
+                    (info ? info + "<br/>" : "") +
+                    (err ? "<strong>ERROR:</strong> " + err : "");
+                $div.removeClass("example-loading");
+                $div.addClass("example-error");
+                $div.children("div.info").html(message);
+            }
+        );
+    }
+};
+
+// -- Register GUI events --
 
 $(window).on('beforeunload', function(e) {
-	var prompt = PromptUserIfDirty();
-	prompt = prompt == null ? undefined : prompt;
-	if(e && typeof e.returnValue != "undefined") { e.returnValue = prompt; }
-	return prompt;
+    var prompt = PromptUserIfDirty();
+    prompt = prompt == null ? undefined : prompt;
+    if(e && typeof e.returnValue != "undefined") { e.returnValue = prompt; }
+    return prompt;
 });
-
-
 
 $(document).ready(function() {
     clearFontsListDiv();
+
+    $('#popupFontPickerModal').modal({ show:false });
+    $('#popupFontPickerModal').on('shown.bs.modal', function () {
+        setTimeout(function(){
+            var docHeight = $("#popupFontPickerModal").height();
+            var modHeight = $("#popupFontPickerModalDialog").height();
+            var bodHeight = $("#popupFontPickerModalBody").height();
+            var modPosTop = $("#popupFontPickerModalDialog").offset().top;
+            var height = docHeight
+                - (modHeight - bodHeight)
+                - modPosTop * 2;
+            $("#popupFontPickerModalBody").css("height", height + "px");
+        }, 5);
+    });
+
+    $("#cmdSelectFonts").click(function() {
+        $("#frameFontPicker").prop("src", "fontPickerFrame.html");
+        $("#popupFontPickerModal").modal("show");
+    });
+
+    $("#popupFontPickerModalFooter").find("button.btn-primary").click(function(e){
+        loadSelectedFonts();
+        $("#frameFontPicker").prop("src", "");
+        $("#popupFontPickerModal").modal("hide");
+    });
+
+    $.getJSON( // initialize search and fontManager classes
+        BASE_PAGE + "/assets/data/fontlist.json",
+        null,
+        function(data, textStatus, jqXHR) {
+            vendors = data;
+            search = new Search(vendors, BASE_PAGE);
+            search.initSearchIndexes();
+            search.fontNamesThatMatchAllFilters();
+            fontManager = new FontManager(BASE_PAGE)
+        }
+    );
 });
